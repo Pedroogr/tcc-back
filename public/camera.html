@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teste de câmera</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+    }
+
+    video {
+      width: 720px;
+      max-width: 100%;
+      background: black;
+      border-radius: 12px;
+      display: block;
+      margin-top: 16px;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    #status {
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Teste câmera</h1>
+
+  <button id="startCamera">Ligar câmera</button>
+  <button id="stopCamera">Desligar câmera</button>
+
+  <p id="status">Aguardando...</p>
+  <video id="video" autoplay playsinline muted></video>
+
+  <script>
+    const startButton = document.getElementById('startCamera');
+    const stopButton = document.getElementById('stopCamera');
+    const video = document.getElementById('video');
+    const status = document.getElementById('status');
+
+    let currentStream = null;
+
+    startButton.addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+
+        currentStream = stream;
+        video.srcObject = stream;
+        status.textContent = 'Câmera e microfone ligados com sucesso.';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Erro ao acessar câmera/microfone: ' + error.message;
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+        currentStream = null;
+        status.textContent = 'Câmera desligada.';
+      }
+    });
+  </script>
+</body>
+</html>
