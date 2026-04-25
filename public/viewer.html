@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espectador</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 24px; }
+    video { width: 720px; max-width: 100%; background: black; border-radius: 12px; display: block; margin-top: 16px; }
+    #status { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Espectador</h1>
+  <p id="status">Entrando na sala...</p>
+  <video id="remoteVideo" autoplay playsinline controls></video>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script>
+    const room = new URLSearchParams(window.location.search).get('room') || 'demo';
+    const socket = io();
+
+    const status = document.getElementById('status');
+    const remoteVideo = document.getElementById('remoteVideo');
+
+    let peerConnection;
+
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection();
+
+      peerConnection.ontrack = (event) => {
+        remoteVideo.srcObject = event.streams[0];
+        status.textContent = 'Recebendo vídeo do transmissor.';
+      };
+
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit('ice-candidate', {
+            room,
+            candidate: event.candidate,
+          });
+        }
+      };
+    }
+
+    socket.emit('join-room', { room, role: 'viewer' });
+    status.textContent = 'Aguardando oferta do transmissor...';
+
+    socket.on('offer', async (offer) => {
+      try {
+        createPeerConnection();
+
+        await peerConnection.setRemoteDescription(offer);
+
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+
+        socket.emit('answer', {
+          room,
+          sdp: answer,
+        });
+
+        status.textContent = 'Resposta enviada ao transmissor.';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Erro ao processar oferta: ' + error.message;
+      }
+    });
+
+    socket.on('ice-candidate', async (candidate) => {
+      try {
+        if (peerConnection) {
+          await peerConnection.addIceCandidate(candidate);
+        }
+      } catch (error) {
+        console.error('Erro ao adicionar ICE candidate no viewer:', error);
+      }
+    });
+  </script>
+</body>
+</html>

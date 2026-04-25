@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transmissor</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 24px; }
+    video { width: 720px; max-width: 100%; background: black; border-radius: 12px; display: block; margin-top: 16px; }
+    button { padding: 10px 16px; cursor: pointer; }
+    #status { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Transmissor</h1>
+  <button id="startBtn">Iniciar transmissão</button>
+  <p id="status">Aguardando...</p>
+  <video id="localVideo" autoplay playsinline muted></video>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script>
+    const room = new URLSearchParams(window.location.search).get('room') || 'demo';
+    const socket = io();
+
+    const startBtn = document.getElementById('startBtn');
+    const status = document.getElementById('status');
+    const localVideo = document.getElementById('localVideo');
+
+    let localStream;
+    let peerConnection;
+
+    function createPeerConnection() {
+      //turn on transmission and spectator
+      peerConnection = new RTCPeerConnection();
+
+      // add cam and mic to webRTC connection
+      localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+      });
+
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit('ice-candidate', {
+            room,
+            candidate: event.candidate,
+          });
+        }
+      };
+    }
+
+    startBtn.addEventListener('click', async () => {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+
+        localVideo.srcObject = localStream;
+        // nest gateway uses this to put this socket in a socker.io room
+        socket.emit('join-room', { room, role: 'transmitter' });
+        status.textContent = 'Câmera ligada. Aguardando espectador...';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Erro ao acessar câmera: ' + error.message;
+      }
+    });
+
+
+    socket.on('viewer-ready', async () => {
+      try {
+        status.textContent = 'Espectador conectado. Criando oferta...';
+        //if someone listening create connection
+        createPeerConnection();
+
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        socket.emit('offer', {
+          room,
+          sdp: offer,
+        });
+
+        status.textContent = 'Oferta enviada.';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Erro ao criar oferta: ' + error.message;
+      }
+    });
+
+    socket.on('answer', async (answer) => {
+      try {
+        await peerConnection.setRemoteDescription(answer);
+        status.textContent = 'Conexão estabelecida com espectador.';
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Erro ao receber resposta: ' + error.message;
+      }
+    });
+
+    socket.on('ice-candidate', async (candidate) => {
+      try {
+        if (peerConnection) {
+          await peerConnection.addIceCandidate(candidate);
+        }
+      } catch (error) {
+        console.error('Erro ao adicionar ICE candidate no transmissor:', error);
+      }
+    });
+  </script>
+</body>
+</html>
