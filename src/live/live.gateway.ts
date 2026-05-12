@@ -24,35 +24,60 @@ export class LiveGateway {
     client.join(data.room);
 
     if (data.role === 'viewer') {
-      client.to(data.room).emit('viewer-ready');
+      client.to(data.room).emit('viewer-ready', {
+        viewerId: client.id,
+      });
     }
 
     if (data.role === 'transmitter') {
-      client.to(data.room).emit('transmitter-ready');
+      client.to(data.room).emit('transmitter-ready', {
+        transmitterId: client.id,
+      });
     }
   }
 
   @SubscribeMessage('offer')
   handleOffer(
-    @MessageBody() data: { room: string; sdp: RTCSessionDescriptionInit },
-    @ConnectedSocket() client: Socket,
+    @MessageBody()
+    data: {
+      targetId: string;
+      senderId: string;
+      sdp: RTCSessionDescriptionInit;
+    },
   ) {
-    client.to(data.room).emit('offer', data.sdp);
+    this.server.to(data.targetId).emit('offer', {
+      senderId: data.senderId,
+      sdp: data.sdp,
+    });
   }
 
   @SubscribeMessage('answer')
   handleAnswer(
-    @MessageBody() data: { room: string; sdp: RTCSessionDescriptionInit },
-    @ConnectedSocket() client: Socket,
+    @MessageBody()
+    data: {
+      targetId: string;
+      senderId: string;
+      sdp: RTCSessionDescriptionInit;
+    },
   ) {
-    client.to(data.room).emit('answer', data.sdp);
+    this.server.to(data.targetId).emit('answer', {
+      senderId: data.senderId,
+      sdp: data.sdp,
+    });
   }
 
   @SubscribeMessage('ice-candidate')
   handleIceCandidate(
-    @MessageBody() data: { room: string; candidate: RTCIceCandidateInit },
-    @ConnectedSocket() client: Socket,
+    @MessageBody()
+    data: {
+      targetId: string;
+      senderId: string;
+      candidate: RTCIceCandidateInit;
+    },
   ) {
-    client.to(data.room).emit('ice-candidate', data.candidate);
+    this.server.to(data.targetId).emit('ice-candidate', {
+      senderId: data.senderId,
+      candidate: data.candidate,
+    });
   }
 }

@@ -9,14 +9,40 @@
 * 🟢 You can import this file directly.
 */
 
-export const UserRole = {
-  ADMIN: 'ADMIN',
-  AUCTIONEER: 'AUCTIONEER',
-  SELLER: 'SELLER',
-  BUYER: 'BUYER'
+export const PlatformRole = {
+  USER: 'USER',
+  SYSTEM_ADMIN: 'SYSTEM_ADMIN'
 } as const
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+export type PlatformRole = (typeof PlatformRole)[keyof typeof PlatformRole]
+
+
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED',
+  PENDING: 'PENDING'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const VerificationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
+
+
+export const AuctionHouseRole = {
+  OWNER: 'OWNER',
+  MANAGER: 'MANAGER',
+  AUCTIONEER: 'AUCTIONEER',
+  STAFF: 'STAFF'
+} as const
+
+export type AuctionHouseRole = (typeof AuctionHouseRole)[keyof typeof AuctionHouseRole]
 
 
 export const AuctionStatus = {
@@ -30,10 +56,94 @@ export const AuctionStatus = {
 export type AuctionStatus = (typeof AuctionStatus)[keyof typeof AuctionStatus]
 
 
+export const AuctionMode = {
+  LIVE: 'LIVE',
+  PRE_BID: 'PRE_BID',
+  TIMED: 'TIMED',
+  HYBRID: 'HYBRID'
+} as const
+
+export type AuctionMode = (typeof AuctionMode)[keyof typeof AuctionMode]
+
+
 export const LotStatus = {
+  DRAFT: 'DRAFT',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
   AVAILABLE: 'AVAILABLE',
+  IN_AUCTION: 'IN_AUCTION',
   SOLD: 'SOLD',
-  WITHDRAWN: 'WITHDRAWN'
+  WITHDRAWN: 'WITHDRAWN',
+  REJECTED: 'REJECTED'
 } as const
 
 export type LotStatus = (typeof LotStatus)[keyof typeof LotStatus]
+
+
+export const ConsignmentStatus = {
+  SUBMITTED: 'SUBMITTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CHANGES_REQUESTED: 'CHANGES_REQUESTED'
+} as const
+
+export type ConsignmentStatus = (typeof ConsignmentStatus)[keyof typeof ConsignmentStatus]
+
+
+export const BuyerRegistrationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type BuyerRegistrationStatus = (typeof BuyerRegistrationStatus)[keyof typeof BuyerRegistrationStatus]
+
+
+export const BidStatus = {
+  VALID: 'VALID',
+  OUTBID: 'OUTBID',
+  CANCELED: 'CANCELED',
+  WINNING: 'WINNING'
+} as const
+
+export type BidStatus = (typeof BidStatus)[keyof typeof BidStatus]
+
+
+export const StreamStatus = {
+  WAITING: 'WAITING',
+  LIVE: 'LIVE',
+  ENDED: 'ENDED',
+  ERROR: 'ERROR'
+} as const
+
+export type StreamStatus = (typeof StreamStatus)[keyof typeof StreamStatus]
+
+
+export const CommercialUnit = {
+  PER_HEAD: 'PER_HEAD',
+  PER_KG: 'PER_KG',
+  PER_ARROBA: 'PER_ARROBA',
+  PER_POUND: 'PER_POUND'
+} as const
+
+export type CommercialUnit = (typeof CommercialUnit)[keyof typeof CommercialUnit]
+
+
+export const MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT'
+} as const
+
+export type MediaType = (typeof MediaType)[keyof typeof MediaType]
+
+
+export const SaleStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]

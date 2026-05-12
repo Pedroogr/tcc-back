@@ -9,6 +9,17 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
+export type * from './models/BuyerProfile.js'
+export type * from './models/SellerProfile.js'
+export type * from './models/AuctionHouse.js'
+export type * from './models/AuctionHouseMember.js'
 export type * from './models/Auction.js'
+export type * from './models/AuctionSettings.js'
+export type * from './models/Consignment.js'
 export type * from './models/Lot.js'
+export type * from './models/LotMedia.js'
+export type * from './models/BuyerRegistration.js'
+export type * from './models/Bid.js'
+export type * from './models/Stream.js'
+export type * from './models/Sale.js'
 export type * from './commonInputTypes.js'

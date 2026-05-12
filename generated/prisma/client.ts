@@ -45,12 +45,67 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model BuyerProfile
+ * 
+ */
+export type BuyerProfile = Prisma.BuyerProfileModel
+/**
+ * Model SellerProfile
+ * 
+ */
+export type SellerProfile = Prisma.SellerProfileModel
+/**
+ * Model AuctionHouse
+ * 
+ */
+export type AuctionHouse = Prisma.AuctionHouseModel
+/**
+ * Model AuctionHouseMember
+ * 
+ */
+export type AuctionHouseMember = Prisma.AuctionHouseMemberModel
+/**
  * Model Auction
  * 
  */
 export type Auction = Prisma.AuctionModel
 /**
+ * Model AuctionSettings
+ * 
+ */
+export type AuctionSettings = Prisma.AuctionSettingsModel
+/**
+ * Model Consignment
+ * 
+ */
+export type Consignment = Prisma.ConsignmentModel
+/**
  * Model Lot
  * 
  */
 export type Lot = Prisma.LotModel
+/**
+ * Model LotMedia
+ * 
+ */
+export type LotMedia = Prisma.LotMediaModel
+/**
+ * Model BuyerRegistration
+ * 
+ */
+export type BuyerRegistration = Prisma.BuyerRegistrationModel
+/**
+ * Model Bid
+ * 
+ */
+export type Bid = Prisma.BidModel
+/**
+ * Model Stream
+ * 
+ */
+export type Stream = Prisma.StreamModel
+/**
+ * Model Sale
+ * 
+ */
+export type Sale = Prisma.SaleModel

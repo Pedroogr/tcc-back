@@ -52,8 +52,19 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  BuyerProfile: 'BuyerProfile',
+  SellerProfile: 'SellerProfile',
+  AuctionHouse: 'AuctionHouse',
+  AuctionHouseMember: 'AuctionHouseMember',
   Auction: 'Auction',
-  Lot: 'Lot'
+  AuctionSettings: 'AuctionSettings',
+  Consignment: 'Consignment',
+  Lot: 'Lot',
+  LotMedia: 'LotMedia',
+  BuyerRegistration: 'BuyerRegistration',
+  Bid: 'Bid',
+  Stream: 'Stream',
+  Sale: 'Sale'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -77,7 +88,10 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   passwordHash: 'passwordHash',
-  role: 'role',
+  phone: 'phone',
+  document: 'document',
+  platformRole: 'platformRole',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -85,18 +99,117 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const BuyerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  verificationStatus: 'verificationStatus',
+  creditLimit: 'creditLimit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BuyerProfileScalarFieldEnum = (typeof BuyerProfileScalarFieldEnum)[keyof typeof BuyerProfileScalarFieldEnum]
+
+
+export const SellerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ruralRegistration: 'ruralRegistration',
+  stateRegistration: 'stateRegistration',
+  farmName: 'farmName',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  verificationStatus: 'verificationStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SellerProfileScalarFieldEnum = (typeof SellerProfileScalarFieldEnum)[keyof typeof SellerProfileScalarFieldEnum]
+
+
+export const AuctionHouseScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  document: 'document',
+  email: 'email',
+  phone: 'phone',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  logoUrl: 'logoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuctionHouseScalarFieldEnum = (typeof AuctionHouseScalarFieldEnum)[keyof typeof AuctionHouseScalarFieldEnum]
+
+
+export const AuctionHouseMemberScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  active: 'active',
+  userId: 'userId',
+  auctionHouseId: 'auctionHouseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuctionHouseMemberScalarFieldEnum = (typeof AuctionHouseMemberScalarFieldEnum)[keyof typeof AuctionHouseMemberScalarFieldEnum]
+
+
 export const AuctionScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
   scheduledAt: 'scheduledAt',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
   status: 'status',
-  ownerId: 'ownerId',
+  mode: 'mode',
+  auctionHouseId: 'auctionHouseId',
+  createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AuctionScalarFieldEnum = (typeof AuctionScalarFieldEnum)[keyof typeof AuctionScalarFieldEnum]
+
+
+export const AuctionSettingsScalarFieldEnum = {
+  id: 'id',
+  auctionId: 'auctionId',
+  country: 'country',
+  currency: 'currency',
+  language: 'language',
+  commercialUnit: 'commercialUnit',
+  minBidIncrement: 'minBidIncrement',
+  allowPreBid: 'allowPreBid',
+  allowAutoExtension: 'allowAutoExtension',
+  autoExtensionSeconds: 'autoExtensionSeconds',
+  hasReservePrice: 'hasReservePrice',
+  requiresBuyerApproval: 'requiresBuyerApproval',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuctionSettingsScalarFieldEnum = (typeof AuctionSettingsScalarFieldEnum)[keyof typeof AuctionSettingsScalarFieldEnum]
+
+
+export const ConsignmentScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  sellerNotes: 'sellerNotes',
+  reviewNotes: 'reviewNotes',
+  reviewedAt: 'reviewedAt',
+  sellerId: 'sellerId',
+  reviewedById: 'reviewedById',
+  auctionHouseId: 'auctionHouseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConsignmentScalarFieldEnum = (typeof ConsignmentScalarFieldEnum)[keyof typeof ConsignmentScalarFieldEnum]
 
 
 export const LotScalarFieldEnum = {
@@ -105,16 +218,94 @@ export const LotScalarFieldEnum = {
   title: 'title',
   description: 'description',
   breed: 'breed',
+  category: 'category',
+  sex: 'sex',
+  ageMonths: 'ageMonths',
   weightKg: 'weightKg',
   quantity: 'quantity',
-  minPrice: 'minPrice',
+  initialPrice: 'initialPrice',
+  reservePrice: 'reservePrice',
   status: 'status',
   auctionId: 'auctionId',
+  consignmentId: 'consignmentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type LotScalarFieldEnum = (typeof LotScalarFieldEnum)[keyof typeof LotScalarFieldEnum]
+
+
+export const LotMediaScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  url: 'url',
+  description: 'description',
+  sortOrder: 'sortOrder',
+  lotId: 'lotId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LotMediaScalarFieldEnum = (typeof LotMediaScalarFieldEnum)[keyof typeof LotMediaScalarFieldEnum]
+
+
+export const BuyerRegistrationScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  notes: 'notes',
+  buyerId: 'buyerId',
+  auctionId: 'auctionId',
+  reviewedById: 'reviewedById',
+  approvedAt: 'approvedAt',
+  rejectedAt: 'rejectedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BuyerRegistrationScalarFieldEnum = (typeof BuyerRegistrationScalarFieldEnum)[keyof typeof BuyerRegistrationScalarFieldEnum]
+
+
+export const BidScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  status: 'status',
+  bidderId: 'bidderId',
+  lotId: 'lotId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BidScalarFieldEnum = (typeof BidScalarFieldEnum)[keyof typeof BidScalarFieldEnum]
+
+
+export const StreamScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  streamUrl: 'streamUrl',
+  protocol: 'protocol',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  auctionId: 'auctionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StreamScalarFieldEnum = (typeof StreamScalarFieldEnum)[keyof typeof StreamScalarFieldEnum]
+
+
+export const SaleScalarFieldEnum = {
+  id: 'id',
+  finalPrice: 'finalPrice',
+  status: 'status',
+  soldAt: 'soldAt',
+  notes: 'notes',
+  lotId: 'lotId',
+  buyerId: 'buyerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
 
 
 export const SortOrder = {

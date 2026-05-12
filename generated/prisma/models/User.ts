@@ -29,7 +29,10 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   passwordHash: string | null
-  role: $Enums.UserRole | null
+  phone: string | null
+  document: string | null
+  platformRole: $Enums.PlatformRole | null
+  status: $Enums.UserStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -39,7 +42,10 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   passwordHash: string | null
-  role: $Enums.UserRole | null
+  phone: string | null
+  document: string | null
+  platformRole: $Enums.PlatformRole | null
+  status: $Enums.UserStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,7 +55,10 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   passwordHash: number
-  role: number
+  phone: number
+  document: number
+  platformRole: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -61,7 +70,10 @@ export type UserMinAggregateInputType = {
   name?: true
   email?: true
   passwordHash?: true
-  role?: true
+  phone?: true
+  document?: true
+  platformRole?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -71,7 +83,10 @@ export type UserMaxAggregateInputType = {
   name?: true
   email?: true
   passwordHash?: true
-  role?: true
+  phone?: true
+  document?: true
+  platformRole?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -81,7 +96,10 @@ export type UserCountAggregateInputType = {
   name?: true
   email?: true
   passwordHash?: true
-  role?: true
+  phone?: true
+  document?: true
+  platformRole?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -164,7 +182,10 @@ export type UserGroupByOutputType = {
   name: string
   email: string
   passwordHash: string
-  role: $Enums.UserRole
+  phone: string | null
+  document: string | null
+  platformRole: $Enums.PlatformRole
+  status: $Enums.UserStatus
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -195,10 +216,22 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
-  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  phone?: Prisma.StringNullableFilter<"User"> | string | null
+  document?: Prisma.StringNullableFilter<"User"> | string | null
+  platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  auctions?: Prisma.AuctionListRelationFilter
+  buyerProfile?: Prisma.XOR<Prisma.BuyerProfileNullableScalarRelationFilter, Prisma.BuyerProfileWhereInput> | null
+  sellerProfile?: Prisma.XOR<Prisma.SellerProfileNullableScalarRelationFilter, Prisma.SellerProfileWhereInput> | null
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberListRelationFilter
+  createdAuctions?: Prisma.AuctionListRelationFilter
+  consignments?: Prisma.ConsignmentListRelationFilter
+  reviewedConsignments?: Prisma.ConsignmentListRelationFilter
+  buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
+  bids?: Prisma.BidListRelationFilter
+  sales?: Prisma.SaleListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -206,10 +239,22 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  document?: Prisma.SortOrderInput | Prisma.SortOrder
+  platformRole?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  auctions?: Prisma.AuctionOrderByRelationAggregateInput
+  buyerProfile?: Prisma.BuyerProfileOrderByWithRelationInput
+  sellerProfile?: Prisma.SellerProfileOrderByWithRelationInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberOrderByRelationAggregateInput
+  createdAuctions?: Prisma.AuctionOrderByRelationAggregateInput
+  consignments?: Prisma.ConsignmentOrderByRelationAggregateInput
+  reviewedConsignments?: Prisma.ConsignmentOrderByRelationAggregateInput
+  buyerRegistrations?: Prisma.BuyerRegistrationOrderByRelationAggregateInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationOrderByRelationAggregateInput
+  bids?: Prisma.BidOrderByRelationAggregateInput
+  sales?: Prisma.SaleOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -220,10 +265,22 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
-  role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  phone?: Prisma.StringNullableFilter<"User"> | string | null
+  document?: Prisma.StringNullableFilter<"User"> | string | null
+  platformRole?: Prisma.EnumPlatformRoleFilter<"User"> | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  auctions?: Prisma.AuctionListRelationFilter
+  buyerProfile?: Prisma.XOR<Prisma.BuyerProfileNullableScalarRelationFilter, Prisma.BuyerProfileWhereInput> | null
+  sellerProfile?: Prisma.XOR<Prisma.SellerProfileNullableScalarRelationFilter, Prisma.SellerProfileWhereInput> | null
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberListRelationFilter
+  createdAuctions?: Prisma.AuctionListRelationFilter
+  consignments?: Prisma.ConsignmentListRelationFilter
+  reviewedConsignments?: Prisma.ConsignmentListRelationFilter
+  buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
+  bids?: Prisma.BidListRelationFilter
+  sales?: Prisma.SaleListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -231,7 +288,10 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  document?: Prisma.SortOrderInput | Prisma.SortOrder
+  platformRole?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -247,7 +307,10 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
-  role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+  phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  document?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  platformRole?: Prisma.EnumPlatformRoleWithAggregatesFilter<"User"> | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -257,10 +320,22 @@ export type UserCreateInput = {
   name: string
   email: string
   passwordHash: string
-  role?: $Enums.UserRole
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  auctions?: Prisma.AuctionCreateNestedManyWithoutOwnerInput
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -268,10 +343,22 @@ export type UserUncheckedCreateInput = {
   name: string
   email: string
   passwordHash: string
-  role?: $Enums.UserRole
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  auctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutOwnerInput
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
 }
 
 export type UserUpdateInput = {
@@ -279,10 +366,22 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  auctions?: Prisma.AuctionUpdateManyWithoutOwnerNestedInput
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -290,10 +389,22 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  auctions?: Prisma.AuctionUncheckedUpdateManyWithoutOwnerNestedInput
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -301,7 +412,10 @@ export type UserCreateManyInput = {
   name: string
   email: string
   passwordHash: string
-  role?: $Enums.UserRole
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -311,7 +425,10 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -321,7 +438,10 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -331,7 +451,10 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  document?: Prisma.SortOrder
+  platformRole?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -341,7 +464,10 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  document?: Prisma.SortOrder
+  platformRole?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -351,7 +477,10 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  document?: Prisma.SortOrder
+  platformRole?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -361,86 +490,1213 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type EnumUserRoleFieldUpdateOperationsInput = {
-  set?: $Enums.UserRole
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type EnumPlatformRoleFieldUpdateOperationsInput = {
+  set?: $Enums.PlatformRole
+}
+
+export type EnumUserStatusFieldUpdateOperationsInput = {
+  set?: $Enums.UserStatus
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutAuctionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuctionsInput, Prisma.UserUncheckedCreateWithoutAuctionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuctionsInput
+export type UserCreateNestedOneWithoutBuyerProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBuyerProfileInput, Prisma.UserUncheckedCreateWithoutBuyerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBuyerProfileInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutAuctionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuctionsInput, Prisma.UserUncheckedCreateWithoutAuctionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuctionsInput
-  upsert?: Prisma.UserUpsertWithoutAuctionsInput
+export type UserUpdateOneRequiredWithoutBuyerProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBuyerProfileInput, Prisma.UserUncheckedCreateWithoutBuyerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBuyerProfileInput
+  upsert?: Prisma.UserUpsertWithoutBuyerProfileInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuctionsInput, Prisma.UserUpdateWithoutAuctionsInput>, Prisma.UserUncheckedUpdateWithoutAuctionsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBuyerProfileInput, Prisma.UserUpdateWithoutBuyerProfileInput>, Prisma.UserUncheckedUpdateWithoutBuyerProfileInput>
 }
 
-export type UserCreateWithoutAuctionsInput = {
+export type UserCreateNestedOneWithoutSellerProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSellerProfileInput, Prisma.UserUncheckedCreateWithoutSellerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSellerProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSellerProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSellerProfileInput, Prisma.UserUncheckedCreateWithoutSellerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSellerProfileInput
+  upsert?: Prisma.UserUpsertWithoutSellerProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSellerProfileInput, Prisma.UserUpdateWithoutSellerProfileInput>, Prisma.UserUncheckedUpdateWithoutSellerProfileInput>
+}
+
+export type UserCreateNestedOneWithoutAuctionHouseMembershipsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuctionHouseMembershipsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAuctionHouseMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuctionHouseMembershipsInput
+  upsert?: Prisma.UserUpsertWithoutAuctionHouseMembershipsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuctionHouseMembershipsInput, Prisma.UserUpdateWithoutAuctionHouseMembershipsInput>, Prisma.UserUncheckedUpdateWithoutAuctionHouseMembershipsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedAuctionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAuctionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAuctionsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedAuctionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAuctionsInput, Prisma.UserUpdateWithoutCreatedAuctionsInput>, Prisma.UserUncheckedUpdateWithoutCreatedAuctionsInput>
+}
+
+export type UserCreateNestedOneWithoutConsignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsignmentsInput, Prisma.UserUncheckedCreateWithoutConsignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReviewedConsignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedConsignmentsInput, Prisma.UserUncheckedCreateWithoutReviewedConsignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedConsignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConsignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsignmentsInput, Prisma.UserUncheckedCreateWithoutConsignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsignmentsInput
+  upsert?: Prisma.UserUpsertWithoutConsignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsignmentsInput, Prisma.UserUpdateWithoutConsignmentsInput>, Prisma.UserUncheckedUpdateWithoutConsignmentsInput>
+}
+
+export type UserUpdateOneWithoutReviewedConsignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedConsignmentsInput, Prisma.UserUncheckedCreateWithoutReviewedConsignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedConsignmentsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedConsignmentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedConsignmentsInput, Prisma.UserUpdateWithoutReviewedConsignmentsInput>, Prisma.UserUncheckedUpdateWithoutReviewedConsignmentsInput>
+}
+
+export type UserCreateNestedOneWithoutBuyerRegistrationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBuyerRegistrationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReviewedBuyerRegistrationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedBuyerRegistrationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBuyerRegistrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBuyerRegistrationsInput
+  upsert?: Prisma.UserUpsertWithoutBuyerRegistrationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBuyerRegistrationsInput, Prisma.UserUpdateWithoutBuyerRegistrationsInput>, Prisma.UserUncheckedUpdateWithoutBuyerRegistrationsInput>
+}
+
+export type UserUpdateOneWithoutReviewedBuyerRegistrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedBuyerRegistrationsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedBuyerRegistrationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedBuyerRegistrationsInput, Prisma.UserUpdateWithoutReviewedBuyerRegistrationsInput>, Prisma.UserUncheckedUpdateWithoutReviewedBuyerRegistrationsInput>
+}
+
+export type UserCreateNestedOneWithoutBidsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBidsInput, Prisma.UserUncheckedCreateWithoutBidsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBidsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBidsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBidsInput, Prisma.UserUncheckedCreateWithoutBidsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBidsInput
+  upsert?: Prisma.UserUpsertWithoutBidsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBidsInput, Prisma.UserUpdateWithoutBidsInput>, Prisma.UserUncheckedUpdateWithoutBidsInput>
+}
+
+export type UserCreateNestedOneWithoutSalesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSalesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSalesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSalesInput
+  upsert?: Prisma.UserUpsertWithoutSalesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSalesInput, Prisma.UserUpdateWithoutSalesInput>, Prisma.UserUncheckedUpdateWithoutSalesInput>
+}
+
+export type UserCreateWithoutBuyerProfileInput = {
   id?: string
   name: string
   email: string
   passwordHash: string
-  role?: $Enums.UserRole
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
 }
 
-export type UserUncheckedCreateWithoutAuctionsInput = {
+export type UserUncheckedCreateWithoutBuyerProfileInput = {
   id?: string
   name: string
   email: string
   passwordHash: string
-  role?: $Enums.UserRole
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
 }
 
-export type UserCreateOrConnectWithoutAuctionsInput = {
+export type UserCreateOrConnectWithoutBuyerProfileInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuctionsInput, Prisma.UserUncheckedCreateWithoutAuctionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBuyerProfileInput, Prisma.UserUncheckedCreateWithoutBuyerProfileInput>
 }
 
-export type UserUpsertWithoutAuctionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuctionsInput, Prisma.UserUncheckedUpdateWithoutAuctionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuctionsInput, Prisma.UserUncheckedCreateWithoutAuctionsInput>
+export type UserUpsertWithoutBuyerProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBuyerProfileInput, Prisma.UserUncheckedUpdateWithoutBuyerProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBuyerProfileInput, Prisma.UserUncheckedCreateWithoutBuyerProfileInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAuctionsInput = {
+export type UserUpdateToOneWithWhereWithoutBuyerProfileInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuctionsInput, Prisma.UserUncheckedUpdateWithoutAuctionsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBuyerProfileInput, Prisma.UserUncheckedUpdateWithoutBuyerProfileInput>
 }
 
-export type UserUpdateWithoutAuctionsInput = {
+export type UserUpdateWithoutBuyerProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAuctionsInput = {
+export type UserUncheckedUpdateWithoutBuyerProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutSellerProfileInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutSellerProfileInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutSellerProfileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSellerProfileInput, Prisma.UserUncheckedCreateWithoutSellerProfileInput>
+}
+
+export type UserUpsertWithoutSellerProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSellerProfileInput, Prisma.UserUncheckedUpdateWithoutSellerProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSellerProfileInput, Prisma.UserUncheckedCreateWithoutSellerProfileInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSellerProfileInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSellerProfileInput, Prisma.UserUncheckedUpdateWithoutSellerProfileInput>
+}
+
+export type UserUpdateWithoutSellerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSellerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutAuctionHouseMembershipsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutAuctionHouseMembershipsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutAuctionHouseMembershipsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
+}
+
+export type UserUpsertWithoutAuctionHouseMembershipsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedUpdateWithoutAuctionHouseMembershipsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuctionHouseMembershipsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedUpdateWithoutAuctionHouseMembershipsInput>
+}
+
+export type UserUpdateWithoutAuctionHouseMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuctionHouseMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutCreatedAuctionsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutCreatedAuctionsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutCreatedAuctionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
+}
+
+export type UserUpsertWithoutCreatedAuctionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAuctionsInput, Prisma.UserUncheckedUpdateWithoutCreatedAuctionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedAuctionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAuctionsInput, Prisma.UserUncheckedUpdateWithoutCreatedAuctionsInput>
+}
+
+export type UserUpdateWithoutCreatedAuctionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedAuctionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutConsignmentsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutConsignmentsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutConsignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsignmentsInput, Prisma.UserUncheckedCreateWithoutConsignmentsInput>
+}
+
+export type UserCreateWithoutReviewedConsignmentsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutReviewedConsignmentsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutReviewedConsignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedConsignmentsInput, Prisma.UserUncheckedCreateWithoutReviewedConsignmentsInput>
+}
+
+export type UserUpsertWithoutConsignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConsignmentsInput, Prisma.UserUncheckedUpdateWithoutConsignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsignmentsInput, Prisma.UserUncheckedCreateWithoutConsignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConsignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConsignmentsInput, Prisma.UserUncheckedUpdateWithoutConsignmentsInput>
+}
+
+export type UserUpdateWithoutConsignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConsignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUpsertWithoutReviewedConsignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedConsignmentsInput, Prisma.UserUncheckedUpdateWithoutReviewedConsignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedConsignmentsInput, Prisma.UserUncheckedCreateWithoutReviewedConsignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedConsignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedConsignmentsInput, Prisma.UserUncheckedUpdateWithoutReviewedConsignmentsInput>
+}
+
+export type UserUpdateWithoutReviewedConsignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedConsignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutBuyerRegistrationsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutBuyerRegistrationsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutBuyerRegistrationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutBuyerRegistrationsInput>
+}
+
+export type UserCreateWithoutReviewedBuyerRegistrationsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutReviewedBuyerRegistrationsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutReviewedBuyerRegistrationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedBuyerRegistrationsInput>
+}
+
+export type UserUpsertWithoutBuyerRegistrationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBuyerRegistrationsInput, Prisma.UserUncheckedUpdateWithoutBuyerRegistrationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutBuyerRegistrationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBuyerRegistrationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBuyerRegistrationsInput, Prisma.UserUncheckedUpdateWithoutBuyerRegistrationsInput>
+}
+
+export type UserUpdateWithoutBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUpsertWithoutReviewedBuyerRegistrationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedBuyerRegistrationsInput, Prisma.UserUncheckedUpdateWithoutReviewedBuyerRegistrationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedBuyerRegistrationsInput, Prisma.UserUncheckedCreateWithoutReviewedBuyerRegistrationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedBuyerRegistrationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedBuyerRegistrationsInput, Prisma.UserUncheckedUpdateWithoutReviewedBuyerRegistrationsInput>
+}
+
+export type UserUpdateWithoutReviewedBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutBidsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
+}
+
+export type UserUncheckedCreateWithoutBidsInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
+}
+
+export type UserCreateOrConnectWithoutBidsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBidsInput, Prisma.UserUncheckedCreateWithoutBidsInput>
+}
+
+export type UserUpsertWithoutBidsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBidsInput, Prisma.UserUncheckedUpdateWithoutBidsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBidsInput, Prisma.UserUncheckedCreateWithoutBidsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBidsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBidsInput, Prisma.UserUncheckedUpdateWithoutBidsInput>
+}
+
+export type UserUpdateWithoutBidsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBidsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
+}
+
+export type UserCreateWithoutSalesInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
+}
+
+export type UserUncheckedCreateWithoutSalesInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  phone?: string | null
+  document?: string | null
+  platformRole?: $Enums.PlatformRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
+  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
+  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
+}
+
+export type UserCreateOrConnectWithoutSalesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+}
+
+export type UserUpsertWithoutSalesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSalesInput, Prisma.UserUncheckedUpdateWithoutSalesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSalesInput, Prisma.UserUncheckedCreateWithoutSalesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSalesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSalesInput, Prisma.UserUncheckedUpdateWithoutSalesInput>
+}
+
+export type UserUpdateWithoutSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSalesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
+  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
+  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
+  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
+  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
+  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
 }
 
 
@@ -449,11 +1705,25 @@ export type UserUncheckedUpdateWithoutAuctionsInput = {
  */
 
 export type UserCountOutputType = {
-  auctions: number
+  auctionHouseMemberships: number
+  createdAuctions: number
+  consignments: number
+  reviewedConsignments: number
+  buyerRegistrations: number
+  reviewedBuyerRegistrations: number
+  bids: number
+  sales: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  auctions?: boolean | UserCountOutputTypeCountAuctionsArgs
+  auctionHouseMemberships?: boolean | UserCountOutputTypeCountAuctionHouseMembershipsArgs
+  createdAuctions?: boolean | UserCountOutputTypeCountCreatedAuctionsArgs
+  consignments?: boolean | UserCountOutputTypeCountConsignmentsArgs
+  reviewedConsignments?: boolean | UserCountOutputTypeCountReviewedConsignmentsArgs
+  buyerRegistrations?: boolean | UserCountOutputTypeCountBuyerRegistrationsArgs
+  reviewedBuyerRegistrations?: boolean | UserCountOutputTypeCountReviewedBuyerRegistrationsArgs
+  bids?: boolean | UserCountOutputTypeCountBidsArgs
+  sales?: boolean | UserCountOutputTypeCountSalesArgs
 }
 
 /**
@@ -469,8 +1739,57 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountAuctionHouseMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuctionHouseMemberWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuctionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConsignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConsignmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedConsignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConsignmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBuyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BuyerRegistrationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedBuyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BuyerRegistrationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBidsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BidWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SaleWhereInput
 }
 
 
@@ -479,10 +1798,22 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   email?: boolean
   passwordHash?: boolean
-  role?: boolean
+  phone?: boolean
+  document?: boolean
+  platformRole?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  auctions?: boolean | Prisma.User$auctionsArgs<ExtArgs>
+  buyerProfile?: boolean | Prisma.User$buyerProfileArgs<ExtArgs>
+  sellerProfile?: boolean | Prisma.User$sellerProfileArgs<ExtArgs>
+  auctionHouseMemberships?: boolean | Prisma.User$auctionHouseMembershipsArgs<ExtArgs>
+  createdAuctions?: boolean | Prisma.User$createdAuctionsArgs<ExtArgs>
+  consignments?: boolean | Prisma.User$consignmentsArgs<ExtArgs>
+  reviewedConsignments?: boolean | Prisma.User$reviewedConsignmentsArgs<ExtArgs>
+  buyerRegistrations?: boolean | Prisma.User$buyerRegistrationsArgs<ExtArgs>
+  reviewedBuyerRegistrations?: boolean | Prisma.User$reviewedBuyerRegistrationsArgs<ExtArgs>
+  bids?: boolean | Prisma.User$bidsArgs<ExtArgs>
+  sales?: boolean | Prisma.User$salesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -491,7 +1822,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   passwordHash?: boolean
-  role?: boolean
+  phone?: boolean
+  document?: boolean
+  platformRole?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -501,7 +1835,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   passwordHash?: boolean
-  role?: boolean
+  phone?: boolean
+  document?: boolean
+  platformRole?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -511,14 +1848,26 @@ export type UserSelectScalar = {
   name?: boolean
   email?: boolean
   passwordHash?: boolean
-  role?: boolean
+  phone?: boolean
+  document?: boolean
+  platformRole?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "phone" | "document" | "platformRole" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  auctions?: boolean | Prisma.User$auctionsArgs<ExtArgs>
+  buyerProfile?: boolean | Prisma.User$buyerProfileArgs<ExtArgs>
+  sellerProfile?: boolean | Prisma.User$sellerProfileArgs<ExtArgs>
+  auctionHouseMemberships?: boolean | Prisma.User$auctionHouseMembershipsArgs<ExtArgs>
+  createdAuctions?: boolean | Prisma.User$createdAuctionsArgs<ExtArgs>
+  consignments?: boolean | Prisma.User$consignmentsArgs<ExtArgs>
+  reviewedConsignments?: boolean | Prisma.User$reviewedConsignmentsArgs<ExtArgs>
+  buyerRegistrations?: boolean | Prisma.User$buyerRegistrationsArgs<ExtArgs>
+  reviewedBuyerRegistrations?: boolean | Prisma.User$reviewedBuyerRegistrationsArgs<ExtArgs>
+  bids?: boolean | Prisma.User$bidsArgs<ExtArgs>
+  sales?: boolean | Prisma.User$salesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -527,14 +1876,26 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    auctions: Prisma.$AuctionPayload<ExtArgs>[]
+    buyerProfile: Prisma.$BuyerProfilePayload<ExtArgs> | null
+    sellerProfile: Prisma.$SellerProfilePayload<ExtArgs> | null
+    auctionHouseMemberships: Prisma.$AuctionHouseMemberPayload<ExtArgs>[]
+    createdAuctions: Prisma.$AuctionPayload<ExtArgs>[]
+    consignments: Prisma.$ConsignmentPayload<ExtArgs>[]
+    reviewedConsignments: Prisma.$ConsignmentPayload<ExtArgs>[]
+    buyerRegistrations: Prisma.$BuyerRegistrationPayload<ExtArgs>[]
+    reviewedBuyerRegistrations: Prisma.$BuyerRegistrationPayload<ExtArgs>[]
+    bids: Prisma.$BidPayload<ExtArgs>[]
+    sales: Prisma.$SalePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     email: string
     passwordHash: string
-    role: $Enums.UserRole
+    phone: string | null
+    document: string | null
+    platformRole: $Enums.PlatformRole
+    status: $Enums.UserStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -931,7 +2292,16 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  auctions<T extends Prisma.User$auctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  buyerProfile<T extends Prisma.User$buyerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$buyerProfileArgs<ExtArgs>>): Prisma.Prisma__BuyerProfileClient<runtime.Types.Result.GetResult<Prisma.$BuyerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sellerProfile<T extends Prisma.User$sellerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sellerProfileArgs<ExtArgs>>): Prisma.Prisma__SellerProfileClient<runtime.Types.Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  auctionHouseMemberships<T extends Prisma.User$auctionHouseMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auctionHouseMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuctionHouseMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdAuctions<T extends Prisma.User$createdAuctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAuctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  consignments<T extends Prisma.User$consignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedConsignments<T extends Prisma.User$reviewedConsignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedConsignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  buyerRegistrations<T extends Prisma.User$buyerRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$buyerRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BuyerRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedBuyerRegistrations<T extends Prisma.User$reviewedBuyerRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedBuyerRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BuyerRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bids<T extends Prisma.User$bidsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bidsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BidPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sales<T extends Prisma.User$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -965,7 +2335,10 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
-  readonly role: Prisma.FieldRef<"User", 'UserRole'>
+  readonly phone: Prisma.FieldRef<"User", 'String'>
+  readonly document: Prisma.FieldRef<"User", 'String'>
+  readonly platformRole: Prisma.FieldRef<"User", 'PlatformRole'>
+  readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1361,9 +2734,71 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.auctions
+ * User.buyerProfile
  */
-export type User$auctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$buyerProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BuyerProfile
+   */
+  select?: Prisma.BuyerProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BuyerProfile
+   */
+  omit?: Prisma.BuyerProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerProfileInclude<ExtArgs> | null
+  where?: Prisma.BuyerProfileWhereInput
+}
+
+/**
+ * User.sellerProfile
+ */
+export type User$sellerProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SellerProfile
+   */
+  select?: Prisma.SellerProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SellerProfile
+   */
+  omit?: Prisma.SellerProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SellerProfileInclude<ExtArgs> | null
+  where?: Prisma.SellerProfileWhereInput
+}
+
+/**
+ * User.auctionHouseMemberships
+ */
+export type User$auctionHouseMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuctionHouseMember
+   */
+  select?: Prisma.AuctionHouseMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuctionHouseMember
+   */
+  omit?: Prisma.AuctionHouseMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuctionHouseMemberInclude<ExtArgs> | null
+  where?: Prisma.AuctionHouseMemberWhereInput
+  orderBy?: Prisma.AuctionHouseMemberOrderByWithRelationInput | Prisma.AuctionHouseMemberOrderByWithRelationInput[]
+  cursor?: Prisma.AuctionHouseMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuctionHouseMemberScalarFieldEnum | Prisma.AuctionHouseMemberScalarFieldEnum[]
+}
+
+/**
+ * User.createdAuctions
+ */
+export type User$createdAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Auction
    */
@@ -1382,6 +2817,150 @@ export type User$auctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.AuctionScalarFieldEnum | Prisma.AuctionScalarFieldEnum[]
+}
+
+/**
+ * User.consignments
+ */
+export type User$consignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Consignment
+   */
+  select?: Prisma.ConsignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Consignment
+   */
+  omit?: Prisma.ConsignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsignmentInclude<ExtArgs> | null
+  where?: Prisma.ConsignmentWhereInput
+  orderBy?: Prisma.ConsignmentOrderByWithRelationInput | Prisma.ConsignmentOrderByWithRelationInput[]
+  cursor?: Prisma.ConsignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConsignmentScalarFieldEnum | Prisma.ConsignmentScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedConsignments
+ */
+export type User$reviewedConsignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Consignment
+   */
+  select?: Prisma.ConsignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Consignment
+   */
+  omit?: Prisma.ConsignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsignmentInclude<ExtArgs> | null
+  where?: Prisma.ConsignmentWhereInput
+  orderBy?: Prisma.ConsignmentOrderByWithRelationInput | Prisma.ConsignmentOrderByWithRelationInput[]
+  cursor?: Prisma.ConsignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConsignmentScalarFieldEnum | Prisma.ConsignmentScalarFieldEnum[]
+}
+
+/**
+ * User.buyerRegistrations
+ */
+export type User$buyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BuyerRegistration
+   */
+  select?: Prisma.BuyerRegistrationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BuyerRegistration
+   */
+  omit?: Prisma.BuyerRegistrationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerRegistrationInclude<ExtArgs> | null
+  where?: Prisma.BuyerRegistrationWhereInput
+  orderBy?: Prisma.BuyerRegistrationOrderByWithRelationInput | Prisma.BuyerRegistrationOrderByWithRelationInput[]
+  cursor?: Prisma.BuyerRegistrationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BuyerRegistrationScalarFieldEnum | Prisma.BuyerRegistrationScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedBuyerRegistrations
+ */
+export type User$reviewedBuyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BuyerRegistration
+   */
+  select?: Prisma.BuyerRegistrationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BuyerRegistration
+   */
+  omit?: Prisma.BuyerRegistrationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerRegistrationInclude<ExtArgs> | null
+  where?: Prisma.BuyerRegistrationWhereInput
+  orderBy?: Prisma.BuyerRegistrationOrderByWithRelationInput | Prisma.BuyerRegistrationOrderByWithRelationInput[]
+  cursor?: Prisma.BuyerRegistrationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BuyerRegistrationScalarFieldEnum | Prisma.BuyerRegistrationScalarFieldEnum[]
+}
+
+/**
+ * User.bids
+ */
+export type User$bidsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Bid
+   */
+  select?: Prisma.BidSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Bid
+   */
+  omit?: Prisma.BidOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BidInclude<ExtArgs> | null
+  where?: Prisma.BidWhereInput
+  orderBy?: Prisma.BidOrderByWithRelationInput | Prisma.BidOrderByWithRelationInput[]
+  cursor?: Prisma.BidWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BidScalarFieldEnum | Prisma.BidScalarFieldEnum[]
+}
+
+/**
+ * User.sales
+ */
+export type User$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Sale
+   */
+  select?: Prisma.SaleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Sale
+   */
+  omit?: Prisma.SaleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleInclude<ExtArgs> | null
+  where?: Prisma.SaleWhereInput
+  orderBy?: Prisma.SaleOrderByWithRelationInput | Prisma.SaleOrderByWithRelationInput[]
+  cursor?: Prisma.SaleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SaleScalarFieldEnum | Prisma.SaleScalarFieldEnum[]
 }
 
 /**

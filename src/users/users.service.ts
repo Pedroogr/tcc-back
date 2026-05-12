@@ -15,14 +15,12 @@ export class UsersService {
       data: {
         name: data.name,
         email: data.email,
-        passwordHash,
-        role: data.role,
+        passwordHash
       },
       select: {
         id: true,
         name: true,
         email: true,
-        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -36,7 +34,6 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
-        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -62,8 +59,7 @@ export class UsersService {
 
     const updateData: any = {
       name: data.name,
-      email: data.email,
-      role: data.role,
+      email: data.email
     };
 
     if (data.password) {
@@ -77,7 +73,6 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
-        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -93,7 +88,6 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
-        role: true,
         createdAt: true,
         updatedAt: true,
       },

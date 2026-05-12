@@ -29,8 +29,12 @@ export type AuctionMinAggregateOutputType = {
   title: string | null
   description: string | null
   scheduledAt: Date | null
+  startedAt: Date | null
+  finishedAt: Date | null
   status: $Enums.AuctionStatus | null
-  ownerId: string | null
+  mode: $Enums.AuctionMode | null
+  auctionHouseId: string | null
+  createdById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,8 +44,12 @@ export type AuctionMaxAggregateOutputType = {
   title: string | null
   description: string | null
   scheduledAt: Date | null
+  startedAt: Date | null
+  finishedAt: Date | null
   status: $Enums.AuctionStatus | null
-  ownerId: string | null
+  mode: $Enums.AuctionMode | null
+  auctionHouseId: string | null
+  createdById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,8 +59,12 @@ export type AuctionCountAggregateOutputType = {
   title: number
   description: number
   scheduledAt: number
+  startedAt: number
+  finishedAt: number
   status: number
-  ownerId: number
+  mode: number
+  auctionHouseId: number
+  createdById: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -64,8 +76,12 @@ export type AuctionMinAggregateInputType = {
   title?: true
   description?: true
   scheduledAt?: true
+  startedAt?: true
+  finishedAt?: true
   status?: true
-  ownerId?: true
+  mode?: true
+  auctionHouseId?: true
+  createdById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -75,8 +91,12 @@ export type AuctionMaxAggregateInputType = {
   title?: true
   description?: true
   scheduledAt?: true
+  startedAt?: true
+  finishedAt?: true
   status?: true
-  ownerId?: true
+  mode?: true
+  auctionHouseId?: true
+  createdById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -86,8 +106,12 @@ export type AuctionCountAggregateInputType = {
   title?: true
   description?: true
   scheduledAt?: true
+  startedAt?: true
+  finishedAt?: true
   status?: true
-  ownerId?: true
+  mode?: true
+  auctionHouseId?: true
+  createdById?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -170,8 +194,12 @@ export type AuctionGroupByOutputType = {
   title: string
   description: string | null
   scheduledAt: Date | null
+  startedAt: Date | null
+  finishedAt: Date | null
   status: $Enums.AuctionStatus
-  ownerId: string
+  mode: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
   createdAt: Date
   updatedAt: Date
   _count: AuctionCountAggregateOutputType | null
@@ -202,12 +230,20 @@ export type AuctionWhereInput = {
   title?: Prisma.StringFilter<"Auction"> | string
   description?: Prisma.StringNullableFilter<"Auction"> | string | null
   scheduledAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
+  startedAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
   status?: Prisma.EnumAuctionStatusFilter<"Auction"> | $Enums.AuctionStatus
-  ownerId?: Prisma.StringFilter<"Auction"> | string
+  mode?: Prisma.EnumAuctionModeFilter<"Auction"> | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFilter<"Auction"> | string
+  createdById?: Prisma.StringFilter<"Auction"> | string
   createdAt?: Prisma.DateTimeFilter<"Auction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Auction"> | Date | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  auctionHouse?: Prisma.XOR<Prisma.AuctionHouseScalarRelationFilter, Prisma.AuctionHouseWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  settings?: Prisma.XOR<Prisma.AuctionSettingsNullableScalarRelationFilter, Prisma.AuctionSettingsWhereInput> | null
+  stream?: Prisma.XOR<Prisma.StreamNullableScalarRelationFilter, Prisma.StreamWhereInput> | null
   lots?: Prisma.LotListRelationFilter
+  buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
 }
 
 export type AuctionOrderByWithRelationInput = {
@@ -215,12 +251,20 @@ export type AuctionOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  owner?: Prisma.UserOrderByWithRelationInput
+  auctionHouse?: Prisma.AuctionHouseOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
+  settings?: Prisma.AuctionSettingsOrderByWithRelationInput
+  stream?: Prisma.StreamOrderByWithRelationInput
   lots?: Prisma.LotOrderByRelationAggregateInput
+  buyerRegistrations?: Prisma.BuyerRegistrationOrderByRelationAggregateInput
 }
 
 export type AuctionWhereUniqueInput = Prisma.AtLeast<{
@@ -231,12 +275,20 @@ export type AuctionWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Auction"> | string
   description?: Prisma.StringNullableFilter<"Auction"> | string | null
   scheduledAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
+  startedAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
   status?: Prisma.EnumAuctionStatusFilter<"Auction"> | $Enums.AuctionStatus
-  ownerId?: Prisma.StringFilter<"Auction"> | string
+  mode?: Prisma.EnumAuctionModeFilter<"Auction"> | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFilter<"Auction"> | string
+  createdById?: Prisma.StringFilter<"Auction"> | string
   createdAt?: Prisma.DateTimeFilter<"Auction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Auction"> | Date | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  auctionHouse?: Prisma.XOR<Prisma.AuctionHouseScalarRelationFilter, Prisma.AuctionHouseWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  settings?: Prisma.XOR<Prisma.AuctionSettingsNullableScalarRelationFilter, Prisma.AuctionSettingsWhereInput> | null
+  stream?: Prisma.XOR<Prisma.StreamNullableScalarRelationFilter, Prisma.StreamWhereInput> | null
   lots?: Prisma.LotListRelationFilter
+  buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
 }, "id">
 
 export type AuctionOrderByWithAggregationInput = {
@@ -244,8 +296,12 @@ export type AuctionOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AuctionCountOrderByAggregateInput
@@ -261,8 +317,12 @@ export type AuctionScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Auction"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Auction"> | string | null
   scheduledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Auction"> | Date | string | null
+  startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Auction"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Auction"> | Date | string | null
   status?: Prisma.EnumAuctionStatusWithAggregatesFilter<"Auction"> | $Enums.AuctionStatus
-  ownerId?: Prisma.StringWithAggregatesFilter<"Auction"> | string
+  mode?: Prisma.EnumAuctionModeWithAggregatesFilter<"Auction"> | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringWithAggregatesFilter<"Auction"> | string
+  createdById?: Prisma.StringWithAggregatesFilter<"Auction"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Auction"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Auction"> | Date | string
 }
@@ -272,11 +332,18 @@ export type AuctionCreateInput = {
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutAuctionsInput
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateInput = {
@@ -284,11 +351,18 @@ export type AuctionUncheckedCreateInput = {
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
-  ownerId: string
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUpdateInput = {
@@ -296,11 +370,18 @@ export type AuctionUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutAuctionsNestedInput
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateInput = {
@@ -308,11 +389,18 @@ export type AuctionUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionCreateManyInput = {
@@ -320,8 +408,12 @@ export type AuctionCreateManyInput = {
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
-  ownerId: string
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -331,7 +423,10 @@ export type AuctionUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -341,8 +436,12 @@ export type AuctionUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -362,8 +461,12 @@ export type AuctionCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -373,8 +476,12 @@ export type AuctionMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -384,8 +491,12 @@ export type AuctionMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -395,50 +506,93 @@ export type AuctionScalarRelationFilter = {
   isNot?: Prisma.AuctionWhereInput
 }
 
-export type AuctionCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.AuctionCreateWithoutOwnerInput, Prisma.AuctionUncheckedCreateWithoutOwnerInput> | Prisma.AuctionCreateWithoutOwnerInput[] | Prisma.AuctionUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutOwnerInput | Prisma.AuctionCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.AuctionCreateManyOwnerInputEnvelope
+export type AuctionNullableScalarRelationFilter = {
+  is?: Prisma.AuctionWhereInput | null
+  isNot?: Prisma.AuctionWhereInput | null
+}
+
+export type AuctionCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutCreatedByInput, Prisma.AuctionUncheckedCreateWithoutCreatedByInput> | Prisma.AuctionCreateWithoutCreatedByInput[] | Prisma.AuctionUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutCreatedByInput | Prisma.AuctionCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.AuctionCreateManyCreatedByInputEnvelope
   connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
 }
 
-export type AuctionUncheckedCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.AuctionCreateWithoutOwnerInput, Prisma.AuctionUncheckedCreateWithoutOwnerInput> | Prisma.AuctionCreateWithoutOwnerInput[] | Prisma.AuctionUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutOwnerInput | Prisma.AuctionCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.AuctionCreateManyOwnerInputEnvelope
+export type AuctionUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutCreatedByInput, Prisma.AuctionUncheckedCreateWithoutCreatedByInput> | Prisma.AuctionCreateWithoutCreatedByInput[] | Prisma.AuctionUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutCreatedByInput | Prisma.AuctionCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.AuctionCreateManyCreatedByInputEnvelope
   connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
 }
 
-export type AuctionUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.AuctionCreateWithoutOwnerInput, Prisma.AuctionUncheckedCreateWithoutOwnerInput> | Prisma.AuctionCreateWithoutOwnerInput[] | Prisma.AuctionUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutOwnerInput | Prisma.AuctionCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.AuctionUpsertWithWhereUniqueWithoutOwnerInput | Prisma.AuctionUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.AuctionCreateManyOwnerInputEnvelope
+export type AuctionUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutCreatedByInput, Prisma.AuctionUncheckedCreateWithoutCreatedByInput> | Prisma.AuctionCreateWithoutCreatedByInput[] | Prisma.AuctionUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutCreatedByInput | Prisma.AuctionCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.AuctionUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.AuctionUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.AuctionCreateManyCreatedByInputEnvelope
   set?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
   disconnect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
   delete?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
   connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
-  update?: Prisma.AuctionUpdateWithWhereUniqueWithoutOwnerInput | Prisma.AuctionUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.AuctionUpdateManyWithWhereWithoutOwnerInput | Prisma.AuctionUpdateManyWithWhereWithoutOwnerInput[]
+  update?: Prisma.AuctionUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.AuctionUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.AuctionUpdateManyWithWhereWithoutCreatedByInput | Prisma.AuctionUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.AuctionScalarWhereInput | Prisma.AuctionScalarWhereInput[]
 }
 
-export type AuctionUncheckedUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.AuctionCreateWithoutOwnerInput, Prisma.AuctionUncheckedCreateWithoutOwnerInput> | Prisma.AuctionCreateWithoutOwnerInput[] | Prisma.AuctionUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutOwnerInput | Prisma.AuctionCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.AuctionUpsertWithWhereUniqueWithoutOwnerInput | Prisma.AuctionUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.AuctionCreateManyOwnerInputEnvelope
+export type AuctionUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutCreatedByInput, Prisma.AuctionUncheckedCreateWithoutCreatedByInput> | Prisma.AuctionCreateWithoutCreatedByInput[] | Prisma.AuctionUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutCreatedByInput | Prisma.AuctionCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.AuctionUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.AuctionUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.AuctionCreateManyCreatedByInputEnvelope
   set?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
   disconnect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
   delete?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
   connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
-  update?: Prisma.AuctionUpdateWithWhereUniqueWithoutOwnerInput | Prisma.AuctionUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.AuctionUpdateManyWithWhereWithoutOwnerInput | Prisma.AuctionUpdateManyWithWhereWithoutOwnerInput[]
+  update?: Prisma.AuctionUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.AuctionUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.AuctionUpdateManyWithWhereWithoutCreatedByInput | Prisma.AuctionUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.AuctionScalarWhereInput | Prisma.AuctionScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type AuctionCreateNestedManyWithoutAuctionHouseInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutAuctionHouseInput, Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput> | Prisma.AuctionCreateWithoutAuctionHouseInput[] | Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput | Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput[]
+  createMany?: Prisma.AuctionCreateManyAuctionHouseInputEnvelope
+  connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+}
+
+export type AuctionUncheckedCreateNestedManyWithoutAuctionHouseInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutAuctionHouseInput, Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput> | Prisma.AuctionCreateWithoutAuctionHouseInput[] | Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput | Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput[]
+  createMany?: Prisma.AuctionCreateManyAuctionHouseInputEnvelope
+  connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+}
+
+export type AuctionUpdateManyWithoutAuctionHouseNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutAuctionHouseInput, Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput> | Prisma.AuctionCreateWithoutAuctionHouseInput[] | Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput | Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput[]
+  upsert?: Prisma.AuctionUpsertWithWhereUniqueWithoutAuctionHouseInput | Prisma.AuctionUpsertWithWhereUniqueWithoutAuctionHouseInput[]
+  createMany?: Prisma.AuctionCreateManyAuctionHouseInputEnvelope
+  set?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  disconnect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  delete?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  update?: Prisma.AuctionUpdateWithWhereUniqueWithoutAuctionHouseInput | Prisma.AuctionUpdateWithWhereUniqueWithoutAuctionHouseInput[]
+  updateMany?: Prisma.AuctionUpdateManyWithWhereWithoutAuctionHouseInput | Prisma.AuctionUpdateManyWithWhereWithoutAuctionHouseInput[]
+  deleteMany?: Prisma.AuctionScalarWhereInput | Prisma.AuctionScalarWhereInput[]
+}
+
+export type AuctionUncheckedUpdateManyWithoutAuctionHouseNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutAuctionHouseInput, Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput> | Prisma.AuctionCreateWithoutAuctionHouseInput[] | Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput | Prisma.AuctionCreateOrConnectWithoutAuctionHouseInput[]
+  upsert?: Prisma.AuctionUpsertWithWhereUniqueWithoutAuctionHouseInput | Prisma.AuctionUpsertWithWhereUniqueWithoutAuctionHouseInput[]
+  createMany?: Prisma.AuctionCreateManyAuctionHouseInputEnvelope
+  set?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  disconnect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  delete?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  connect?: Prisma.AuctionWhereUniqueInput | Prisma.AuctionWhereUniqueInput[]
+  update?: Prisma.AuctionUpdateWithWhereUniqueWithoutAuctionHouseInput | Prisma.AuctionUpdateWithWhereUniqueWithoutAuctionHouseInput[]
+  updateMany?: Prisma.AuctionUpdateManyWithWhereWithoutAuctionHouseInput | Prisma.AuctionUpdateManyWithWhereWithoutAuctionHouseInput[]
+  deleteMany?: Prisma.AuctionScalarWhereInput | Prisma.AuctionScalarWhereInput[]
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -449,66 +603,128 @@ export type EnumAuctionStatusFieldUpdateOperationsInput = {
   set?: $Enums.AuctionStatus
 }
 
+export type EnumAuctionModeFieldUpdateOperationsInput = {
+  set?: $Enums.AuctionMode
+}
+
+export type AuctionCreateNestedOneWithoutSettingsInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutSettingsInput, Prisma.AuctionUncheckedCreateWithoutSettingsInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutSettingsInput
+  connect?: Prisma.AuctionWhereUniqueInput
+}
+
+export type AuctionUpdateOneRequiredWithoutSettingsNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutSettingsInput, Prisma.AuctionUncheckedCreateWithoutSettingsInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutSettingsInput
+  upsert?: Prisma.AuctionUpsertWithoutSettingsInput
+  connect?: Prisma.AuctionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionUpdateToOneWithWhereWithoutSettingsInput, Prisma.AuctionUpdateWithoutSettingsInput>, Prisma.AuctionUncheckedUpdateWithoutSettingsInput>
+}
+
 export type AuctionCreateNestedOneWithoutLotsInput = {
   create?: Prisma.XOR<Prisma.AuctionCreateWithoutLotsInput, Prisma.AuctionUncheckedCreateWithoutLotsInput>
   connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutLotsInput
   connect?: Prisma.AuctionWhereUniqueInput
 }
 
-export type AuctionUpdateOneRequiredWithoutLotsNestedInput = {
+export type AuctionUpdateOneWithoutLotsNestedInput = {
   create?: Prisma.XOR<Prisma.AuctionCreateWithoutLotsInput, Prisma.AuctionUncheckedCreateWithoutLotsInput>
   connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutLotsInput
   upsert?: Prisma.AuctionUpsertWithoutLotsInput
+  disconnect?: Prisma.AuctionWhereInput | boolean
+  delete?: Prisma.AuctionWhereInput | boolean
   connect?: Prisma.AuctionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionUpdateToOneWithWhereWithoutLotsInput, Prisma.AuctionUpdateWithoutLotsInput>, Prisma.AuctionUncheckedUpdateWithoutLotsInput>
 }
 
-export type AuctionCreateWithoutOwnerInput = {
+export type AuctionCreateNestedOneWithoutBuyerRegistrationsInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutBuyerRegistrationsInput, Prisma.AuctionUncheckedCreateWithoutBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutBuyerRegistrationsInput
+  connect?: Prisma.AuctionWhereUniqueInput
+}
+
+export type AuctionUpdateOneRequiredWithoutBuyerRegistrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutBuyerRegistrationsInput, Prisma.AuctionUncheckedCreateWithoutBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutBuyerRegistrationsInput
+  upsert?: Prisma.AuctionUpsertWithoutBuyerRegistrationsInput
+  connect?: Prisma.AuctionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionUpdateToOneWithWhereWithoutBuyerRegistrationsInput, Prisma.AuctionUpdateWithoutBuyerRegistrationsInput>, Prisma.AuctionUncheckedUpdateWithoutBuyerRegistrationsInput>
+}
+
+export type AuctionCreateNestedOneWithoutStreamInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutStreamInput, Prisma.AuctionUncheckedCreateWithoutStreamInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutStreamInput
+  connect?: Prisma.AuctionWhereUniqueInput
+}
+
+export type AuctionUpdateOneRequiredWithoutStreamNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutStreamInput, Prisma.AuctionUncheckedCreateWithoutStreamInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutStreamInput
+  upsert?: Prisma.AuctionUpsertWithoutStreamInput
+  connect?: Prisma.AuctionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionUpdateToOneWithWhereWithoutStreamInput, Prisma.AuctionUpdateWithoutStreamInput>, Prisma.AuctionUncheckedUpdateWithoutStreamInput>
+}
+
+export type AuctionCreateWithoutCreatedByInput = {
   id?: string
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
   createdAt?: Date | string
   updatedAt?: Date | string
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionInput
 }
 
-export type AuctionUncheckedCreateWithoutOwnerInput = {
+export type AuctionUncheckedCreateWithoutCreatedByInput = {
   id?: string
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput
 }
 
-export type AuctionCreateOrConnectWithoutOwnerInput = {
+export type AuctionCreateOrConnectWithoutCreatedByInput = {
   where: Prisma.AuctionWhereUniqueInput
-  create: Prisma.XOR<Prisma.AuctionCreateWithoutOwnerInput, Prisma.AuctionUncheckedCreateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutCreatedByInput, Prisma.AuctionUncheckedCreateWithoutCreatedByInput>
 }
 
-export type AuctionCreateManyOwnerInputEnvelope = {
-  data: Prisma.AuctionCreateManyOwnerInput | Prisma.AuctionCreateManyOwnerInput[]
+export type AuctionCreateManyCreatedByInputEnvelope = {
+  data: Prisma.AuctionCreateManyCreatedByInput | Prisma.AuctionCreateManyCreatedByInput[]
   skipDuplicates?: boolean
 }
 
-export type AuctionUpsertWithWhereUniqueWithoutOwnerInput = {
+export type AuctionUpsertWithWhereUniqueWithoutCreatedByInput = {
   where: Prisma.AuctionWhereUniqueInput
-  update: Prisma.XOR<Prisma.AuctionUpdateWithoutOwnerInput, Prisma.AuctionUncheckedUpdateWithoutOwnerInput>
-  create: Prisma.XOR<Prisma.AuctionCreateWithoutOwnerInput, Prisma.AuctionUncheckedCreateWithoutOwnerInput>
+  update: Prisma.XOR<Prisma.AuctionUpdateWithoutCreatedByInput, Prisma.AuctionUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutCreatedByInput, Prisma.AuctionUncheckedCreateWithoutCreatedByInput>
 }
 
-export type AuctionUpdateWithWhereUniqueWithoutOwnerInput = {
+export type AuctionUpdateWithWhereUniqueWithoutCreatedByInput = {
   where: Prisma.AuctionWhereUniqueInput
-  data: Prisma.XOR<Prisma.AuctionUpdateWithoutOwnerInput, Prisma.AuctionUncheckedUpdateWithoutOwnerInput>
+  data: Prisma.XOR<Prisma.AuctionUpdateWithoutCreatedByInput, Prisma.AuctionUncheckedUpdateWithoutCreatedByInput>
 }
 
-export type AuctionUpdateManyWithWhereWithoutOwnerInput = {
+export type AuctionUpdateManyWithWhereWithoutCreatedByInput = {
   where: Prisma.AuctionScalarWhereInput
-  data: Prisma.XOR<Prisma.AuctionUpdateManyMutationInput, Prisma.AuctionUncheckedUpdateManyWithoutOwnerInput>
+  data: Prisma.XOR<Prisma.AuctionUpdateManyMutationInput, Prisma.AuctionUncheckedUpdateManyWithoutCreatedByInput>
 }
 
 export type AuctionScalarWhereInput = {
@@ -519,10 +735,164 @@ export type AuctionScalarWhereInput = {
   title?: Prisma.StringFilter<"Auction"> | string
   description?: Prisma.StringNullableFilter<"Auction"> | string | null
   scheduledAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
+  startedAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableFilter<"Auction"> | Date | string | null
   status?: Prisma.EnumAuctionStatusFilter<"Auction"> | $Enums.AuctionStatus
-  ownerId?: Prisma.StringFilter<"Auction"> | string
+  mode?: Prisma.EnumAuctionModeFilter<"Auction"> | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFilter<"Auction"> | string
+  createdById?: Prisma.StringFilter<"Auction"> | string
   createdAt?: Prisma.DateTimeFilter<"Auction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Auction"> | Date | string
+}
+
+export type AuctionCreateWithoutAuctionHouseInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionUncheckedCreateWithoutAuctionHouseInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionCreateOrConnectWithoutAuctionHouseInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutAuctionHouseInput, Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput>
+}
+
+export type AuctionCreateManyAuctionHouseInputEnvelope = {
+  data: Prisma.AuctionCreateManyAuctionHouseInput | Prisma.AuctionCreateManyAuctionHouseInput[]
+  skipDuplicates?: boolean
+}
+
+export type AuctionUpsertWithWhereUniqueWithoutAuctionHouseInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  update: Prisma.XOR<Prisma.AuctionUpdateWithoutAuctionHouseInput, Prisma.AuctionUncheckedUpdateWithoutAuctionHouseInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutAuctionHouseInput, Prisma.AuctionUncheckedCreateWithoutAuctionHouseInput>
+}
+
+export type AuctionUpdateWithWhereUniqueWithoutAuctionHouseInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  data: Prisma.XOR<Prisma.AuctionUpdateWithoutAuctionHouseInput, Prisma.AuctionUncheckedUpdateWithoutAuctionHouseInput>
+}
+
+export type AuctionUpdateManyWithWhereWithoutAuctionHouseInput = {
+  where: Prisma.AuctionScalarWhereInput
+  data: Prisma.XOR<Prisma.AuctionUpdateManyMutationInput, Prisma.AuctionUncheckedUpdateManyWithoutAuctionHouseInput>
+}
+
+export type AuctionCreateWithoutSettingsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedAuctionsInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionUncheckedCreateWithoutSettingsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionCreateOrConnectWithoutSettingsInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutSettingsInput, Prisma.AuctionUncheckedCreateWithoutSettingsInput>
+}
+
+export type AuctionUpsertWithoutSettingsInput = {
+  update: Prisma.XOR<Prisma.AuctionUpdateWithoutSettingsInput, Prisma.AuctionUncheckedUpdateWithoutSettingsInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutSettingsInput, Prisma.AuctionUncheckedCreateWithoutSettingsInput>
+  where?: Prisma.AuctionWhereInput
+}
+
+export type AuctionUpdateToOneWithWhereWithoutSettingsInput = {
+  where?: Prisma.AuctionWhereInput
+  data: Prisma.XOR<Prisma.AuctionUpdateWithoutSettingsInput, Prisma.AuctionUncheckedUpdateWithoutSettingsInput>
+}
+
+export type AuctionUpdateWithoutSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionUncheckedUpdateWithoutSettingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionCreateWithoutLotsInput = {
@@ -530,10 +900,17 @@ export type AuctionCreateWithoutLotsInput = {
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutAuctionsInput
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateWithoutLotsInput = {
@@ -541,10 +918,17 @@ export type AuctionUncheckedCreateWithoutLotsInput = {
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
-  ownerId: string
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionCreateOrConnectWithoutLotsInput = {
@@ -568,10 +952,17 @@ export type AuctionUpdateWithoutLotsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutAuctionsNestedInput
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateWithoutLotsInput = {
@@ -579,50 +970,319 @@ export type AuctionUncheckedUpdateWithoutLotsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
-export type AuctionCreateManyOwnerInput = {
+export type AuctionCreateWithoutBuyerRegistrationsInput = {
   id?: string
   title: string
   description?: string | null
   scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionUncheckedCreateWithoutBuyerRegistrationsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionCreateOrConnectWithoutBuyerRegistrationsInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutBuyerRegistrationsInput, Prisma.AuctionUncheckedCreateWithoutBuyerRegistrationsInput>
+}
+
+export type AuctionUpsertWithoutBuyerRegistrationsInput = {
+  update: Prisma.XOR<Prisma.AuctionUpdateWithoutBuyerRegistrationsInput, Prisma.AuctionUncheckedUpdateWithoutBuyerRegistrationsInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutBuyerRegistrationsInput, Prisma.AuctionUncheckedCreateWithoutBuyerRegistrationsInput>
+  where?: Prisma.AuctionWhereInput
+}
+
+export type AuctionUpdateToOneWithWhereWithoutBuyerRegistrationsInput = {
+  where?: Prisma.AuctionWhereInput
+  data: Prisma.XOR<Prisma.AuctionUpdateWithoutBuyerRegistrationsInput, Prisma.AuctionUncheckedUpdateWithoutBuyerRegistrationsInput>
+}
+
+export type AuctionUpdateWithoutBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionUncheckedUpdateWithoutBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionCreateWithoutStreamInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionUncheckedCreateWithoutStreamInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionCreateOrConnectWithoutStreamInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutStreamInput, Prisma.AuctionUncheckedCreateWithoutStreamInput>
+}
+
+export type AuctionUpsertWithoutStreamInput = {
+  update: Prisma.XOR<Prisma.AuctionUpdateWithoutStreamInput, Prisma.AuctionUncheckedUpdateWithoutStreamInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutStreamInput, Prisma.AuctionUncheckedCreateWithoutStreamInput>
+  where?: Prisma.AuctionWhereInput
+}
+
+export type AuctionUpdateToOneWithWhereWithoutStreamInput = {
+  where?: Prisma.AuctionWhereInput
+  data: Prisma.XOR<Prisma.AuctionUpdateWithoutStreamInput, Prisma.AuctionUncheckedUpdateWithoutStreamInput>
+}
+
+export type AuctionUpdateWithoutStreamInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionUncheckedUpdateWithoutStreamInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionCreateManyCreatedByInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type AuctionUpdateWithoutOwnerInput = {
+export type AuctionUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionNestedInput
 }
 
-export type AuctionUncheckedUpdateWithoutOwnerInput = {
+export type AuctionUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
-export type AuctionUncheckedUpdateManyWithoutOwnerInput = {
+export type AuctionUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AuctionCreateManyAuctionHouseInput = {
+  id?: string
+  title: string
+  description?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  mode?: $Enums.AuctionMode
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AuctionUpdateWithoutAuctionHouseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionUncheckedUpdateWithoutAuctionHouseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionUncheckedUpdateManyWithoutAuctionHouseInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  mode?: Prisma.EnumAuctionModeFieldUpdateOperationsInput | $Enums.AuctionMode
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -634,10 +1294,12 @@ export type AuctionUncheckedUpdateManyWithoutOwnerInput = {
 
 export type AuctionCountOutputType = {
   lots: number
+  buyerRegistrations: number
 }
 
 export type AuctionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lots?: boolean | AuctionCountOutputTypeCountLotsArgs
+  buyerRegistrations?: boolean | AuctionCountOutputTypeCountBuyerRegistrationsArgs
 }
 
 /**
@@ -657,18 +1319,33 @@ export type AuctionCountOutputTypeCountLotsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.LotWhereInput
 }
 
+/**
+ * AuctionCountOutputType without action
+ */
+export type AuctionCountOutputTypeCountBuyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BuyerRegistrationWhereInput
+}
+
 
 export type AuctionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
   scheduledAt?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
   status?: boolean
-  ownerId?: boolean
+  mode?: boolean
+  auctionHouseId?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  settings?: boolean | Prisma.Auction$settingsArgs<ExtArgs>
+  stream?: boolean | Prisma.Auction$streamArgs<ExtArgs>
   lots?: boolean | Prisma.Auction$lotsArgs<ExtArgs>
+  buyerRegistrations?: boolean | Prisma.Auction$buyerRegistrationsArgs<ExtArgs>
   _count?: boolean | Prisma.AuctionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["auction"]>
 
@@ -677,11 +1354,16 @@ export type AuctionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   title?: boolean
   description?: boolean
   scheduledAt?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
   status?: boolean
-  ownerId?: boolean
+  mode?: boolean
+  auctionHouseId?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["auction"]>
 
 export type AuctionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -689,11 +1371,16 @@ export type AuctionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   title?: boolean
   description?: boolean
   scheduledAt?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
   status?: boolean
-  ownerId?: boolean
+  mode?: boolean
+  auctionHouseId?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["auction"]>
 
 export type AuctionSelectScalar = {
@@ -701,38 +1388,56 @@ export type AuctionSelectScalar = {
   title?: boolean
   description?: boolean
   scheduledAt?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
   status?: boolean
-  ownerId?: boolean
+  mode?: boolean
+  auctionHouseId?: boolean
+  createdById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AuctionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "scheduledAt" | "status" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["auction"]>
+export type AuctionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "scheduledAt" | "startedAt" | "finishedAt" | "status" | "mode" | "auctionHouseId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["auction"]>
 export type AuctionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  settings?: boolean | Prisma.Auction$settingsArgs<ExtArgs>
+  stream?: boolean | Prisma.Auction$streamArgs<ExtArgs>
   lots?: boolean | Prisma.Auction$lotsArgs<ExtArgs>
+  buyerRegistrations?: boolean | Prisma.Auction$buyerRegistrationsArgs<ExtArgs>
   _count?: boolean | Prisma.AuctionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AuctionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type AuctionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $AuctionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Auction"
   objects: {
-    owner: Prisma.$UserPayload<ExtArgs>
+    auctionHouse: Prisma.$AuctionHousePayload<ExtArgs>
+    createdBy: Prisma.$UserPayload<ExtArgs>
+    settings: Prisma.$AuctionSettingsPayload<ExtArgs> | null
+    stream: Prisma.$StreamPayload<ExtArgs> | null
     lots: Prisma.$LotPayload<ExtArgs>[]
+    buyerRegistrations: Prisma.$BuyerRegistrationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     description: string | null
     scheduledAt: Date | null
+    startedAt: Date | null
+    finishedAt: Date | null
     status: $Enums.AuctionStatus
-    ownerId: string
+    mode: $Enums.AuctionMode
+    auctionHouseId: string
+    createdById: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["auction"]>
@@ -1129,8 +1834,12 @@ readonly fields: AuctionFieldRefs;
  */
 export interface Prisma__AuctionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  auctionHouse<T extends Prisma.AuctionHouseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouseDefaultArgs<ExtArgs>>): Prisma.Prisma__AuctionHouseClient<runtime.Types.Result.GetResult<Prisma.$AuctionHousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  settings<T extends Prisma.Auction$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$settingsArgs<ExtArgs>>): Prisma.Prisma__AuctionSettingsClient<runtime.Types.Result.GetResult<Prisma.$AuctionSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  stream<T extends Prisma.Auction$streamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$streamArgs<ExtArgs>>): Prisma.Prisma__StreamClient<runtime.Types.Result.GetResult<Prisma.$StreamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   lots<T extends Prisma.Auction$lotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$lotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  buyerRegistrations<T extends Prisma.Auction$buyerRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$buyerRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BuyerRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1164,8 +1873,12 @@ export interface AuctionFieldRefs {
   readonly title: Prisma.FieldRef<"Auction", 'String'>
   readonly description: Prisma.FieldRef<"Auction", 'String'>
   readonly scheduledAt: Prisma.FieldRef<"Auction", 'DateTime'>
+  readonly startedAt: Prisma.FieldRef<"Auction", 'DateTime'>
+  readonly finishedAt: Prisma.FieldRef<"Auction", 'DateTime'>
   readonly status: Prisma.FieldRef<"Auction", 'AuctionStatus'>
-  readonly ownerId: Prisma.FieldRef<"Auction", 'String'>
+  readonly mode: Prisma.FieldRef<"Auction", 'AuctionMode'>
+  readonly auctionHouseId: Prisma.FieldRef<"Auction", 'String'>
+  readonly createdById: Prisma.FieldRef<"Auction", 'String'>
   readonly createdAt: Prisma.FieldRef<"Auction", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Auction", 'DateTime'>
 }
@@ -1569,6 +2282,44 @@ export type AuctionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Auction.settings
+ */
+export type Auction$settingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuctionSettings
+   */
+  select?: Prisma.AuctionSettingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuctionSettings
+   */
+  omit?: Prisma.AuctionSettingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuctionSettingsInclude<ExtArgs> | null
+  where?: Prisma.AuctionSettingsWhereInput
+}
+
+/**
+ * Auction.stream
+ */
+export type Auction$streamArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Stream
+   */
+  select?: Prisma.StreamSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Stream
+   */
+  omit?: Prisma.StreamOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StreamInclude<ExtArgs> | null
+  where?: Prisma.StreamWhereInput
+}
+
+/**
  * Auction.lots
  */
 export type Auction$lotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1590,6 +2341,30 @@ export type Auction$lotsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.LotScalarFieldEnum | Prisma.LotScalarFieldEnum[]
+}
+
+/**
+ * Auction.buyerRegistrations
+ */
+export type Auction$buyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BuyerRegistration
+   */
+  select?: Prisma.BuyerRegistrationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BuyerRegistration
+   */
+  omit?: Prisma.BuyerRegistrationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerRegistrationInclude<ExtArgs> | null
+  where?: Prisma.BuyerRegistrationWhereInput
+  orderBy?: Prisma.BuyerRegistrationOrderByWithRelationInput | Prisma.BuyerRegistrationOrderByWithRelationInput[]
+  cursor?: Prisma.BuyerRegistrationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BuyerRegistrationScalarFieldEnum | Prisma.BuyerRegistrationScalarFieldEnum[]
 }
 
 /**

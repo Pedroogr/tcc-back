@@ -26,82 +26,93 @@
     const status = document.getElementById('status');
     const localVideo = document.getElementById('localVideo');
 
-    let localStream;
-    let peerConnection;
+    let localStream = null;
+    let started = false;
 
-    function createPeerConnection() {
-      //turn on transmission and spectator
-      peerConnection = new RTCPeerConnection();
+    // Uma conexão por viewer
+    const peerConnections = {};
 
-      // add cam and mic to webRTC connection
+    function createPeerConnection(viewerId) {
+      const pc = new RTCPeerConnection();
+
       localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
+        pc.addTrack(track, localStream);
       });
 
-      peerConnection.onicecandidate = (event) => {
+      pc.onicecandidate = (event) => {
         if (event.candidate) {
           socket.emit('ice-candidate', {
-            room,
+            targetId: viewerId,
+            senderId: socket.id,
             candidate: event.candidate,
           });
         }
       };
+
+      peerConnections[viewerId] = pc;
+      return pc;
     }
 
     startBtn.addEventListener('click', async () => {
       try {
         localStream = await navigator.mediaDevices.getUserMedia({
           video: true,
-          audio: true,
+          audio: true
         });
 
         localVideo.srcObject = localStream;
-        // nest gateway uses this to put this socket in a socker.io room
         socket.emit('join-room', { room, role: 'transmitter' });
-        status.textContent = 'Câmera ligada. Aguardando espectador...';
+        started = true;
+        status.textContent = 'Transmissão iniciada. Aguardando espectadores...';
       } catch (error) {
         console.error(error);
         status.textContent = 'Erro ao acessar câmera: ' + error.message;
       }
     });
 
-
-    socket.on('viewer-ready', async () => {
+    socket.on('viewer-ready', async ({ viewerId }) => {
       try {
-        status.textContent = 'Espectador conectado. Criando oferta...';
-        //if someone listening create connection
-        createPeerConnection();
+        if (!started || !localStream) return;
 
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
+        status.textContent = `Viewer ${viewerId} entrou. Criando conexão...`;
+
+        const pc = createPeerConnection(viewerId);
+
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
 
         socket.emit('offer', {
-          room,
+          targetId: viewerId,
+          senderId: socket.id,
           sdp: offer,
         });
 
-        status.textContent = 'Oferta enviada.';
+        status.textContent = `Offer enviada para viewer ${viewerId}`;
       } catch (error) {
         console.error(error);
-        status.textContent = 'Erro ao criar oferta: ' + error.message;
+        status.textContent = 'Erro ao criar offer: ' + error.message;
       }
     });
 
-    socket.on('answer', async (answer) => {
+    socket.on('answer', async ({ senderId, sdp }) => {
       try {
-        await peerConnection.setRemoteDescription(answer);
-        status.textContent = 'Conexão estabelecida com espectador.';
+        const pc = peerConnections[senderId];
+        if (!pc) return;
+
+        await pc.setRemoteDescription(sdp);
+        status.textContent = `Conexão estabelecida com ${senderId}`;
       } catch (error) {
         console.error(error);
-        status.textContent = 'Erro ao receber resposta: ' + error.message;
+        status.textContent = 'Erro ao receber answer: ' + error.message;
       }
     });
 
-    socket.on('ice-candidate', async (candidate) => {
+    socket.on('ice-candidate', async ({ senderId, candidate }) => {
       try {
-        if (peerConnection) {
-          await peerConnection.addIceCandidate(candidate);
-        }
+        const pc = peerConnections[senderId];
+        if (!pc) return;
+
+        await pc.addIceCandidate(candidate);
       } catch (error) {
         console.error('Erro ao adicionar ICE candidate no transmissor:', error);
       }

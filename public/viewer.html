@@ -23,7 +23,8 @@
     const status = document.getElementById('status');
     const remoteVideo = document.getElementById('remoteVideo');
 
-    let peerConnection;
+    let peerConnection = null;
+    let transmitterId = null;
 
     function createPeerConnection() {
       peerConnection = new RTCPeerConnection();
@@ -34,9 +35,10 @@
       };
 
       peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
+        if (event.candidate && transmitterId) {
           socket.emit('ice-candidate', {
-            room,
+            targetId: transmitterId,
+            senderId: socket.id,
             candidate: event.candidate,
           });
         }
@@ -46,32 +48,34 @@
     socket.emit('join-room', { room, role: 'viewer' });
     status.textContent = 'Aguardando oferta do transmissor...';
 
-    socket.on('offer', async (offer) => {
+    socket.on('offer', async ({ senderId, sdp }) => {
       try {
+        transmitterId = senderId;
+
         createPeerConnection();
 
-        await peerConnection.setRemoteDescription(offer);
+        await peerConnection.setRemoteDescription(sdp);
 
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
 
         socket.emit('answer', {
-          room,
+          targetId: transmitterId,
+          senderId: socket.id,
           sdp: answer,
         });
 
         status.textContent = 'Resposta enviada ao transmissor.';
       } catch (error) {
         console.error(error);
-        status.textContent = 'Erro ao processar oferta: ' + error.message;
+        status.textContent = 'Erro ao processar offer: ' + error.message;
       }
     });
 
-    socket.on('ice-candidate', async (candidate) => {
+    socket.on('ice-candidate', async ({ senderId, candidate }) => {
       try {
-        if (peerConnection) {
-          await peerConnection.addIceCandidate(candidate);
-        }
+        if (!peerConnection) return;
+        await peerConnection.addIceCandidate(candidate);
       } catch (error) {
         console.error('Erro ao adicionar ICE candidate no viewer:', error);
       }
