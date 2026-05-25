@@ -28,12 +28,10 @@ export type AggregateAuctionSettings = {
 
 export type AuctionSettingsAvgAggregateOutputType = {
   minBidIncrement: runtime.Decimal | null
-  autoExtensionSeconds: number | null
 }
 
 export type AuctionSettingsSumAggregateOutputType = {
   minBidIncrement: runtime.Decimal | null
-  autoExtensionSeconds: number | null
 }
 
 export type AuctionSettingsMinAggregateOutputType = {
@@ -44,10 +42,6 @@ export type AuctionSettingsMinAggregateOutputType = {
   language: string | null
   commercialUnit: $Enums.CommercialUnit | null
   minBidIncrement: runtime.Decimal | null
-  allowPreBid: boolean | null
-  allowAutoExtension: boolean | null
-  autoExtensionSeconds: number | null
-  hasReservePrice: boolean | null
   requiresBuyerApproval: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,10 +55,6 @@ export type AuctionSettingsMaxAggregateOutputType = {
   language: string | null
   commercialUnit: $Enums.CommercialUnit | null
   minBidIncrement: runtime.Decimal | null
-  allowPreBid: boolean | null
-  allowAutoExtension: boolean | null
-  autoExtensionSeconds: number | null
-  hasReservePrice: boolean | null
   requiresBuyerApproval: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -78,10 +68,6 @@ export type AuctionSettingsCountAggregateOutputType = {
   language: number
   commercialUnit: number
   minBidIncrement: number
-  allowPreBid: number
-  allowAutoExtension: number
-  autoExtensionSeconds: number
-  hasReservePrice: number
   requiresBuyerApproval: number
   createdAt: number
   updatedAt: number
@@ -91,12 +77,10 @@ export type AuctionSettingsCountAggregateOutputType = {
 
 export type AuctionSettingsAvgAggregateInputType = {
   minBidIncrement?: true
-  autoExtensionSeconds?: true
 }
 
 export type AuctionSettingsSumAggregateInputType = {
   minBidIncrement?: true
-  autoExtensionSeconds?: true
 }
 
 export type AuctionSettingsMinAggregateInputType = {
@@ -107,10 +91,6 @@ export type AuctionSettingsMinAggregateInputType = {
   language?: true
   commercialUnit?: true
   minBidIncrement?: true
-  allowPreBid?: true
-  allowAutoExtension?: true
-  autoExtensionSeconds?: true
-  hasReservePrice?: true
   requiresBuyerApproval?: true
   createdAt?: true
   updatedAt?: true
@@ -124,10 +104,6 @@ export type AuctionSettingsMaxAggregateInputType = {
   language?: true
   commercialUnit?: true
   minBidIncrement?: true
-  allowPreBid?: true
-  allowAutoExtension?: true
-  autoExtensionSeconds?: true
-  hasReservePrice?: true
   requiresBuyerApproval?: true
   createdAt?: true
   updatedAt?: true
@@ -141,10 +117,6 @@ export type AuctionSettingsCountAggregateInputType = {
   language?: true
   commercialUnit?: true
   minBidIncrement?: true
-  allowPreBid?: true
-  allowAutoExtension?: true
-  autoExtensionSeconds?: true
-  hasReservePrice?: true
   requiresBuyerApproval?: true
   createdAt?: true
   updatedAt?: true
@@ -245,10 +217,6 @@ export type AuctionSettingsGroupByOutputType = {
   language: string
   commercialUnit: $Enums.CommercialUnit
   minBidIncrement: runtime.Decimal
-  allowPreBid: boolean
-  allowAutoExtension: boolean
-  autoExtensionSeconds: number | null
-  hasReservePrice: boolean
   requiresBuyerApproval: boolean
   createdAt: Date
   updatedAt: Date
@@ -285,10 +253,6 @@ export type AuctionSettingsWhereInput = {
   language?: Prisma.StringFilter<"AuctionSettings"> | string
   commercialUnit?: Prisma.EnumCommercialUnitFilter<"AuctionSettings"> | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFilter<"AuctionSettings"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFilter<"AuctionSettings"> | boolean
-  allowAutoExtension?: Prisma.BoolFilter<"AuctionSettings"> | boolean
-  autoExtensionSeconds?: Prisma.IntNullableFilter<"AuctionSettings"> | number | null
-  hasReservePrice?: Prisma.BoolFilter<"AuctionSettings"> | boolean
   requiresBuyerApproval?: Prisma.BoolFilter<"AuctionSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"AuctionSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AuctionSettings"> | Date | string
@@ -303,10 +267,6 @@ export type AuctionSettingsOrderByWithRelationInput = {
   language?: Prisma.SortOrder
   commercialUnit?: Prisma.SortOrder
   minBidIncrement?: Prisma.SortOrder
-  allowPreBid?: Prisma.SortOrder
-  allowAutoExtension?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
-  hasReservePrice?: Prisma.SortOrder
   requiresBuyerApproval?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -324,10 +284,6 @@ export type AuctionSettingsWhereUniqueInput = Prisma.AtLeast<{
   language?: Prisma.StringFilter<"AuctionSettings"> | string
   commercialUnit?: Prisma.EnumCommercialUnitFilter<"AuctionSettings"> | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFilter<"AuctionSettings"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFilter<"AuctionSettings"> | boolean
-  allowAutoExtension?: Prisma.BoolFilter<"AuctionSettings"> | boolean
-  autoExtensionSeconds?: Prisma.IntNullableFilter<"AuctionSettings"> | number | null
-  hasReservePrice?: Prisma.BoolFilter<"AuctionSettings"> | boolean
   requiresBuyerApproval?: Prisma.BoolFilter<"AuctionSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"AuctionSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AuctionSettings"> | Date | string
@@ -342,10 +298,6 @@ export type AuctionSettingsOrderByWithAggregationInput = {
   language?: Prisma.SortOrder
   commercialUnit?: Prisma.SortOrder
   minBidIncrement?: Prisma.SortOrder
-  allowPreBid?: Prisma.SortOrder
-  allowAutoExtension?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
-  hasReservePrice?: Prisma.SortOrder
   requiresBuyerApproval?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -367,10 +319,6 @@ export type AuctionSettingsScalarWhereWithAggregatesInput = {
   language?: Prisma.StringWithAggregatesFilter<"AuctionSettings"> | string
   commercialUnit?: Prisma.EnumCommercialUnitWithAggregatesFilter<"AuctionSettings"> | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalWithAggregatesFilter<"AuctionSettings"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolWithAggregatesFilter<"AuctionSettings"> | boolean
-  allowAutoExtension?: Prisma.BoolWithAggregatesFilter<"AuctionSettings"> | boolean
-  autoExtensionSeconds?: Prisma.IntNullableWithAggregatesFilter<"AuctionSettings"> | number | null
-  hasReservePrice?: Prisma.BoolWithAggregatesFilter<"AuctionSettings"> | boolean
   requiresBuyerApproval?: Prisma.BoolWithAggregatesFilter<"AuctionSettings"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AuctionSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AuctionSettings"> | Date | string
@@ -383,10 +331,6 @@ export type AuctionSettingsCreateInput = {
   language?: string
   commercialUnit?: $Enums.CommercialUnit
   minBidIncrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: number | null
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -401,10 +345,6 @@ export type AuctionSettingsUncheckedCreateInput = {
   language?: string
   commercialUnit?: $Enums.CommercialUnit
   minBidIncrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: number | null
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -417,10 +357,6 @@ export type AuctionSettingsUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   commercialUnit?: Prisma.EnumCommercialUnitFieldUpdateOperationsInput | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  allowAutoExtension?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  autoExtensionSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasReservePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresBuyerApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -435,10 +371,6 @@ export type AuctionSettingsUncheckedUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   commercialUnit?: Prisma.EnumCommercialUnitFieldUpdateOperationsInput | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  allowAutoExtension?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  autoExtensionSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasReservePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresBuyerApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -452,10 +384,6 @@ export type AuctionSettingsCreateManyInput = {
   language?: string
   commercialUnit?: $Enums.CommercialUnit
   minBidIncrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: number | null
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -468,10 +396,6 @@ export type AuctionSettingsUpdateManyMutationInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   commercialUnit?: Prisma.EnumCommercialUnitFieldUpdateOperationsInput | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  allowAutoExtension?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  autoExtensionSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasReservePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresBuyerApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -485,10 +409,6 @@ export type AuctionSettingsUncheckedUpdateManyInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   commercialUnit?: Prisma.EnumCommercialUnitFieldUpdateOperationsInput | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  allowAutoExtension?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  autoExtensionSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasReservePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresBuyerApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,10 +427,6 @@ export type AuctionSettingsCountOrderByAggregateInput = {
   language?: Prisma.SortOrder
   commercialUnit?: Prisma.SortOrder
   minBidIncrement?: Prisma.SortOrder
-  allowPreBid?: Prisma.SortOrder
-  allowAutoExtension?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrder
-  hasReservePrice?: Prisma.SortOrder
   requiresBuyerApproval?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -518,7 +434,6 @@ export type AuctionSettingsCountOrderByAggregateInput = {
 
 export type AuctionSettingsAvgOrderByAggregateInput = {
   minBidIncrement?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrder
 }
 
 export type AuctionSettingsMaxOrderByAggregateInput = {
@@ -529,10 +444,6 @@ export type AuctionSettingsMaxOrderByAggregateInput = {
   language?: Prisma.SortOrder
   commercialUnit?: Prisma.SortOrder
   minBidIncrement?: Prisma.SortOrder
-  allowPreBid?: Prisma.SortOrder
-  allowAutoExtension?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrder
-  hasReservePrice?: Prisma.SortOrder
   requiresBuyerApproval?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -546,10 +457,6 @@ export type AuctionSettingsMinOrderByAggregateInput = {
   language?: Prisma.SortOrder
   commercialUnit?: Prisma.SortOrder
   minBidIncrement?: Prisma.SortOrder
-  allowPreBid?: Prisma.SortOrder
-  allowAutoExtension?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrder
-  hasReservePrice?: Prisma.SortOrder
   requiresBuyerApproval?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -557,7 +464,6 @@ export type AuctionSettingsMinOrderByAggregateInput = {
 
 export type AuctionSettingsSumOrderByAggregateInput = {
   minBidIncrement?: Prisma.SortOrder
-  autoExtensionSeconds?: Prisma.SortOrder
 }
 
 export type AuctionSettingsCreateNestedOneWithoutAuctionInput = {
@@ -604,14 +510,6 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type AuctionSettingsCreateWithoutAuctionInput = {
   id?: string
   country?: string
@@ -619,10 +517,6 @@ export type AuctionSettingsCreateWithoutAuctionInput = {
   language?: string
   commercialUnit?: $Enums.CommercialUnit
   minBidIncrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: number | null
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -635,10 +529,6 @@ export type AuctionSettingsUncheckedCreateWithoutAuctionInput = {
   language?: string
   commercialUnit?: $Enums.CommercialUnit
   minBidIncrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: number | null
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -667,10 +557,6 @@ export type AuctionSettingsUpdateWithoutAuctionInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   commercialUnit?: Prisma.EnumCommercialUnitFieldUpdateOperationsInput | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  allowAutoExtension?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  autoExtensionSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasReservePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresBuyerApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -683,10 +569,6 @@ export type AuctionSettingsUncheckedUpdateWithoutAuctionInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   commercialUnit?: Prisma.EnumCommercialUnitFieldUpdateOperationsInput | $Enums.CommercialUnit
   minBidIncrement?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowPreBid?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  allowAutoExtension?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  autoExtensionSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasReservePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresBuyerApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -702,10 +584,6 @@ export type AuctionSettingsSelect<ExtArgs extends runtime.Types.Extensions.Inter
   language?: boolean
   commercialUnit?: boolean
   minBidIncrement?: boolean
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: boolean
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -720,10 +598,6 @@ export type AuctionSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   language?: boolean
   commercialUnit?: boolean
   minBidIncrement?: boolean
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: boolean
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -738,10 +612,6 @@ export type AuctionSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   language?: boolean
   commercialUnit?: boolean
   minBidIncrement?: boolean
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: boolean
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -756,16 +626,12 @@ export type AuctionSettingsSelectScalar = {
   language?: boolean
   commercialUnit?: boolean
   minBidIncrement?: boolean
-  allowPreBid?: boolean
-  allowAutoExtension?: boolean
-  autoExtensionSeconds?: boolean
-  hasReservePrice?: boolean
   requiresBuyerApproval?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AuctionSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "auctionId" | "country" | "currency" | "language" | "commercialUnit" | "minBidIncrement" | "allowPreBid" | "allowAutoExtension" | "autoExtensionSeconds" | "hasReservePrice" | "requiresBuyerApproval" | "createdAt" | "updatedAt", ExtArgs["result"]["auctionSettings"]>
+export type AuctionSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "auctionId" | "country" | "currency" | "language" | "commercialUnit" | "minBidIncrement" | "requiresBuyerApproval" | "createdAt" | "updatedAt", ExtArgs["result"]["auctionSettings"]>
 export type AuctionSettingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
 }
@@ -789,10 +655,6 @@ export type $AuctionSettingsPayload<ExtArgs extends runtime.Types.Extensions.Int
     language: string
     commercialUnit: $Enums.CommercialUnit
     minBidIncrement: runtime.Decimal
-    allowPreBid: boolean
-    allowAutoExtension: boolean
-    autoExtensionSeconds: number | null
-    hasReservePrice: boolean
     requiresBuyerApproval: boolean
     createdAt: Date
     updatedAt: Date
@@ -1227,10 +1089,6 @@ export interface AuctionSettingsFieldRefs {
   readonly language: Prisma.FieldRef<"AuctionSettings", 'String'>
   readonly commercialUnit: Prisma.FieldRef<"AuctionSettings", 'CommercialUnit'>
   readonly minBidIncrement: Prisma.FieldRef<"AuctionSettings", 'Decimal'>
-  readonly allowPreBid: Prisma.FieldRef<"AuctionSettings", 'Boolean'>
-  readonly allowAutoExtension: Prisma.FieldRef<"AuctionSettings", 'Boolean'>
-  readonly autoExtensionSeconds: Prisma.FieldRef<"AuctionSettings", 'Int'>
-  readonly hasReservePrice: Prisma.FieldRef<"AuctionSettings", 'Boolean'>
   readonly requiresBuyerApproval: Prisma.FieldRef<"AuctionSettings", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"AuctionSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AuctionSettings", 'DateTime'>

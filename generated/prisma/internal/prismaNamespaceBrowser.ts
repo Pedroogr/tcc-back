@@ -184,10 +184,6 @@ export const AuctionSettingsScalarFieldEnum = {
   language: 'language',
   commercialUnit: 'commercialUnit',
   minBidIncrement: 'minBidIncrement',
-  allowPreBid: 'allowPreBid',
-  allowAutoExtension: 'allowAutoExtension',
-  autoExtensionSeconds: 'autoExtensionSeconds',
-  hasReservePrice: 'hasReservePrice',
   requiresBuyerApproval: 'requiresBuyerApproval',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -224,7 +220,6 @@ export const LotScalarFieldEnum = {
   weightKg: 'weightKg',
   quantity: 'quantity',
   initialPrice: 'initialPrice',
-  reservePrice: 'reservePrice',
   status: 'status',
   auctionId: 'auctionId',
   consignmentId: 'consignmentId',
@@ -301,6 +296,7 @@ export const SaleScalarFieldEnum = {
   notes: 'notes',
   lotId: 'lotId',
   buyerId: 'buyerId',
+  confirmedByMemberId: 'confirmedByMemberId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

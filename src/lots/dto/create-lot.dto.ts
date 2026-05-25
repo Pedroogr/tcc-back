@@ -1,5 +1,5 @@
-import { LotStatus } from '../../../generated/prisma/enums';
 import { Type } from 'class-transformer';
+import { LotStatus } from '../../../generated/prisma/enums';
 import {
   IsEnum,
   IsNumber,
@@ -11,10 +11,10 @@ import {
 
 export class CreateLotDto {
   @IsString()
-  code: string;
+  code!: string;
 
   @IsString()
-  title: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
@@ -23,6 +23,20 @@ export class CreateLotDto {
   @IsOptional()
   @IsString()
   breed?: string;
+
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @IsOptional()
+  @IsString()
+  sex?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  ageMonths?: number;
 
   @IsOptional()
   @Type(() => Number)
@@ -38,12 +52,18 @@ export class CreateLotDto {
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
-  minPrice?: number;
+  @Min(0)
+  initialPrice?: number;
 
   @IsOptional()
   @IsEnum(LotStatus)
   status?: LotStatus;
 
+  @IsOptional()
   @IsUUID()
-  auctionId: string;
+  auctionId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  consignmentId?: string;
 }

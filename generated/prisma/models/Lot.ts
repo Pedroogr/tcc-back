@@ -31,7 +31,6 @@ export type LotAvgAggregateOutputType = {
   weightKg: number | null
   quantity: number | null
   initialPrice: runtime.Decimal | null
-  reservePrice: runtime.Decimal | null
 }
 
 export type LotSumAggregateOutputType = {
@@ -39,7 +38,6 @@ export type LotSumAggregateOutputType = {
   weightKg: number | null
   quantity: number | null
   initialPrice: runtime.Decimal | null
-  reservePrice: runtime.Decimal | null
 }
 
 export type LotMinAggregateOutputType = {
@@ -54,7 +52,6 @@ export type LotMinAggregateOutputType = {
   weightKg: number | null
   quantity: number | null
   initialPrice: runtime.Decimal | null
-  reservePrice: runtime.Decimal | null
   status: $Enums.LotStatus | null
   auctionId: string | null
   consignmentId: string | null
@@ -74,7 +71,6 @@ export type LotMaxAggregateOutputType = {
   weightKg: number | null
   quantity: number | null
   initialPrice: runtime.Decimal | null
-  reservePrice: runtime.Decimal | null
   status: $Enums.LotStatus | null
   auctionId: string | null
   consignmentId: string | null
@@ -94,7 +90,6 @@ export type LotCountAggregateOutputType = {
   weightKg: number
   quantity: number
   initialPrice: number
-  reservePrice: number
   status: number
   auctionId: number
   consignmentId: number
@@ -109,7 +104,6 @@ export type LotAvgAggregateInputType = {
   weightKg?: true
   quantity?: true
   initialPrice?: true
-  reservePrice?: true
 }
 
 export type LotSumAggregateInputType = {
@@ -117,7 +111,6 @@ export type LotSumAggregateInputType = {
   weightKg?: true
   quantity?: true
   initialPrice?: true
-  reservePrice?: true
 }
 
 export type LotMinAggregateInputType = {
@@ -132,7 +125,6 @@ export type LotMinAggregateInputType = {
   weightKg?: true
   quantity?: true
   initialPrice?: true
-  reservePrice?: true
   status?: true
   auctionId?: true
   consignmentId?: true
@@ -152,7 +144,6 @@ export type LotMaxAggregateInputType = {
   weightKg?: true
   quantity?: true
   initialPrice?: true
-  reservePrice?: true
   status?: true
   auctionId?: true
   consignmentId?: true
@@ -172,7 +163,6 @@ export type LotCountAggregateInputType = {
   weightKg?: true
   quantity?: true
   initialPrice?: true
-  reservePrice?: true
   status?: true
   auctionId?: true
   consignmentId?: true
@@ -279,7 +269,6 @@ export type LotGroupByOutputType = {
   weightKg: number | null
   quantity: number
   initialPrice: runtime.Decimal | null
-  reservePrice: runtime.Decimal | null
   status: $Enums.LotStatus
   auctionId: string | null
   consignmentId: string | null
@@ -322,7 +311,6 @@ export type LotWhereInput = {
   weightKg?: Prisma.FloatNullableFilter<"Lot"> | number | null
   quantity?: Prisma.IntFilter<"Lot"> | number
   initialPrice?: Prisma.DecimalNullableFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.DecimalNullableFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFilter<"Lot"> | $Enums.LotStatus
   auctionId?: Prisma.StringNullableFilter<"Lot"> | string | null
   consignmentId?: Prisma.StringNullableFilter<"Lot"> | string | null
@@ -347,7 +335,6 @@ export type LotOrderByWithRelationInput = {
   weightKg?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrderInput | Prisma.SortOrder
-  reservePrice?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   auctionId?: Prisma.SortOrderInput | Prisma.SortOrder
   consignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,7 +363,6 @@ export type LotWhereUniqueInput = Prisma.AtLeast<{
   weightKg?: Prisma.FloatNullableFilter<"Lot"> | number | null
   quantity?: Prisma.IntFilter<"Lot"> | number
   initialPrice?: Prisma.DecimalNullableFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.DecimalNullableFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFilter<"Lot"> | $Enums.LotStatus
   auctionId?: Prisma.StringNullableFilter<"Lot"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Lot"> | Date | string
@@ -400,7 +386,6 @@ export type LotOrderByWithAggregationInput = {
   weightKg?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrderInput | Prisma.SortOrder
-  reservePrice?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   auctionId?: Prisma.SortOrderInput | Prisma.SortOrder
   consignmentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -428,7 +413,6 @@ export type LotScalarWhereWithAggregatesInput = {
   weightKg?: Prisma.FloatNullableWithAggregatesFilter<"Lot"> | number | null
   quantity?: Prisma.IntWithAggregatesFilter<"Lot"> | number
   initialPrice?: Prisma.DecimalNullableWithAggregatesFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.DecimalNullableWithAggregatesFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusWithAggregatesFilter<"Lot"> | $Enums.LotStatus
   auctionId?: Prisma.StringNullableWithAggregatesFilter<"Lot"> | string | null
   consignmentId?: Prisma.StringNullableWithAggregatesFilter<"Lot"> | string | null
@@ -448,7 +432,6 @@ export type LotCreateInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -471,7 +454,6 @@ export type LotUncheckedCreateInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   auctionId?: string | null
   consignmentId?: string | null
@@ -494,7 +476,6 @@ export type LotUpdateInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -517,7 +498,6 @@ export type LotUncheckedUpdateInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   auctionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -540,7 +520,6 @@ export type LotCreateManyInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   auctionId?: string | null
   consignmentId?: string | null
@@ -560,7 +539,6 @@ export type LotUpdateManyMutationInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -578,7 +556,6 @@ export type LotUncheckedUpdateManyInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   auctionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -613,7 +590,6 @@ export type LotCountOrderByAggregateInput = {
   weightKg?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrder
-  reservePrice?: Prisma.SortOrder
   status?: Prisma.SortOrder
   auctionId?: Prisma.SortOrder
   consignmentId?: Prisma.SortOrder
@@ -626,7 +602,6 @@ export type LotAvgOrderByAggregateInput = {
   weightKg?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrder
-  reservePrice?: Prisma.SortOrder
 }
 
 export type LotMaxOrderByAggregateInput = {
@@ -641,7 +616,6 @@ export type LotMaxOrderByAggregateInput = {
   weightKg?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrder
-  reservePrice?: Prisma.SortOrder
   status?: Prisma.SortOrder
   auctionId?: Prisma.SortOrder
   consignmentId?: Prisma.SortOrder
@@ -661,7 +635,6 @@ export type LotMinOrderByAggregateInput = {
   weightKg?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrder
-  reservePrice?: Prisma.SortOrder
   status?: Prisma.SortOrder
   auctionId?: Prisma.SortOrder
   consignmentId?: Prisma.SortOrder
@@ -674,7 +647,6 @@ export type LotSumOrderByAggregateInput = {
   weightKg?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   initialPrice?: Prisma.SortOrder
-  reservePrice?: Prisma.SortOrder
 }
 
 export type LotScalarRelationFilter = {
@@ -756,6 +728,14 @@ export type LotUncheckedUpdateOneWithoutConsignmentNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LotUpdateToOneWithWhereWithoutConsignmentInput, Prisma.LotUpdateWithoutConsignmentInput>, Prisma.LotUncheckedUpdateWithoutConsignmentInput>
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type NullableFloatFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -830,7 +810,6 @@ export type LotCreateWithoutAuctionInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -852,7 +831,6 @@ export type LotUncheckedCreateWithoutAuctionInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   consignmentId?: string | null
   createdAt?: Date | string
@@ -903,7 +881,6 @@ export type LotScalarWhereInput = {
   weightKg?: Prisma.FloatNullableFilter<"Lot"> | number | null
   quantity?: Prisma.IntFilter<"Lot"> | number
   initialPrice?: Prisma.DecimalNullableFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.DecimalNullableFilter<"Lot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFilter<"Lot"> | $Enums.LotStatus
   auctionId?: Prisma.StringNullableFilter<"Lot"> | string | null
   consignmentId?: Prisma.StringNullableFilter<"Lot"> | string | null
@@ -923,7 +900,6 @@ export type LotCreateWithoutConsignmentInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -945,7 +921,6 @@ export type LotUncheckedCreateWithoutConsignmentInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   auctionId?: string | null
   createdAt?: Date | string
@@ -983,7 +958,6 @@ export type LotUpdateWithoutConsignmentInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1005,7 +979,6 @@ export type LotUncheckedUpdateWithoutConsignmentInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   auctionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1027,7 +1000,6 @@ export type LotCreateWithoutMediaInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1049,7 +1021,6 @@ export type LotUncheckedCreateWithoutMediaInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   auctionId?: string | null
   consignmentId?: string | null
@@ -1087,7 +1058,6 @@ export type LotUpdateWithoutMediaInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1109,7 +1079,6 @@ export type LotUncheckedUpdateWithoutMediaInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   auctionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1131,7 +1100,6 @@ export type LotCreateWithoutBidsInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1153,7 +1121,6 @@ export type LotUncheckedCreateWithoutBidsInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   auctionId?: string | null
   consignmentId?: string | null
@@ -1191,7 +1158,6 @@ export type LotUpdateWithoutBidsInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1213,7 +1179,6 @@ export type LotUncheckedUpdateWithoutBidsInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   auctionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1235,7 +1200,6 @@ export type LotCreateWithoutSaleInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1257,7 +1221,6 @@ export type LotUncheckedCreateWithoutSaleInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   auctionId?: string | null
   consignmentId?: string | null
@@ -1295,7 +1258,6 @@ export type LotUpdateWithoutSaleInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1317,7 +1279,6 @@ export type LotUncheckedUpdateWithoutSaleInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   auctionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1339,7 +1300,6 @@ export type LotCreateManyAuctionInput = {
   weightKg?: number | null
   quantity?: number
   initialPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.LotStatus
   consignmentId?: string | null
   createdAt?: Date | string
@@ -1358,7 +1318,6 @@ export type LotUpdateWithoutAuctionInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1380,7 +1339,6 @@ export type LotUncheckedUpdateWithoutAuctionInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1402,7 +1360,6 @@ export type LotUncheckedUpdateManyWithoutAuctionInput = {
   weightKg?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   initialPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  reservePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumLotStatusFieldUpdateOperationsInput | $Enums.LotStatus
   consignmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1461,7 +1418,6 @@ export type LotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   weightKg?: boolean
   quantity?: boolean
   initialPrice?: boolean
-  reservePrice?: boolean
   status?: boolean
   auctionId?: boolean
   consignmentId?: boolean
@@ -1487,7 +1443,6 @@ export type LotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   weightKg?: boolean
   quantity?: boolean
   initialPrice?: boolean
-  reservePrice?: boolean
   status?: boolean
   auctionId?: boolean
   consignmentId?: boolean
@@ -1509,7 +1464,6 @@ export type LotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   weightKg?: boolean
   quantity?: boolean
   initialPrice?: boolean
-  reservePrice?: boolean
   status?: boolean
   auctionId?: boolean
   consignmentId?: boolean
@@ -1531,7 +1485,6 @@ export type LotSelectScalar = {
   weightKg?: boolean
   quantity?: boolean
   initialPrice?: boolean
-  reservePrice?: boolean
   status?: boolean
   auctionId?: boolean
   consignmentId?: boolean
@@ -1539,7 +1492,7 @@ export type LotSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "title" | "description" | "breed" | "category" | "sex" | "ageMonths" | "weightKg" | "quantity" | "initialPrice" | "reservePrice" | "status" | "auctionId" | "consignmentId" | "createdAt" | "updatedAt", ExtArgs["result"]["lot"]>
+export type LotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "title" | "description" | "breed" | "category" | "sex" | "ageMonths" | "weightKg" | "quantity" | "initialPrice" | "status" | "auctionId" | "consignmentId" | "createdAt" | "updatedAt", ExtArgs["result"]["lot"]>
 export type LotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auction?: boolean | Prisma.Lot$auctionArgs<ExtArgs>
   consignment?: boolean | Prisma.Lot$consignmentArgs<ExtArgs>
@@ -1578,7 +1531,6 @@ export type $LotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     weightKg: number | null
     quantity: number
     initialPrice: runtime.Decimal | null
-    reservePrice: runtime.Decimal | null
     status: $Enums.LotStatus
     auctionId: string | null
     consignmentId: string | null
@@ -2023,7 +1975,6 @@ export interface LotFieldRefs {
   readonly weightKg: Prisma.FieldRef<"Lot", 'Float'>
   readonly quantity: Prisma.FieldRef<"Lot", 'Int'>
   readonly initialPrice: Prisma.FieldRef<"Lot", 'Decimal'>
-  readonly reservePrice: Prisma.FieldRef<"Lot", 'Decimal'>
   readonly status: Prisma.FieldRef<"Lot", 'LotStatus'>
   readonly auctionId: Prisma.FieldRef<"Lot", 'String'>
   readonly consignmentId: Prisma.FieldRef<"Lot", 'String'>

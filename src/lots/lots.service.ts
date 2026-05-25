@@ -10,24 +10,14 @@ export class LotsService {
 
   create(data: CreateLotDto) {
     return this.prisma.lot.create({
-      data: {
-        ...data,
-        minPrice:
-          data.minPrice !== undefined
-            ? new Prisma.Decimal(data.minPrice)
-            : undefined,
-      },
-      include: {
-        auction: true,
-      },
+      data: this.toLotCreateData(data),
+      include: this.lotInclude(),
     });
   }
 
   findAll() {
     return this.prisma.lot.findMany({
-      include: {
-        auction: true,
-      },
+      include: this.lotInclude(),
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -35,13 +25,11 @@ export class LotsService {
   async findOne(id: string) {
     const lot = await this.prisma.lot.findUnique({
       where: { id },
-      include: {
-        auction: true,
-      },
+      include: this.lotInclude(),
     });
 
     if (!lot) {
-      throw new NotFoundException('Lote não encontrado');
+      throw new NotFoundException('Lote nao encontrado');
     }
 
     return lot;
@@ -52,16 +40,8 @@ export class LotsService {
 
     return this.prisma.lot.update({
       where: { id },
-      data: {
-        ...data,
-        minPrice:
-          data.minPrice !== undefined
-            ? new Prisma.Decimal(data.minPrice)
-            : undefined,
-      },
-      include: {
-        auction: true,
-      },
+      data: this.toLotUpdateData(data),
+      include: this.lotInclude(),
     });
   }
 
@@ -71,5 +51,60 @@ export class LotsService {
     return this.prisma.lot.delete({
       where: { id },
     });
+  }
+
+  private toLotCreateData(data: CreateLotDto): Prisma.LotCreateInput {
+    return {
+      code: data.code,
+      title: data.title,
+      description: data.description,
+      breed: data.breed,
+      category: data.category,
+      sex: data.sex,
+      ageMonths: data.ageMonths,
+      weightKg: data.weightKg,
+      quantity: data.quantity,
+      initialPrice:
+        data.initialPrice !== undefined
+          ? new Prisma.Decimal(data.initialPrice)
+          : undefined,
+      status: data.status,
+      auction: data.auctionId ? { connect: { id: data.auctionId } } : undefined,
+      consignment: data.consignmentId
+        ? { connect: { id: data.consignmentId } }
+        : undefined,
+    };
+  }
+
+  private toLotUpdateData(data: UpdateLotDto): Prisma.LotUpdateInput {
+    return {
+      code: data.code,
+      title: data.title,
+      description: data.description,
+      breed: data.breed,
+      category: data.category,
+      sex: data.sex,
+      ageMonths: data.ageMonths,
+      weightKg: data.weightKg,
+      quantity: data.quantity,
+      initialPrice:
+        data.initialPrice !== undefined
+          ? new Prisma.Decimal(data.initialPrice)
+          : undefined,
+      status: data.status,
+      auction: data.auctionId ? { connect: { id: data.auctionId } } : undefined,
+      consignment: data.consignmentId
+        ? { connect: { id: data.consignmentId } }
+        : undefined,
+    };
+  }
+
+  private lotInclude() {
+    return {
+      auction: true,
+      consignment: true,
+      media: true,
+      sale: true,
+    } satisfies Prisma.LotInclude;
   }
 }

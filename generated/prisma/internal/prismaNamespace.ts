@@ -1593,10 +1593,6 @@ export const AuctionSettingsScalarFieldEnum = {
   language: 'language',
   commercialUnit: 'commercialUnit',
   minBidIncrement: 'minBidIncrement',
-  allowPreBid: 'allowPreBid',
-  allowAutoExtension: 'allowAutoExtension',
-  autoExtensionSeconds: 'autoExtensionSeconds',
-  hasReservePrice: 'hasReservePrice',
   requiresBuyerApproval: 'requiresBuyerApproval',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1633,7 +1629,6 @@ export const LotScalarFieldEnum = {
   weightKg: 'weightKg',
   quantity: 'quantity',
   initialPrice: 'initialPrice',
-  reservePrice: 'reservePrice',
   status: 'status',
   auctionId: 'auctionId',
   consignmentId: 'consignmentId',
@@ -1710,6 +1705,7 @@ export const SaleScalarFieldEnum = {
   notes: 'notes',
   lotId: 'lotId',
   buyerId: 'buyerId',
+  confirmedByMemberId: 'confirmedByMemberId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1895,20 +1891,6 @@ export type ListEnumCommercialUnitFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'ConsignmentStatus'
  */
 export type EnumConsignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConsignmentStatus'>
@@ -1919,6 +1901,20 @@ export type EnumConsignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'ConsignmentStatus[]'
  */
 export type ListEnumConsignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConsignmentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
