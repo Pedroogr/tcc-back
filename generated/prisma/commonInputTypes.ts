@@ -188,11 +188,11 @@ export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
 }
 
-export type EnumAuctionHouseRoleFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionHouseRole | Prisma.EnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionHouseRoleFilter<$PrismaModel> | $Enums.AuctionHouseRole
+export type EnumAuctionHouseStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionHouseStatus | Prisma.EnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionHouseStatusFilter<$PrismaModel> | $Enums.AuctionHouseStatus
 }
 
 export type BoolFilter<$PrismaModel = never> = {
@@ -200,14 +200,14 @@ export type BoolFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
 }
 
-export type EnumAuctionHouseRoleWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionHouseRole | Prisma.EnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionHouseRoleWithAggregatesFilter<$PrismaModel> | $Enums.AuctionHouseRole
+export type EnumAuctionHouseStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionHouseStatus | Prisma.EnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionHouseStatusWithAggregatesFilter<$PrismaModel> | $Enums.AuctionHouseStatus
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumAuctionHouseRoleFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumAuctionHouseRoleFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAuctionHouseStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAuctionHouseStatusFilter<$PrismaModel>
 }
 
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -708,11 +708,11 @@ export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
 }
 
-export type NestedEnumAuctionHouseRoleFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionHouseRole | Prisma.EnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionHouseRoleFilter<$PrismaModel> | $Enums.AuctionHouseRole
+export type NestedEnumAuctionHouseStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionHouseStatus | Prisma.EnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionHouseStatusFilter<$PrismaModel> | $Enums.AuctionHouseStatus
 }
 
 export type NestedBoolFilter<$PrismaModel = never> = {
@@ -720,14 +720,14 @@ export type NestedBoolFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
 }
 
-export type NestedEnumAuctionHouseRoleWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionHouseRole | Prisma.EnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionHouseRole[] | Prisma.ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionHouseRoleWithAggregatesFilter<$PrismaModel> | $Enums.AuctionHouseRole
+export type NestedEnumAuctionHouseStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionHouseStatus | Prisma.EnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionHouseStatus[] | Prisma.ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionHouseStatusWithAggregatesFilter<$PrismaModel> | $Enums.AuctionHouseStatus
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumAuctionHouseRoleFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumAuctionHouseRoleFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAuctionHouseStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAuctionHouseStatusFilter<$PrismaModel>
 }
 
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {

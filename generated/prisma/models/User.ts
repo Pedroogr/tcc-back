@@ -224,8 +224,6 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   buyerProfile?: Prisma.XOR<Prisma.BuyerProfileNullableScalarRelationFilter, Prisma.BuyerProfileWhereInput> | null
   sellerProfile?: Prisma.XOR<Prisma.SellerProfileNullableScalarRelationFilter, Prisma.SellerProfileWhereInput> | null
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberListRelationFilter
-  createdAuctions?: Prisma.AuctionListRelationFilter
   consignments?: Prisma.ConsignmentListRelationFilter
   reviewedConsignments?: Prisma.ConsignmentListRelationFilter
   buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
@@ -247,8 +245,6 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   buyerProfile?: Prisma.BuyerProfileOrderByWithRelationInput
   sellerProfile?: Prisma.SellerProfileOrderByWithRelationInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberOrderByRelationAggregateInput
-  createdAuctions?: Prisma.AuctionOrderByRelationAggregateInput
   consignments?: Prisma.ConsignmentOrderByRelationAggregateInput
   reviewedConsignments?: Prisma.ConsignmentOrderByRelationAggregateInput
   buyerRegistrations?: Prisma.BuyerRegistrationOrderByRelationAggregateInput
@@ -273,8 +269,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   buyerProfile?: Prisma.XOR<Prisma.BuyerProfileNullableScalarRelationFilter, Prisma.BuyerProfileWhereInput> | null
   sellerProfile?: Prisma.XOR<Prisma.SellerProfileNullableScalarRelationFilter, Prisma.SellerProfileWhereInput> | null
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberListRelationFilter
-  createdAuctions?: Prisma.AuctionListRelationFilter
   consignments?: Prisma.ConsignmentListRelationFilter
   reviewedConsignments?: Prisma.ConsignmentListRelationFilter
   buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
@@ -328,8 +322,6 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
@@ -351,8 +343,6 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
@@ -374,8 +364,6 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
@@ -397,8 +385,6 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
@@ -543,34 +529,6 @@ export type UserUpdateOneRequiredWithoutSellerProfileNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSellerProfileInput, Prisma.UserUpdateWithoutSellerProfileInput>, Prisma.UserUncheckedUpdateWithoutSellerProfileInput>
 }
 
-export type UserCreateNestedOneWithoutAuctionHouseMembershipsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuctionHouseMembershipsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutAuctionHouseMembershipsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuctionHouseMembershipsInput
-  upsert?: Prisma.UserUpsertWithoutAuctionHouseMembershipsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuctionHouseMembershipsInput, Prisma.UserUpdateWithoutAuctionHouseMembershipsInput>, Prisma.UserUncheckedUpdateWithoutAuctionHouseMembershipsInput>
-}
-
-export type UserCreateNestedOneWithoutCreatedAuctionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAuctionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutCreatedAuctionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAuctionsInput
-  upsert?: Prisma.UserUpsertWithoutCreatedAuctionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAuctionsInput, Prisma.UserUpdateWithoutCreatedAuctionsInput>, Prisma.UserUncheckedUpdateWithoutCreatedAuctionsInput>
-}
-
 export type UserCreateNestedOneWithoutConsignmentsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutConsignmentsInput, Prisma.UserUncheckedCreateWithoutConsignmentsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsignmentsInput
@@ -671,8 +629,6 @@ export type UserCreateWithoutBuyerProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
@@ -693,8 +649,6 @@ export type UserUncheckedCreateWithoutBuyerProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
@@ -731,8 +685,6 @@ export type UserUpdateWithoutBuyerProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
@@ -753,8 +705,6 @@ export type UserUncheckedUpdateWithoutBuyerProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
@@ -775,8 +725,6 @@ export type UserCreateWithoutSellerProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
@@ -797,8 +745,6 @@ export type UserUncheckedCreateWithoutSellerProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
@@ -835,8 +781,6 @@ export type UserUpdateWithoutSellerProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
@@ -857,216 +801,6 @@ export type UserUncheckedUpdateWithoutSellerProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
-  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
-  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
-  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
-  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
-  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
-}
-
-export type UserCreateWithoutAuctionHouseMembershipsInput = {
-  id?: string
-  name: string
-  email: string
-  passwordHash: string
-  phone?: string | null
-  document?: string | null
-  platformRole?: $Enums.PlatformRole
-  status?: $Enums.UserStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
-  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
-  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
-  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
-  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
-  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
-  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
-}
-
-export type UserUncheckedCreateWithoutAuctionHouseMembershipsInput = {
-  id?: string
-  name: string
-  email: string
-  passwordHash: string
-  phone?: string | null
-  document?: string | null
-  platformRole?: $Enums.PlatformRole
-  status?: $Enums.UserStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
-  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
-  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
-  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
-  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
-  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
-  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
-}
-
-export type UserCreateOrConnectWithoutAuctionHouseMembershipsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
-}
-
-export type UserUpsertWithoutAuctionHouseMembershipsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedUpdateWithoutAuctionHouseMembershipsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedCreateWithoutAuctionHouseMembershipsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAuctionHouseMembershipsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuctionHouseMembershipsInput, Prisma.UserUncheckedUpdateWithoutAuctionHouseMembershipsInput>
-}
-
-export type UserUpdateWithoutAuctionHouseMembershipsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
-  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
-  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
-  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
-  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
-  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
-  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAuctionHouseMembershipsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
-  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
-  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
-  reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
-  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
-  bids?: Prisma.BidUncheckedUpdateManyWithoutBidderNestedInput
-  sales?: Prisma.SaleUncheckedUpdateManyWithoutBuyerNestedInput
-}
-
-export type UserCreateWithoutCreatedAuctionsInput = {
-  id?: string
-  name: string
-  email: string
-  passwordHash: string
-  phone?: string | null
-  document?: string | null
-  platformRole?: $Enums.PlatformRole
-  status?: $Enums.UserStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
-  sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
-  reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
-  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
-  bids?: Prisma.BidCreateNestedManyWithoutBidderInput
-  sales?: Prisma.SaleCreateNestedManyWithoutBuyerInput
-}
-
-export type UserUncheckedCreateWithoutCreatedAuctionsInput = {
-  id?: string
-  name: string
-  email: string
-  passwordHash: string
-  phone?: string | null
-  document?: string | null
-  platformRole?: $Enums.PlatformRole
-  status?: $Enums.UserStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
-  sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
-  reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
-  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
-  bids?: Prisma.BidUncheckedCreateNestedManyWithoutBidderInput
-  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBuyerInput
-}
-
-export type UserCreateOrConnectWithoutCreatedAuctionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
-}
-
-export type UserUpsertWithoutCreatedAuctionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAuctionsInput, Prisma.UserUncheckedUpdateWithoutCreatedAuctionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAuctionsInput, Prisma.UserUncheckedCreateWithoutCreatedAuctionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCreatedAuctionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAuctionsInput, Prisma.UserUncheckedUpdateWithoutCreatedAuctionsInput>
-}
-
-export type UserUpdateWithoutCreatedAuctionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
-  sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
-  reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
-  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
-  reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
-  bids?: Prisma.BidUpdateManyWithoutBidderNestedInput
-  sales?: Prisma.SaleUpdateManyWithoutBuyerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCreatedAuctionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  platformRole?: Prisma.EnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole
-  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
-  sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
@@ -1088,8 +822,6 @@ export type UserCreateWithoutConsignmentsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
@@ -1110,8 +842,6 @@ export type UserUncheckedCreateWithoutConsignmentsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
@@ -1137,8 +867,6 @@ export type UserCreateWithoutReviewedConsignmentsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
@@ -1159,8 +887,6 @@ export type UserUncheckedCreateWithoutReviewedConsignmentsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
@@ -1197,8 +923,6 @@ export type UserUpdateWithoutConsignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
@@ -1219,8 +943,6 @@ export type UserUncheckedUpdateWithoutConsignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -1252,8 +974,6 @@ export type UserUpdateWithoutReviewedConsignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
@@ -1274,8 +994,6 @@ export type UserUncheckedUpdateWithoutReviewedConsignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -1296,8 +1014,6 @@ export type UserCreateWithoutBuyerRegistrationsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutReviewedByInput
@@ -1318,8 +1034,6 @@ export type UserUncheckedCreateWithoutBuyerRegistrationsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
@@ -1345,8 +1059,6 @@ export type UserCreateWithoutReviewedBuyerRegistrationsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
@@ -1367,8 +1079,6 @@ export type UserUncheckedCreateWithoutReviewedBuyerRegistrationsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
@@ -1405,8 +1115,6 @@ export type UserUpdateWithoutBuyerRegistrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutReviewedByNestedInput
@@ -1427,8 +1135,6 @@ export type UserUncheckedUpdateWithoutBuyerRegistrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   reviewedBuyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -1460,8 +1166,6 @@ export type UserUpdateWithoutReviewedBuyerRegistrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
@@ -1482,8 +1186,6 @@ export type UserUncheckedUpdateWithoutReviewedBuyerRegistrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
@@ -1504,8 +1206,6 @@ export type UserCreateWithoutBidsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
@@ -1526,8 +1226,6 @@ export type UserUncheckedCreateWithoutBidsInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
@@ -1564,8 +1262,6 @@ export type UserUpdateWithoutBidsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
@@ -1586,8 +1282,6 @@ export type UserUncheckedUpdateWithoutBidsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
@@ -1608,8 +1302,6 @@ export type UserCreateWithoutSalesInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutBuyerInput
@@ -1630,8 +1322,6 @@ export type UserUncheckedCreateWithoutSalesInput = {
   updatedAt?: Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedCreateNestedOneWithoutUserInput
   sellerProfile?: Prisma.SellerProfileUncheckedCreateNestedOneWithoutUserInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedCreateNestedManyWithoutUserInput
-  createdAuctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutCreatedByInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutSellerInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutBuyerInput
@@ -1668,8 +1358,6 @@ export type UserUpdateWithoutSalesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutBuyerNestedInput
@@ -1690,8 +1378,6 @@ export type UserUncheckedUpdateWithoutSalesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyerProfile?: Prisma.BuyerProfileUncheckedUpdateOneWithoutUserNestedInput
   sellerProfile?: Prisma.SellerProfileUncheckedUpdateOneWithoutUserNestedInput
-  auctionHouseMemberships?: Prisma.AuctionHouseMemberUncheckedUpdateManyWithoutUserNestedInput
-  createdAuctions?: Prisma.AuctionUncheckedUpdateManyWithoutCreatedByNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutSellerNestedInput
   reviewedConsignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput
   buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutBuyerNestedInput
@@ -1705,8 +1391,6 @@ export type UserUncheckedUpdateWithoutSalesInput = {
  */
 
 export type UserCountOutputType = {
-  auctionHouseMemberships: number
-  createdAuctions: number
   consignments: number
   reviewedConsignments: number
   buyerRegistrations: number
@@ -1716,8 +1400,6 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  auctionHouseMemberships?: boolean | UserCountOutputTypeCountAuctionHouseMembershipsArgs
-  createdAuctions?: boolean | UserCountOutputTypeCountCreatedAuctionsArgs
   consignments?: boolean | UserCountOutputTypeCountConsignmentsArgs
   reviewedConsignments?: boolean | UserCountOutputTypeCountReviewedConsignmentsArgs
   buyerRegistrations?: boolean | UserCountOutputTypeCountBuyerRegistrationsArgs
@@ -1734,20 +1416,6 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAuctionHouseMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuctionHouseMemberWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuctionWhereInput
 }
 
 /**
@@ -1806,8 +1474,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   buyerProfile?: boolean | Prisma.User$buyerProfileArgs<ExtArgs>
   sellerProfile?: boolean | Prisma.User$sellerProfileArgs<ExtArgs>
-  auctionHouseMemberships?: boolean | Prisma.User$auctionHouseMembershipsArgs<ExtArgs>
-  createdAuctions?: boolean | Prisma.User$createdAuctionsArgs<ExtArgs>
   consignments?: boolean | Prisma.User$consignmentsArgs<ExtArgs>
   reviewedConsignments?: boolean | Prisma.User$reviewedConsignmentsArgs<ExtArgs>
   buyerRegistrations?: boolean | Prisma.User$buyerRegistrationsArgs<ExtArgs>
@@ -1860,8 +1526,6 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   buyerProfile?: boolean | Prisma.User$buyerProfileArgs<ExtArgs>
   sellerProfile?: boolean | Prisma.User$sellerProfileArgs<ExtArgs>
-  auctionHouseMemberships?: boolean | Prisma.User$auctionHouseMembershipsArgs<ExtArgs>
-  createdAuctions?: boolean | Prisma.User$createdAuctionsArgs<ExtArgs>
   consignments?: boolean | Prisma.User$consignmentsArgs<ExtArgs>
   reviewedConsignments?: boolean | Prisma.User$reviewedConsignmentsArgs<ExtArgs>
   buyerRegistrations?: boolean | Prisma.User$buyerRegistrationsArgs<ExtArgs>
@@ -1878,8 +1542,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     buyerProfile: Prisma.$BuyerProfilePayload<ExtArgs> | null
     sellerProfile: Prisma.$SellerProfilePayload<ExtArgs> | null
-    auctionHouseMemberships: Prisma.$AuctionHouseMemberPayload<ExtArgs>[]
-    createdAuctions: Prisma.$AuctionPayload<ExtArgs>[]
     consignments: Prisma.$ConsignmentPayload<ExtArgs>[]
     reviewedConsignments: Prisma.$ConsignmentPayload<ExtArgs>[]
     buyerRegistrations: Prisma.$BuyerRegistrationPayload<ExtArgs>[]
@@ -2294,8 +1956,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   buyerProfile<T extends Prisma.User$buyerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$buyerProfileArgs<ExtArgs>>): Prisma.Prisma__BuyerProfileClient<runtime.Types.Result.GetResult<Prisma.$BuyerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sellerProfile<T extends Prisma.User$sellerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sellerProfileArgs<ExtArgs>>): Prisma.Prisma__SellerProfileClient<runtime.Types.Result.GetResult<Prisma.$SellerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  auctionHouseMemberships<T extends Prisma.User$auctionHouseMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auctionHouseMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuctionHouseMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdAuctions<T extends Prisma.User$createdAuctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAuctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consignments<T extends Prisma.User$consignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewedConsignments<T extends Prisma.User$reviewedConsignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedConsignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   buyerRegistrations<T extends Prisma.User$buyerRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$buyerRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BuyerRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2769,54 +2429,6 @@ export type User$sellerProfileArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   include?: Prisma.SellerProfileInclude<ExtArgs> | null
   where?: Prisma.SellerProfileWhereInput
-}
-
-/**
- * User.auctionHouseMemberships
- */
-export type User$auctionHouseMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AuctionHouseMember
-   */
-  select?: Prisma.AuctionHouseMemberSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AuctionHouseMember
-   */
-  omit?: Prisma.AuctionHouseMemberOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AuctionHouseMemberInclude<ExtArgs> | null
-  where?: Prisma.AuctionHouseMemberWhereInput
-  orderBy?: Prisma.AuctionHouseMemberOrderByWithRelationInput | Prisma.AuctionHouseMemberOrderByWithRelationInput[]
-  cursor?: Prisma.AuctionHouseMemberWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AuctionHouseMemberScalarFieldEnum | Prisma.AuctionHouseMemberScalarFieldEnum[]
-}
-
-/**
- * User.createdAuctions
- */
-export type User$createdAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Auction
-   */
-  select?: Prisma.AuctionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Auction
-   */
-  omit?: Prisma.AuctionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AuctionInclude<ExtArgs> | null
-  where?: Prisma.AuctionWhereInput
-  orderBy?: Prisma.AuctionOrderByWithRelationInput | Prisma.AuctionOrderByWithRelationInput[]
-  cursor?: Prisma.AuctionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AuctionScalarFieldEnum | Prisma.AuctionScalarFieldEnum[]
 }
 
 /**

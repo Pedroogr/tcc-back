@@ -388,7 +388,6 @@ export const ModelName = {
   BuyerProfile: 'BuyerProfile',
   SellerProfile: 'SellerProfile',
   AuctionHouse: 'AuctionHouse',
-  AuctionHouseMember: 'AuctionHouseMember',
   Auction: 'Auction',
   AuctionSettings: 'AuctionSettings',
   Consignment: 'Consignment',
@@ -413,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "buyerProfile" | "sellerProfile" | "auctionHouse" | "auctionHouseMember" | "auction" | "auctionSettings" | "consignment" | "lot" | "lotMedia" | "buyerRegistration" | "bid" | "stream" | "sale"
+    modelProps: "user" | "buyerProfile" | "sellerProfile" | "auctionHouse" | "auction" | "auctionSettings" | "consignment" | "lot" | "lotMedia" | "buyerRegistration" | "bid" | "stream" | "sale"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -710,80 +709,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AuctionHouseCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AuctionHouseCountAggregateOutputType> | number
-        }
-      }
-    }
-    AuctionHouseMember: {
-      payload: Prisma.$AuctionHouseMemberPayload<ExtArgs>
-      fields: Prisma.AuctionHouseMemberFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AuctionHouseMemberFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AuctionHouseMemberFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>
-        }
-        findFirst: {
-          args: Prisma.AuctionHouseMemberFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AuctionHouseMemberFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>
-        }
-        findMany: {
-          args: Prisma.AuctionHouseMemberFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>[]
-        }
-        create: {
-          args: Prisma.AuctionHouseMemberCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>
-        }
-        createMany: {
-          args: Prisma.AuctionHouseMemberCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AuctionHouseMemberCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>[]
-        }
-        delete: {
-          args: Prisma.AuctionHouseMemberDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>
-        }
-        update: {
-          args: Prisma.AuctionHouseMemberUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>
-        }
-        deleteMany: {
-          args: Prisma.AuctionHouseMemberDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AuctionHouseMemberUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AuctionHouseMemberUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>[]
-        }
-        upsert: {
-          args: Prisma.AuctionHouseMemberUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuctionHouseMemberPayload>
-        }
-        aggregate: {
-          args: Prisma.AuctionHouseMemberAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAuctionHouseMember>
-        }
-        groupBy: {
-          args: Prisma.AuctionHouseMemberGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AuctionHouseMemberGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AuctionHouseMemberCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AuctionHouseMemberCountAggregateOutputType> | number
         }
       }
     }
@@ -1542,29 +1467,19 @@ export const AuctionHouseScalarFieldEnum = {
   name: 'name',
   document: 'document',
   email: 'email',
+  passwordHash: 'passwordHash',
   phone: 'phone',
   city: 'city',
   state: 'state',
   country: 'country',
   logoUrl: 'logoUrl',
+  status: 'status',
+  mustChangePassword: 'mustChangePassword',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AuctionHouseScalarFieldEnum = (typeof AuctionHouseScalarFieldEnum)[keyof typeof AuctionHouseScalarFieldEnum]
-
-
-export const AuctionHouseMemberScalarFieldEnum = {
-  id: 'id',
-  role: 'role',
-  active: 'active',
-  userId: 'userId',
-  auctionHouseId: 'auctionHouseId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AuctionHouseMemberScalarFieldEnum = (typeof AuctionHouseMemberScalarFieldEnum)[keyof typeof AuctionHouseMemberScalarFieldEnum]
 
 
 export const AuctionScalarFieldEnum = {
@@ -1577,7 +1492,6 @@ export const AuctionScalarFieldEnum = {
   status: 'status',
   mode: 'mode',
   auctionHouseId: 'auctionHouseId',
-  createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1705,7 +1619,7 @@ export const SaleScalarFieldEnum = {
   notes: 'notes',
   lotId: 'lotId',
   buyerId: 'buyerId',
-  confirmedByMemberId: 'confirmedByMemberId',
+  saleRecordedByAuctionHouseId: 'saleRecordedByAuctionHouseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1828,16 +1742,16 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
- * Reference to a field of type 'AuctionHouseRole'
+ * Reference to a field of type 'AuctionHouseStatus'
  */
-export type EnumAuctionHouseRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionHouseRole'>
+export type EnumAuctionHouseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionHouseStatus'>
     
 
 
 /**
- * Reference to a field of type 'AuctionHouseRole[]'
+ * Reference to a field of type 'AuctionHouseStatus[]'
  */
-export type ListEnumAuctionHouseRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionHouseRole[]'>
+export type ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionHouseStatus[]'>
     
 
 
@@ -2129,7 +2043,6 @@ export type GlobalOmitConfig = {
   buyerProfile?: Prisma.BuyerProfileOmit
   sellerProfile?: Prisma.SellerProfileOmit
   auctionHouse?: Prisma.AuctionHouseOmit
-  auctionHouseMember?: Prisma.AuctionHouseMemberOmit
   auction?: Prisma.AuctionOmit
   auctionSettings?: Prisma.AuctionSettingsOmit
   consignment?: Prisma.ConsignmentOmit

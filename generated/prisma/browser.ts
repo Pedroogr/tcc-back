@@ -38,11 +38,6 @@ export type SellerProfile = Prisma.SellerProfileModel
  */
 export type AuctionHouse = Prisma.AuctionHouseModel
 /**
- * Model AuctionHouseMember
- * 
- */
-export type AuctionHouseMember = Prisma.AuctionHouseMemberModel
-/**
  * Model Auction
  * 
  */

@@ -59,9 +59,8 @@ export class CreateLotDto {
   @IsEnum(LotStatus)
   status?: LotStatus;
 
-  @IsOptional()
   @IsUUID()
-  auctionId?: string;
+  auctionId!: string;
 
   @IsOptional()
   @IsUUID()

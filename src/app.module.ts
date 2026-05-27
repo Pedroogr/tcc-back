@@ -5,6 +5,7 @@ import { join } from 'path';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuctionsModule } from './auctions/auctions.module';
+import { AuthModule } from './auth/auth.module';
 import { LotsModule } from './lots/lots.module';
 import { LiveModule } from './live/live.module';
 
@@ -17,6 +18,7 @@ import { LiveModule } from './live/live.module';
       rootPath: join(process.cwd(), 'public'),
     }),
     PrismaModule,
+    AuthModule,
     UsersModule,
     AuctionsModule,
     LotsModule,

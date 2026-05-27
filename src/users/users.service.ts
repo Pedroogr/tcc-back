@@ -6,7 +6,8 @@ import {
 import { hash } from 'bcryptjs';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto, UserRegistrationRole } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpsertSellerProfileDto } from './dto/upsert-seller-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
@@ -60,6 +61,21 @@ export class UsersService {
     }
   }
 
+  async upsertSellerProfile(userId: string, data: UpsertSellerProfileDto) {
+    await this.findOne(userId);
+
+    await this.prisma.sellerProfile.upsert({
+      where: { userId },
+      create: {
+        user: { connect: { id: userId } },
+        ...this.toSellerProfileCreateData(data),
+      },
+      update: this.toSellerProfileUpdateData(data),
+    });
+
+    return this.findOne(userId);
+  }
+
   async remove(id: string) {
     await this.findOne(id);
 
@@ -72,24 +88,12 @@ export class UsersService {
   private async toUserCreateData(
     data: CreateUserDto,
   ): Promise<Prisma.UserCreateInput> {
-    const roles = this.resolveRegistrationRoles(data.roles);
-
     return {
       name: data.name,
       email: data.email,
       passwordHash: await hash(data.password, 10),
       phone: data.phone,
       document: data.document,
-      ...(roles.has(UserRegistrationRole.BUYER)
-        ? { buyerProfile: { create: {} } }
-        : {}),
-      ...(roles.has(UserRegistrationRole.SELLER)
-        ? {
-            sellerProfile: {
-              create: this.toSellerProfileData(data),
-            },
-          }
-        : {}),
     };
   }
 
@@ -107,46 +111,33 @@ export class UsersService {
       updateData.passwordHash = await hash(data.password, 10);
     }
 
-    const roles = data.roles
-      ? this.resolveRegistrationRoles(data.roles)
-      : new Set<UserRegistrationRole>();
-
-    if (roles.has(UserRegistrationRole.BUYER)) {
-      updateData.buyerProfile = {
-        upsert: {
-          create: {},
-          update: {},
-        },
-      };
-    }
-
-    if (roles.has(UserRegistrationRole.SELLER)) {
-      updateData.sellerProfile = {
-        upsert: {
-          create: this.toSellerProfileData(data),
-          update: this.toSellerProfileData(data),
-        },
-      };
-    }
-
     return updateData;
   }
 
-  private toSellerProfileData(
-    data: CreateUserDto | UpdateUserDto,
+  private toSellerProfileCreateData(
+    data: UpsertSellerProfileDto,
   ): Prisma.SellerProfileCreateWithoutUserInput {
     return {
+      farmName: data.farmName,
       ruralRegistration: data.ruralRegistration,
       stateRegistration: data.stateRegistration,
-      farmName: data.farmName,
       city: data.city,
       state: data.state,
       country: data.country,
     };
   }
 
-  private resolveRegistrationRoles(roles?: UserRegistrationRole[]) {
-    return new Set(roles?.length ? roles : [UserRegistrationRole.BUYER]);
+  private toSellerProfileUpdateData(
+    data: UpsertSellerProfileDto,
+  ): Prisma.SellerProfileUpdateInput {
+    return {
+      farmName: data.farmName,
+      ruralRegistration: data.ruralRegistration,
+      stateRegistration: data.stateRegistration,
+      city: data.city,
+      state: data.state,
+      country: data.country,
+    };
   }
 
   private safeUserSelect() {

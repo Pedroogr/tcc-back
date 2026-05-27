@@ -55,7 +55,6 @@ export const ModelName = {
   BuyerProfile: 'BuyerProfile',
   SellerProfile: 'SellerProfile',
   AuctionHouse: 'AuctionHouse',
-  AuctionHouseMember: 'AuctionHouseMember',
   Auction: 'Auction',
   AuctionSettings: 'AuctionSettings',
   Consignment: 'Consignment',
@@ -133,29 +132,19 @@ export const AuctionHouseScalarFieldEnum = {
   name: 'name',
   document: 'document',
   email: 'email',
+  passwordHash: 'passwordHash',
   phone: 'phone',
   city: 'city',
   state: 'state',
   country: 'country',
   logoUrl: 'logoUrl',
+  status: 'status',
+  mustChangePassword: 'mustChangePassword',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AuctionHouseScalarFieldEnum = (typeof AuctionHouseScalarFieldEnum)[keyof typeof AuctionHouseScalarFieldEnum]
-
-
-export const AuctionHouseMemberScalarFieldEnum = {
-  id: 'id',
-  role: 'role',
-  active: 'active',
-  userId: 'userId',
-  auctionHouseId: 'auctionHouseId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AuctionHouseMemberScalarFieldEnum = (typeof AuctionHouseMemberScalarFieldEnum)[keyof typeof AuctionHouseMemberScalarFieldEnum]
 
 
 export const AuctionScalarFieldEnum = {
@@ -168,7 +157,6 @@ export const AuctionScalarFieldEnum = {
   status: 'status',
   mode: 'mode',
   auctionHouseId: 'auctionHouseId',
-  createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -296,7 +284,7 @@ export const SaleScalarFieldEnum = {
   notes: 'notes',
   lotId: 'lotId',
   buyerId: 'buyerId',
-  confirmedByMemberId: 'confirmedByMemberId',
+  saleRecordedByAuctionHouseId: 'saleRecordedByAuctionHouseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

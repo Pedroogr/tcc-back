@@ -19,17 +19,16 @@ enum UserStatus {
   PENDING
 }
 
+enum AuctionHouseStatus {
+  ACTIVE
+  BLOCKED
+  PENDING
+}
+
 enum VerificationStatus {
   PENDING
   APPROVED
   REJECTED
-}
-
-enum AuctionHouseRole {
-  OWNER
-  MANAGER
-  AUCTIONEER
-  STAFF
 }
 
 enum AuctionStatus {
@@ -119,10 +118,6 @@ model User {
   buyerProfile  BuyerProfile?
   sellerProfile SellerProfile?
 
-  auctionHouseMemberships AuctionHouseMember[]
-
-  createdAuctions Auction[] @relation("AuctionCreatedBy")
-
   consignments         Consignment[] @relation("SellerConsignments")
   reviewedConsignments Consignment[] @relation("ConsignmentReviewedBy")
 
@@ -169,43 +164,25 @@ model SellerProfile {
 }
 
 model AuctionHouse {
-  id       String  @id @default(uuid())
-  name     String
-  document String?
-  email    String?
-  phone    String?
-  city     String?
-  state    String?
-  country  String?
-  logoUrl  String?
+  id                 String             @id @default(uuid())
+  name               String
+  document           String?            @unique
+  email              String             @unique
+  passwordHash       String
+  phone              String?
+  city               String?
+  state              String?
+  country            String?
+  logoUrl            String?
+  status             AuctionHouseStatus @default(ACTIVE)
+  mustChangePassword Boolean            @default(false)
 
-  members      AuctionHouseMember[]
   auctions     Auction[]
   consignments Consignment[]
+  saleRecords  Sale[]        @relation("SaleRecordedByAuctionHouse")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model AuctionHouseMember {
-  id     String           @id @default(uuid())
-  role   AuctionHouseRole
-  active Boolean          @default(true)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  auctionHouseId String
-  auctionHouse   AuctionHouse @relation(fields: [auctionHouseId], references: [id], onDelete: Cascade)
-
-  confirmedSales Sale[] @relation("SaleConfirmedByMember")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, auctionHouseId])
-  @@index([auctionHouseId])
-  @@index([userId])
 }
 model Auction {
   id          String        @id @default(uuid())
@@ -220,9 +197,6 @@ model Auction {
   auctionHouseId String
   auctionHouse   AuctionHouse @relation(fields: [auctionHouseId], references: [id], onDelete: Cascade)
 
-  createdById String
-  createdBy   User   @relation("AuctionCreatedBy", fields: [createdById], references: [id])
-
   settings AuctionSettings?
   stream   Stream?
   lots     Lot[]
@@ -233,7 +207,6 @@ model Auction {
   updatedAt DateTime @updatedAt
 
   @@index([auctionHouseId])
-  @@index([createdById])
   @@index([status])
 }
 
@@ -406,12 +379,12 @@ model Sale {
   buyerId String
   buyer   User   @relation("BuyerSales", fields: [buyerId], references: [id])
 
-  confirmedByMemberId String
-  confirmedByMember   AuctionHouseMember @relation("SaleConfirmedByMember", fields: [confirmedByMemberId], references: [id])
+  saleRecordedByAuctionHouseId String
+  saleRecordedByAuctionHouse   AuctionHouse @relation("SaleRecordedByAuctionHouse", fields: [saleRecordedByAuctionHouseId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([buyerId])
-  @@index([confirmedByMemberId])
+  @@index([saleRecordedByAuctionHouseId])
 }

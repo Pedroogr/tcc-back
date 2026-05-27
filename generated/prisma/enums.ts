@@ -26,6 +26,15 @@ export const UserStatus = {
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
+export const AuctionHouseStatus = {
+  ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED',
+  PENDING: 'PENDING'
+} as const
+
+export type AuctionHouseStatus = (typeof AuctionHouseStatus)[keyof typeof AuctionHouseStatus]
+
+
 export const VerificationStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -33,16 +42,6 @@ export const VerificationStatus = {
 } as const
 
 export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
-
-
-export const AuctionHouseRole = {
-  OWNER: 'OWNER',
-  MANAGER: 'MANAGER',
-  AUCTIONEER: 'AUCTIONEER',
-  STAFF: 'STAFF'
-} as const
-
-export type AuctionHouseRole = (typeof AuctionHouseRole)[keyof typeof AuctionHouseRole]
 
 
 export const AuctionStatus = {

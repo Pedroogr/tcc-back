@@ -1,5 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
+import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAuctionDto } from './dto/create-auction.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
@@ -8,9 +13,13 @@ import { UpdateAuctionDto } from './dto/update-auction.dto';
 export class AuctionsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: CreateAuctionDto) {
+  create(data: CreateAuctionDto, actor: AuthenticatedActor) {
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException('Apenas escritorios podem criar remates');
+    }
+
     return this.prisma.auction.create({
-      data: this.toAuctionCreateData(data),
+      data: this.toAuctionCreateData(data, actor.auctionHouse.id),
       include: this.auctionInclude(),
     });
   }
@@ -35,8 +44,8 @@ export class AuctionsService {
     return auction;
   }
 
-  async update(id: string, data: UpdateAuctionDto) {
-    await this.findOne(id);
+  async update(id: string, data: UpdateAuctionDto, actor: AuthenticatedActor) {
+    await this.assertAuctionHouseOwner(id, actor);
 
     return this.prisma.auction.update({
       where: { id },
@@ -45,8 +54,8 @@ export class AuctionsService {
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, actor: AuthenticatedActor) {
+    await this.assertAuctionHouseOwner(id, actor);
 
     return this.prisma.auction.delete({
       where: { id },
@@ -55,6 +64,7 @@ export class AuctionsService {
 
   private toAuctionCreateData(
     data: CreateAuctionDto,
+    auctionHouseId: string,
   ): Prisma.AuctionCreateInput {
     return {
       title: data.title,
@@ -63,10 +73,7 @@ export class AuctionsService {
       status: data.status,
       mode: data.mode,
       auctionHouse: {
-        connect: { id: data.auctionHouseId },
-      },
-      createdBy: {
-        connect: { id: data.createdById },
+        connect: { id: auctionHouseId },
       },
     };
   }
@@ -83,17 +90,36 @@ export class AuctionsService {
       auctionHouse: data.auctionHouseId
         ? { connect: { id: data.auctionHouseId } }
         : undefined,
-      createdBy: data.createdById
-        ? { connect: { id: data.createdById } }
-        : undefined,
     };
   }
 
   private auctionInclude() {
     return {
       auctionHouse: true,
-      createdBy: true,
       lots: true,
     } satisfies Prisma.AuctionInclude;
+  }
+
+  private async assertAuctionHouseOwner(id: string, actor: AuthenticatedActor) {
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException(
+        'Apenas escritorios podem gerenciar remates',
+      );
+    }
+
+    const auction = await this.prisma.auction.findUnique({
+      where: { id },
+      select: { id: true, auctionHouseId: true },
+    });
+
+    if (!auction) {
+      throw new NotFoundException('Leilao nao encontrado');
+    }
+
+    if (auction.auctionHouseId !== actor.auctionHouse.id) {
+      throw new ForbiddenException(
+        'Escritorio nao pode gerenciar remate de outro escritorio',
+      );
+    }
   }
 }

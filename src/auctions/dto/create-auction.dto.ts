@@ -1,11 +1,5 @@
 import { AuctionMode, AuctionStatus } from '../../../generated/prisma/enums';
-import {
-  IsDateString,
-  IsEnum,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CreateAuctionDto {
   @IsString()
@@ -27,9 +21,7 @@ export class CreateAuctionDto {
   @IsEnum(AuctionMode)
   mode?: AuctionMode;
 
-  @IsUUID()
-  auctionHouseId: string;
-
-  @IsUUID()
-  createdById: string;
+  @IsOptional()
+  @IsString()
+  auctionHouseId?: string;
 }
