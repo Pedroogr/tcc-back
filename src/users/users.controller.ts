@@ -40,6 +40,12 @@ export class UsersController {
     return this.usersService.upsertSellerProfile(request.user.id, body);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('me/buyer-profile')
+  upsertBuyerProfile(@Req() request: AuthenticatedRequest) {
+    return this.usersService.upsertBuyerProfile(request.user.id);
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll();

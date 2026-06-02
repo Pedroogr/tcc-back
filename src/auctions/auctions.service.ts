@@ -4,9 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
+import { BuyerRegistrationStatus } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateBuyerRegistrationDto } from './dto/create-buyer-registration.dto';
 import { CreateAuctionDto } from './dto/create-auction.dto';
+import { ReviewBuyerRegistrationDto } from './dto/review-buyer-registration.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
 
 @Injectable()
@@ -62,6 +65,92 @@ export class AuctionsService {
     });
   }
 
+  async registerBuyer(
+    id: string,
+    data: CreateBuyerRegistrationDto,
+    actor: AuthenticatedActor,
+  ) {
+    if (actor.type !== 'USER' || !actor.user.buyerProfile) {
+      throw new ForbiddenException(
+        'Apenas compradores podem solicitar liberacao para lances',
+      );
+    }
+
+    await this.findOne(id);
+
+    const existingRegistration = await this.prisma.buyerRegistration.findUnique(
+      {
+        where: { buyerId_auctionId: { buyerId: actor.user.id, auctionId: id } },
+      },
+    );
+
+    if (existingRegistration?.status === BuyerRegistrationStatus.BLOCKED) {
+      throw new ForbiddenException(
+        'Comprador bloqueado para este remate pelo escritorio responsavel',
+      );
+    }
+
+    if (existingRegistration?.status === BuyerRegistrationStatus.APPROVED) {
+      return existingRegistration;
+    }
+
+    return this.prisma.buyerRegistration.upsert({
+      where: { buyerId_auctionId: { buyerId: actor.user.id, auctionId: id } },
+      create: {
+        buyer: { connect: { id: actor.user.id } },
+        auction: { connect: { id } },
+        notes: data.notes,
+      },
+      update: {
+        status: BuyerRegistrationStatus.PENDING,
+        notes: data.notes,
+        approvedAt: null,
+        rejectedAt: null,
+      },
+    });
+  }
+
+  async findBuyerRegistrations(id: string, actor: AuthenticatedActor) {
+    await this.assertAuctionHouseOwner(id, actor);
+
+    return this.prisma.buyerRegistration.findMany({
+      where: { auctionId: id },
+      include: { buyer: { select: this.registrationBuyerSelect() } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async reviewBuyerRegistration(
+    auctionId: string,
+    registrationId: string,
+    data: ReviewBuyerRegistrationDto,
+    actor: AuthenticatedActor,
+  ) {
+    await this.assertAuctionHouseOwner(auctionId, actor);
+
+    const registration = await this.prisma.buyerRegistration.findUnique({
+      where: { id: registrationId },
+      select: { id: true, auctionId: true },
+    });
+
+    if (!registration || registration.auctionId !== auctionId) {
+      throw new NotFoundException('Solicitacao de comprador nao encontrada');
+    }
+
+    return this.prisma.buyerRegistration.update({
+      where: { id: registrationId },
+      data: {
+        status: data.status,
+        notes: data.notes,
+        approvedAt:
+          data.status === BuyerRegistrationStatus.APPROVED ? new Date() : null,
+        rejectedAt:
+          data.status === BuyerRegistrationStatus.REJECTED ? new Date() : null,
+      },
+      include: { buyer: { select: this.registrationBuyerSelect() } },
+    });
+  }
+
   private toAuctionCreateData(
     data: CreateAuctionDto,
     auctionHouseId: string,
@@ -98,6 +187,17 @@ export class AuctionsService {
       auctionHouse: true,
       lots: true,
     } satisfies Prisma.AuctionInclude;
+  }
+
+  private registrationBuyerSelect() {
+    return {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      document: true,
+      buyerProfile: true,
+    } satisfies Prisma.UserSelect;
   }
 
   private async assertAuctionHouseOwner(id: string, actor: AuthenticatedActor) {

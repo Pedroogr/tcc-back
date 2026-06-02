@@ -1,12 +1,18 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
-import { LotStatus } from '../../generated/prisma/enums';
+import {
+  BidStatus,
+  BuyerRegistrationStatus,
+  LotStatus,
+} from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateBidDto } from './dto/create-bid.dto';
 import { CreateLotDto } from './dto/create-lot.dto';
 import { UpdateLotDto } from './dto/update-lot.dto';
 
@@ -84,6 +90,118 @@ export class LotsService {
 
     return this.prisma.lot.delete({
       where: { id },
+    });
+  }
+
+  async createBid(id: string, data: CreateBidDto, actor: AuthenticatedActor) {
+    if (actor.type !== 'USER' || !actor.user.buyerProfile) {
+      throw new ForbiddenException('Apenas compradores podem realizar lances');
+    }
+
+    const lot = await this.prisma.lot.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        status: true,
+        initialPrice: true,
+        auctionId: true,
+        auction: {
+          select: {
+            id: true,
+            settings: {
+              select: {
+                requiresBuyerApproval: true,
+                minBidIncrement: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!lot) {
+      throw new NotFoundException('Lote nao encontrado');
+    }
+
+    if (!lot.auctionId || !lot.auction) {
+      throw new ForbiddenException('Lote nao esta vinculado a um remate');
+    }
+
+    if (
+      lot.status !== LotStatus.AVAILABLE &&
+      lot.status !== LotStatus.IN_AUCTION
+    ) {
+      throw new ForbiddenException('Lote nao esta liberado para lances');
+    }
+
+    if (lot.auction.settings?.requiresBuyerApproval ?? true) {
+      const registration = await this.prisma.buyerRegistration.findUnique({
+        where: {
+          buyerId_auctionId: {
+            buyerId: actor.user.id,
+            auctionId: lot.auctionId,
+          },
+        },
+        select: { status: true },
+      });
+
+      if (registration?.status !== BuyerRegistrationStatus.APPROVED) {
+        throw new ForbiddenException(
+          'Comprador precisa estar aprovado pelo escritorio deste remate para realizar lances',
+        );
+      }
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const currentWinningBid = await tx.bid.findFirst({
+        where: {
+          lotId: id,
+          status: BidStatus.WINNING,
+        },
+        orderBy: { amount: 'desc' },
+      });
+
+      const minBidIncrement =
+        lot.auction?.settings?.minBidIncrement ?? new Prisma.Decimal(0);
+      const minimumAmount = currentWinningBid
+        ? currentWinningBid.amount.plus(minBidIncrement)
+        : (lot.initialPrice ?? new Prisma.Decimal(0));
+      const amount = new Prisma.Decimal(data.amount);
+
+      if (amount.lt(minimumAmount)) {
+        throw new BadRequestException(
+          `Lance minimo para este lote e ${minimumAmount.toString()}`,
+        );
+      }
+
+      await tx.bid.updateMany({
+        where: {
+          lotId: id,
+          status: BidStatus.WINNING,
+        },
+        data: { status: BidStatus.OUTBID },
+      });
+
+      return tx.bid.create({
+        data: {
+          amount,
+          status: BidStatus.WINNING,
+          bidder: { connect: { id: actor.user.id } },
+          lot: { connect: { id } },
+        },
+        include: {
+          bidder: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              document: true,
+            },
+          },
+          lot: true,
+        },
+      });
     });
   }
 

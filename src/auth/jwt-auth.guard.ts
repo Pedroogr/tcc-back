@@ -18,6 +18,7 @@ type JwtPayload = {
 const authenticatedUserSelect = {
   id: true,
   email: true,
+  buyerProfile: true,
   sellerProfile: true,
 } satisfies Prisma.UserSelect;
 

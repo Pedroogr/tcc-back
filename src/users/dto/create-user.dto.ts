@@ -1,4 +1,18 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+  ValidateNested,
+} from 'class-validator';
+import { UpsertSellerProfileDto } from './upsert-seller-profile.dto';
+
+export enum UserAccountType {
+  BUYER = 'BUYER',
+  SELLER = 'SELLER',
+}
 
 export class CreateUserDto {
   @IsString()
@@ -18,4 +32,13 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   document?: string;
+
+  @IsOptional()
+  @IsEnum(UserAccountType)
+  accountType?: UserAccountType;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpsertSellerProfileDto)
+  sellerProfile?: UpsertSellerProfileDto;
 }

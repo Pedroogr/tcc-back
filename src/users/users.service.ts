@@ -6,7 +6,7 @@ import {
 import { hash } from 'bcryptjs';
 import { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UserAccountType } from './dto/create-user.dto';
 import { UpsertSellerProfileDto } from './dto/upsert-seller-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -76,6 +76,20 @@ export class UsersService {
     return this.findOne(userId);
   }
 
+  async upsertBuyerProfile(userId: string) {
+    await this.findOne(userId);
+
+    await this.prisma.buyerProfile.upsert({
+      where: { userId },
+      create: {
+        user: { connect: { id: userId } },
+      },
+      update: {},
+    });
+
+    return this.findOne(userId);
+  }
+
   async remove(id: string) {
     await this.findOne(id);
 
@@ -88,13 +102,25 @@ export class UsersService {
   private async toUserCreateData(
     data: CreateUserDto,
   ): Promise<Prisma.UserCreateInput> {
-    return {
+    const createData: Prisma.UserCreateInput = {
       name: data.name,
       email: data.email,
       passwordHash: await hash(data.password, 10),
       phone: data.phone,
       document: data.document,
     };
+
+    if (data.accountType === UserAccountType.BUYER) {
+      createData.buyerProfile = { create: {} };
+    }
+
+    if (data.accountType === UserAccountType.SELLER) {
+      createData.sellerProfile = {
+        create: this.toSellerProfileCreateData(data.sellerProfile ?? {}),
+      };
+    }
+
+    return createData;
   }
 
   private async toUserUpdateData(
