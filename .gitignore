@@ -3,6 +3,11 @@
 /node_modules
 /build
 /gesture-poc/.venv
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/lots/
+/public/uploads/lots/*
+!/public/uploads/lots/.gitkeep
 
 # Logs
 logs

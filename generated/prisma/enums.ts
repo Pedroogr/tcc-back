@@ -35,6 +35,15 @@ export const AuctionHouseStatus = {
 export type AuctionHouseStatus = (typeof AuctionHouseStatus)[keyof typeof AuctionHouseStatus]
 
 
+export const OfficeInviteStatus = {
+  PENDING: 'PENDING',
+  USED: 'USED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type OfficeInviteStatus = (typeof OfficeInviteStatus)[keyof typeof OfficeInviteStatus]
+
+
 export const VerificationStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

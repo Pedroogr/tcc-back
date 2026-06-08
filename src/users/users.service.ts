@@ -5,6 +5,10 @@ import {
 } from '@nestjs/common';
 import { hash } from 'bcryptjs';
 import { Prisma } from '../../generated/prisma/client';
+import {
+  normalizeBrazilianPhone,
+  normalizeCpfOrCnpj,
+} from '../common/br-fields';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto, UserAccountType } from './dto/create-user.dto';
 import { UpsertSellerProfileDto } from './dto/upsert-seller-profile.dto';
@@ -106,8 +110,8 @@ export class UsersService {
       name: data.name,
       email: data.email,
       passwordHash: await hash(data.password, 10),
-      phone: data.phone,
-      document: data.document,
+      phone: normalizeBrazilianPhone(data.phone),
+      document: normalizeCpfOrCnpj(data.document),
     };
 
     if (data.accountType === UserAccountType.BUYER) {
@@ -129,8 +133,8 @@ export class UsersService {
     const updateData: Prisma.UserUpdateInput = {
       name: data.name,
       email: data.email,
-      phone: data.phone,
-      document: data.document,
+      phone: normalizeBrazilianPhone(data.phone),
+      document: normalizeCpfOrCnpj(data.document),
     };
 
     if (data.password) {

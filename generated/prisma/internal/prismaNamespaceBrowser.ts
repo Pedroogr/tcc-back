@@ -55,6 +55,7 @@ export const ModelName = {
   BuyerProfile: 'BuyerProfile',
   SellerProfile: 'SellerProfile',
   AuctionHouse: 'AuctionHouse',
+  OfficeInvite: 'OfficeInvite',
   Auction: 'Auction',
   AuctionSettings: 'AuctionSettings',
   Consignment: 'Consignment',
@@ -147,6 +148,21 @@ export const AuctionHouseScalarFieldEnum = {
 export type AuctionHouseScalarFieldEnum = (typeof AuctionHouseScalarFieldEnum)[keyof typeof AuctionHouseScalarFieldEnum]
 
 
+export const OfficeInviteScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  auctionHouseId: 'auctionHouseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OfficeInviteScalarFieldEnum = (typeof OfficeInviteScalarFieldEnum)[keyof typeof OfficeInviteScalarFieldEnum]
+
+
 export const AuctionScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -237,7 +253,7 @@ export const BuyerRegistrationScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   buyerId: 'buyerId',
-  auctionId: 'auctionId',
+  auctionHouseId: 'auctionHouseId',
   reviewedById: 'reviewedById',
   approvedAt: 'approvedAt',
   rejectedAt: 'rejectedAt',

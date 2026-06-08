@@ -4,11 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
 import { Prisma } from '../../generated/prisma/client';
 import {
   BidStatus,
   BuyerRegistrationStatus,
   LotStatus,
+  MediaType,
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
@@ -30,27 +34,25 @@ export class LotsService {
       throw new NotFoundException('Remate nao encontrado');
     }
 
-    const isAuctionHouseActor =
-      actor.type === 'AUCTION_HOUSE' &&
-      actor.auctionHouse.id === auction.auctionHouseId;
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException(
+        'Apenas escritorios podem cadastrar lotes em remates',
+      );
+    }
 
-    if (
-      actor.type === 'AUCTION_HOUSE' &&
-      actor.auctionHouse.id !== auction.auctionHouseId
-    ) {
+    if (actor.auctionHouse.id !== auction.auctionHouseId) {
       throw new ForbiddenException(
         'Escritorio nao pode cadastrar lotes em remate de outro escritorio',
       );
     }
 
-    if (actor.type === 'USER' && !actor.user.sellerProfile) {
-      throw new ForbiddenException(
-        'Apenas vendedores ou o escritorio responsavel podem cadastrar lotes neste remate',
-      );
-    }
+    const imageMedia = await this.saveLotImages(data.images);
 
     return this.prisma.lot.create({
-      data: this.toLotCreateData(data, actor, auction, isAuctionHouseActor),
+      data: {
+        ...this.toLotCreateData(data),
+        media: imageMedia.length ? { create: imageMedia } : undefined,
+      },
       include: this.lotInclude(),
     });
   }
@@ -77,10 +79,14 @@ export class LotsService {
 
   async update(id: string, data: UpdateLotDto, actor: AuthenticatedActor) {
     await this.assertLotManager(id, actor);
+    const imageMedia = await this.saveLotImages(data.images);
 
     return this.prisma.lot.update({
       where: { id },
-      data: this.toLotUpdateData(data),
+      data: {
+        ...this.toLotUpdateData(data),
+        media: imageMedia.length ? { create: imageMedia } : undefined,
+      },
       include: this.lotInclude(),
     });
   }
@@ -94,8 +100,10 @@ export class LotsService {
   }
 
   async createBid(id: string, data: CreateBidDto, actor: AuthenticatedActor) {
-    if (actor.type !== 'USER' || !actor.user.buyerProfile) {
-      throw new ForbiddenException('Apenas compradores podem realizar lances');
+    if (actor.type !== 'USER') {
+      throw new ForbiddenException(
+        'Apenas usuarios comuns podem realizar lances',
+      );
     }
 
     const lot = await this.prisma.lot.findUnique({
@@ -107,10 +115,10 @@ export class LotsService {
         auctionId: true,
         auction: {
           select: {
+            auctionHouseId: true,
             id: true,
             settings: {
               select: {
-                requiresBuyerApproval: true,
                 minBidIncrement: true,
               },
             },
@@ -134,22 +142,20 @@ export class LotsService {
       throw new ForbiddenException('Lote nao esta liberado para lances');
     }
 
-    if (lot.auction.settings?.requiresBuyerApproval ?? true) {
-      const registration = await this.prisma.buyerRegistration.findUnique({
-        where: {
-          buyerId_auctionId: {
-            buyerId: actor.user.id,
-            auctionId: lot.auctionId,
-          },
+    const registration = await this.prisma.buyerRegistration.findUnique({
+      where: {
+        buyerId_auctionHouseId: {
+          buyerId: actor.user.id,
+          auctionHouseId: lot.auction.auctionHouseId,
         },
-        select: { status: true },
-      });
+      },
+      select: { status: true },
+    });
 
-      if (registration?.status !== BuyerRegistrationStatus.APPROVED) {
-        throw new ForbiddenException(
-          'Comprador precisa estar aprovado pelo escritorio deste remate para realizar lances',
-        );
-      }
+    if (registration?.status !== BuyerRegistrationStatus.APPROVED) {
+      throw new ForbiddenException(
+        'Usuario precisa estar aprovado pelo escritorio deste remate para realizar lances',
+      );
     }
 
     return this.prisma.$transaction(async (tx) => {
@@ -205,12 +211,7 @@ export class LotsService {
     });
   }
 
-  private toLotCreateData(
-    data: CreateLotDto,
-    actor: AuthenticatedActor,
-    auction: { id: string; auctionHouseId: string },
-    isAuctionHouseActor: boolean,
-  ): Prisma.LotCreateInput {
+  private toLotCreateData(data: CreateLotDto): Prisma.LotCreateInput {
     return {
       code: data.code,
       title: data.title,
@@ -227,19 +228,9 @@ export class LotsService {
           : undefined,
       status: LotStatus.UNDER_REVIEW,
       auction: { connect: { id: data.auctionId } },
-      consignment:
-        actor.type === 'USER' &&
-        actor.user.sellerProfile &&
-        !isAuctionHouseActor
-          ? {
-              create: {
-                seller: { connect: { id: actor.user.id } },
-                auctionHouse: { connect: { id: auction.auctionHouseId } },
-              },
-            }
-          : data.consignmentId
-            ? { connect: { id: data.consignmentId } }
-            : undefined,
+      consignment: data.consignmentId
+        ? { connect: { id: data.consignmentId } }
+        : undefined,
     };
   }
 
@@ -270,9 +261,68 @@ export class LotsService {
     return {
       auction: true,
       consignment: true,
-      media: true,
+      media: { orderBy: { sortOrder: 'asc' } },
       sale: true,
     } satisfies Prisma.LotInclude;
+  }
+
+  private async saveLotImages(images?: CreateLotDto['images']) {
+    if (!images?.length) {
+      return [];
+    }
+
+    const uploadDir = join(process.cwd(), 'public', 'uploads', 'lots');
+    await mkdir(uploadDir, { recursive: true });
+
+    return Promise.all(
+      images.map(async (image, index) => {
+        const savedImage = await this.saveLotImageFile(
+          image.dataUrl,
+          uploadDir,
+        );
+
+        return {
+          type: MediaType.IMAGE,
+          url: savedImage.url,
+          description: image.description || image.fileName,
+          sortOrder: index,
+        };
+      }),
+    );
+  }
+
+  private async saveLotImageFile(dataUrl: string, uploadDir: string) {
+    const match =
+      /^data:(image\/(?:png|jpe?g|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(
+        dataUrl,
+      );
+
+    if (!match) {
+      throw new BadRequestException(
+        'Imagem invalida. Envie PNG, JPG, WEBP ou GIF.',
+      );
+    }
+
+    const [, mimeType, base64] = match;
+    const buffer = Buffer.from(base64, 'base64');
+
+    if (buffer.byteLength > 5 * 1024 * 1024) {
+      throw new BadRequestException('Cada imagem deve ter no maximo 5MB.');
+    }
+
+    const extensionByMimeType: Record<string, string> = {
+      'image/gif': 'gif',
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp',
+    };
+    const extension = extensionByMimeType[mimeType];
+    const fileName = `${randomUUID()}.${extension}`;
+
+    await writeFile(join(uploadDir, fileName), buffer);
+
+    return { url: `/uploads/lots/${fileName}` };
   }
 
   private async assertLotManager(id: string, actor: AuthenticatedActor) {

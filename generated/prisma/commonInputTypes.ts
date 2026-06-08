@@ -218,6 +218,13 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type EnumOfficeInviteStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.OfficeInviteStatus | Prisma.EnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOfficeInviteStatusFilter<$PrismaModel> | $Enums.OfficeInviteStatus
+}
+
 export type DateTimeNullableFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -229,18 +236,14 @@ export type DateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
-export type EnumAuctionStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel> | $Enums.AuctionStatus
-}
-
-export type EnumAuctionModeFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionMode | Prisma.EnumAuctionModeFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionModeFilter<$PrismaModel> | $Enums.AuctionMode
+export type EnumOfficeInviteStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OfficeInviteStatus | Prisma.EnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOfficeInviteStatusWithAggregatesFilter<$PrismaModel> | $Enums.OfficeInviteStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOfficeInviteStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOfficeInviteStatusFilter<$PrismaModel>
 }
 
 export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -255,6 +258,20 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type EnumAuctionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel> | $Enums.AuctionStatus
+}
+
+export type EnumAuctionModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionMode | Prisma.EnumAuctionModeFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionModeFilter<$PrismaModel> | $Enums.AuctionMode
 }
 
 export type EnumAuctionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -738,6 +755,13 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type NestedEnumOfficeInviteStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.OfficeInviteStatus | Prisma.EnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOfficeInviteStatusFilter<$PrismaModel> | $Enums.OfficeInviteStatus
+}
+
 export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -749,18 +773,14 @@ export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
-export type NestedEnumAuctionStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel> | $Enums.AuctionStatus
-}
-
-export type NestedEnumAuctionModeFilter<$PrismaModel = never> = {
-  equals?: $Enums.AuctionMode | Prisma.EnumAuctionModeFieldRefInput<$PrismaModel>
-  in?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAuctionModeFilter<$PrismaModel> | $Enums.AuctionMode
+export type NestedEnumOfficeInviteStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OfficeInviteStatus | Prisma.EnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OfficeInviteStatus[] | Prisma.ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOfficeInviteStatusWithAggregatesFilter<$PrismaModel> | $Enums.OfficeInviteStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOfficeInviteStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOfficeInviteStatusFilter<$PrismaModel>
 }
 
 export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -775,6 +795,20 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumAuctionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel> | $Enums.AuctionStatus
+}
+
+export type NestedEnumAuctionModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionMode | Prisma.EnumAuctionModeFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionMode[] | Prisma.ListEnumAuctionModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionModeFilter<$PrismaModel> | $Enums.AuctionMode
 }
 
 export type NestedEnumAuctionStatusWithAggregatesFilter<$PrismaModel = never> = {

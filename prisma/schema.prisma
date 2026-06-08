@@ -25,6 +25,12 @@ enum AuctionHouseStatus {
   PENDING
 }
 
+enum OfficeInviteStatus {
+  PENDING
+  USED
+  EXPIRED
+}
+
 enum VerificationStatus {
   PENDING
   APPROVED
@@ -180,9 +186,30 @@ model AuctionHouse {
   auctions     Auction[]
   consignments Consignment[]
   saleRecords  Sale[]        @relation("SaleRecordedByAuctionHouse")
+  buyerRegistrations BuyerRegistration[]
+  officeInvites OfficeInvite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model OfficeInvite {
+  id        String             @id @default(uuid())
+  email     String?
+  token     String             @unique
+  status    OfficeInviteStatus @default(PENDING)
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  auctionHouseId String?
+  auctionHouse   AuctionHouse? @relation(fields: [auctionHouseId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
 }
 model Auction {
   id          String        @id @default(uuid())
@@ -200,8 +227,6 @@ model Auction {
   settings AuctionSettings?
   stream   Stream?
   lots     Lot[]
-
-  buyerRegistrations BuyerRegistration[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -313,8 +338,8 @@ model BuyerRegistration {
   buyerId String
   buyer   User   @relation("BuyerRegistrations", fields: [buyerId], references: [id], onDelete: Cascade)
 
-  auctionId String
-  auction   Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  auctionHouseId String
+  auctionHouse   AuctionHouse @relation(fields: [auctionHouseId], references: [id], onDelete: Cascade)
 
   reviewedById String?
   reviewedBy   User?   @relation("BuyerRegistrationReviewedBy", fields: [reviewedById], references: [id])
@@ -325,9 +350,9 @@ model BuyerRegistration {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([buyerId, auctionId])
+  @@unique([buyerId, auctionHouseId])
   @@index([buyerId])
-  @@index([auctionId])
+  @@index([auctionHouseId])
   @@index([status])
 }
 

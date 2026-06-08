@@ -29,7 +29,7 @@ export type BuyerRegistrationMinAggregateOutputType = {
   status: $Enums.BuyerRegistrationStatus | null
   notes: string | null
   buyerId: string | null
-  auctionId: string | null
+  auctionHouseId: string | null
   reviewedById: string | null
   approvedAt: Date | null
   rejectedAt: Date | null
@@ -42,7 +42,7 @@ export type BuyerRegistrationMaxAggregateOutputType = {
   status: $Enums.BuyerRegistrationStatus | null
   notes: string | null
   buyerId: string | null
-  auctionId: string | null
+  auctionHouseId: string | null
   reviewedById: string | null
   approvedAt: Date | null
   rejectedAt: Date | null
@@ -55,7 +55,7 @@ export type BuyerRegistrationCountAggregateOutputType = {
   status: number
   notes: number
   buyerId: number
-  auctionId: number
+  auctionHouseId: number
   reviewedById: number
   approvedAt: number
   rejectedAt: number
@@ -70,7 +70,7 @@ export type BuyerRegistrationMinAggregateInputType = {
   status?: true
   notes?: true
   buyerId?: true
-  auctionId?: true
+  auctionHouseId?: true
   reviewedById?: true
   approvedAt?: true
   rejectedAt?: true
@@ -83,7 +83,7 @@ export type BuyerRegistrationMaxAggregateInputType = {
   status?: true
   notes?: true
   buyerId?: true
-  auctionId?: true
+  auctionHouseId?: true
   reviewedById?: true
   approvedAt?: true
   rejectedAt?: true
@@ -96,7 +96,7 @@ export type BuyerRegistrationCountAggregateInputType = {
   status?: true
   notes?: true
   buyerId?: true
-  auctionId?: true
+  auctionHouseId?: true
   reviewedById?: true
   approvedAt?: true
   rejectedAt?: true
@@ -182,7 +182,7 @@ export type BuyerRegistrationGroupByOutputType = {
   status: $Enums.BuyerRegistrationStatus
   notes: string | null
   buyerId: string
-  auctionId: string
+  auctionHouseId: string
   reviewedById: string | null
   approvedAt: Date | null
   rejectedAt: Date | null
@@ -216,14 +216,14 @@ export type BuyerRegistrationWhereInput = {
   status?: Prisma.EnumBuyerRegistrationStatusFilter<"BuyerRegistration"> | $Enums.BuyerRegistrationStatus
   notes?: Prisma.StringNullableFilter<"BuyerRegistration"> | string | null
   buyerId?: Prisma.StringFilter<"BuyerRegistration"> | string
-  auctionId?: Prisma.StringFilter<"BuyerRegistration"> | string
+  auctionHouseId?: Prisma.StringFilter<"BuyerRegistration"> | string
   reviewedById?: Prisma.StringNullableFilter<"BuyerRegistration"> | string | null
   approvedAt?: Prisma.DateTimeNullableFilter<"BuyerRegistration"> | Date | string | null
   rejectedAt?: Prisma.DateTimeNullableFilter<"BuyerRegistration"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"BuyerRegistration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BuyerRegistration"> | Date | string
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  auction?: Prisma.XOR<Prisma.AuctionScalarRelationFilter, Prisma.AuctionWhereInput>
+  auctionHouse?: Prisma.XOR<Prisma.AuctionHouseScalarRelationFilter, Prisma.AuctionHouseWhereInput>
   reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
@@ -232,43 +232,43 @@ export type BuyerRegistrationOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  auctionId?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   buyer?: Prisma.UserOrderByWithRelationInput
-  auction?: Prisma.AuctionOrderByWithRelationInput
+  auctionHouse?: Prisma.AuctionHouseOrderByWithRelationInput
   reviewedBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type BuyerRegistrationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  buyerId_auctionId?: Prisma.BuyerRegistrationBuyerIdAuctionIdCompoundUniqueInput
+  buyerId_auctionHouseId?: Prisma.BuyerRegistrationBuyerIdAuctionHouseIdCompoundUniqueInput
   AND?: Prisma.BuyerRegistrationWhereInput | Prisma.BuyerRegistrationWhereInput[]
   OR?: Prisma.BuyerRegistrationWhereInput[]
   NOT?: Prisma.BuyerRegistrationWhereInput | Prisma.BuyerRegistrationWhereInput[]
   status?: Prisma.EnumBuyerRegistrationStatusFilter<"BuyerRegistration"> | $Enums.BuyerRegistrationStatus
   notes?: Prisma.StringNullableFilter<"BuyerRegistration"> | string | null
   buyerId?: Prisma.StringFilter<"BuyerRegistration"> | string
-  auctionId?: Prisma.StringFilter<"BuyerRegistration"> | string
+  auctionHouseId?: Prisma.StringFilter<"BuyerRegistration"> | string
   reviewedById?: Prisma.StringNullableFilter<"BuyerRegistration"> | string | null
   approvedAt?: Prisma.DateTimeNullableFilter<"BuyerRegistration"> | Date | string | null
   rejectedAt?: Prisma.DateTimeNullableFilter<"BuyerRegistration"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"BuyerRegistration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BuyerRegistration"> | Date | string
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  auction?: Prisma.XOR<Prisma.AuctionScalarRelationFilter, Prisma.AuctionWhereInput>
+  auctionHouse?: Prisma.XOR<Prisma.AuctionHouseScalarRelationFilter, Prisma.AuctionHouseWhereInput>
   reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "id" | "buyerId_auctionId">
+}, "id" | "buyerId_auctionHouseId">
 
 export type BuyerRegistrationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  auctionId?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -287,7 +287,7 @@ export type BuyerRegistrationScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumBuyerRegistrationStatusWithAggregatesFilter<"BuyerRegistration"> | $Enums.BuyerRegistrationStatus
   notes?: Prisma.StringNullableWithAggregatesFilter<"BuyerRegistration"> | string | null
   buyerId?: Prisma.StringWithAggregatesFilter<"BuyerRegistration"> | string
-  auctionId?: Prisma.StringWithAggregatesFilter<"BuyerRegistration"> | string
+  auctionHouseId?: Prisma.StringWithAggregatesFilter<"BuyerRegistration"> | string
   reviewedById?: Prisma.StringNullableWithAggregatesFilter<"BuyerRegistration"> | string | null
   approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BuyerRegistration"> | Date | string | null
   rejectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"BuyerRegistration"> | Date | string | null
@@ -304,7 +304,7 @@ export type BuyerRegistrationCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   buyer: Prisma.UserCreateNestedOneWithoutBuyerRegistrationsInput
-  auction: Prisma.AuctionCreateNestedOneWithoutBuyerRegistrationsInput
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutBuyerRegistrationsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedBuyerRegistrationsInput
 }
 
@@ -313,7 +313,7 @@ export type BuyerRegistrationUncheckedCreateInput = {
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
   buyerId: string
-  auctionId: string
+  auctionHouseId: string
   reviewedById?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
@@ -330,7 +330,7 @@ export type BuyerRegistrationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyer?: Prisma.UserUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
-  auction?: Prisma.AuctionUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedBuyerRegistrationsNestedInput
 }
 
@@ -339,7 +339,7 @@ export type BuyerRegistrationUncheckedUpdateInput = {
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  auctionId?: Prisma.StringFieldUpdateOperationsInput | string
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -352,7 +352,7 @@ export type BuyerRegistrationCreateManyInput = {
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
   buyerId: string
-  auctionId: string
+  auctionHouseId: string
   reviewedById?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
@@ -375,7 +375,7 @@ export type BuyerRegistrationUncheckedUpdateManyInput = {
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  auctionId?: Prisma.StringFieldUpdateOperationsInput | string
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -393,9 +393,9 @@ export type BuyerRegistrationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type BuyerRegistrationBuyerIdAuctionIdCompoundUniqueInput = {
+export type BuyerRegistrationBuyerIdAuctionHouseIdCompoundUniqueInput = {
   buyerId: string
-  auctionId: string
+  auctionHouseId: string
 }
 
 export type BuyerRegistrationCountOrderByAggregateInput = {
@@ -403,7 +403,7 @@ export type BuyerRegistrationCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  auctionId?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   rejectedAt?: Prisma.SortOrder
@@ -416,7 +416,7 @@ export type BuyerRegistrationMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  auctionId?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   rejectedAt?: Prisma.SortOrder
@@ -429,7 +429,7 @@ export type BuyerRegistrationMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
-  auctionId?: Prisma.SortOrder
+  auctionHouseId?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   rejectedAt?: Prisma.SortOrder
@@ -521,45 +521,45 @@ export type BuyerRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput = {
   deleteMany?: Prisma.BuyerRegistrationScalarWhereInput | Prisma.BuyerRegistrationScalarWhereInput[]
 }
 
-export type BuyerRegistrationCreateNestedManyWithoutAuctionInput = {
-  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput> | Prisma.BuyerRegistrationCreateWithoutAuctionInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput[]
-  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput[]
-  createMany?: Prisma.BuyerRegistrationCreateManyAuctionInputEnvelope
+export type BuyerRegistrationCreateNestedManyWithoutAuctionHouseInput = {
+  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput> | Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput[]
+  createMany?: Prisma.BuyerRegistrationCreateManyAuctionHouseInputEnvelope
   connect?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
 }
 
-export type BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionInput = {
-  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput> | Prisma.BuyerRegistrationCreateWithoutAuctionInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput[]
-  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput[]
-  createMany?: Prisma.BuyerRegistrationCreateManyAuctionInputEnvelope
+export type BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionHouseInput = {
+  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput> | Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput[]
+  createMany?: Prisma.BuyerRegistrationCreateManyAuctionHouseInputEnvelope
   connect?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
 }
 
-export type BuyerRegistrationUpdateManyWithoutAuctionNestedInput = {
-  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput> | Prisma.BuyerRegistrationCreateWithoutAuctionInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput[]
-  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput[]
-  upsert?: Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionInput | Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionInput[]
-  createMany?: Prisma.BuyerRegistrationCreateManyAuctionInputEnvelope
+export type BuyerRegistrationUpdateManyWithoutAuctionHouseNestedInput = {
+  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput> | Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput[]
+  upsert?: Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionHouseInput | Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionHouseInput[]
+  createMany?: Prisma.BuyerRegistrationCreateManyAuctionHouseInputEnvelope
   set?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
   disconnect?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
   delete?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
   connect?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
-  update?: Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionInput | Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionInput[]
-  updateMany?: Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionInput | Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionInput[]
+  update?: Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionHouseInput | Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionHouseInput[]
+  updateMany?: Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionHouseInput | Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionHouseInput[]
   deleteMany?: Prisma.BuyerRegistrationScalarWhereInput | Prisma.BuyerRegistrationScalarWhereInput[]
 }
 
-export type BuyerRegistrationUncheckedUpdateManyWithoutAuctionNestedInput = {
-  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput> | Prisma.BuyerRegistrationCreateWithoutAuctionInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput[]
-  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionInput[]
-  upsert?: Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionInput | Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionInput[]
-  createMany?: Prisma.BuyerRegistrationCreateManyAuctionInputEnvelope
+export type BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseNestedInput = {
+  create?: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput> | Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput[] | Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput[]
+  connectOrCreate?: Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput | Prisma.BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput[]
+  upsert?: Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionHouseInput | Prisma.BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionHouseInput[]
+  createMany?: Prisma.BuyerRegistrationCreateManyAuctionHouseInputEnvelope
   set?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
   disconnect?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
   delete?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
   connect?: Prisma.BuyerRegistrationWhereUniqueInput | Prisma.BuyerRegistrationWhereUniqueInput[]
-  update?: Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionInput | Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionInput[]
-  updateMany?: Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionInput | Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionInput[]
+  update?: Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionHouseInput | Prisma.BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionHouseInput[]
+  updateMany?: Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionHouseInput | Prisma.BuyerRegistrationUpdateManyWithWhereWithoutAuctionHouseInput[]
   deleteMany?: Prisma.BuyerRegistrationScalarWhereInput | Prisma.BuyerRegistrationScalarWhereInput[]
 }
 
@@ -575,7 +575,7 @@ export type BuyerRegistrationCreateWithoutBuyerInput = {
   rejectedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  auction: Prisma.AuctionCreateNestedOneWithoutBuyerRegistrationsInput
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutBuyerRegistrationsInput
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedBuyerRegistrationsInput
 }
 
@@ -583,7 +583,7 @@ export type BuyerRegistrationUncheckedCreateWithoutBuyerInput = {
   id?: string
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
-  auctionId: string
+  auctionHouseId: string
   reviewedById?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
@@ -610,7 +610,7 @@ export type BuyerRegistrationCreateWithoutReviewedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   buyer: Prisma.UserCreateNestedOneWithoutBuyerRegistrationsInput
-  auction: Prisma.AuctionCreateNestedOneWithoutBuyerRegistrationsInput
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutBuyerRegistrationsInput
 }
 
 export type BuyerRegistrationUncheckedCreateWithoutReviewedByInput = {
@@ -618,7 +618,7 @@ export type BuyerRegistrationUncheckedCreateWithoutReviewedByInput = {
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
   buyerId: string
-  auctionId: string
+  auctionHouseId: string
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   createdAt?: Date | string
@@ -659,7 +659,7 @@ export type BuyerRegistrationScalarWhereInput = {
   status?: Prisma.EnumBuyerRegistrationStatusFilter<"BuyerRegistration"> | $Enums.BuyerRegistrationStatus
   notes?: Prisma.StringNullableFilter<"BuyerRegistration"> | string | null
   buyerId?: Prisma.StringFilter<"BuyerRegistration"> | string
-  auctionId?: Prisma.StringFilter<"BuyerRegistration"> | string
+  auctionHouseId?: Prisma.StringFilter<"BuyerRegistration"> | string
   reviewedById?: Prisma.StringNullableFilter<"BuyerRegistration"> | string | null
   approvedAt?: Prisma.DateTimeNullableFilter<"BuyerRegistration"> | Date | string | null
   rejectedAt?: Prisma.DateTimeNullableFilter<"BuyerRegistration"> | Date | string | null
@@ -683,7 +683,7 @@ export type BuyerRegistrationUpdateManyWithWhereWithoutReviewedByInput = {
   data: Prisma.XOR<Prisma.BuyerRegistrationUpdateManyMutationInput, Prisma.BuyerRegistrationUncheckedUpdateManyWithoutReviewedByInput>
 }
 
-export type BuyerRegistrationCreateWithoutAuctionInput = {
+export type BuyerRegistrationCreateWithoutAuctionHouseInput = {
   id?: string
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
@@ -695,7 +695,7 @@ export type BuyerRegistrationCreateWithoutAuctionInput = {
   reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedBuyerRegistrationsInput
 }
 
-export type BuyerRegistrationUncheckedCreateWithoutAuctionInput = {
+export type BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput = {
   id?: string
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
@@ -707,37 +707,37 @@ export type BuyerRegistrationUncheckedCreateWithoutAuctionInput = {
   updatedAt?: Date | string
 }
 
-export type BuyerRegistrationCreateOrConnectWithoutAuctionInput = {
+export type BuyerRegistrationCreateOrConnectWithoutAuctionHouseInput = {
   where: Prisma.BuyerRegistrationWhereUniqueInput
-  create: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput>
+  create: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput>
 }
 
-export type BuyerRegistrationCreateManyAuctionInputEnvelope = {
-  data: Prisma.BuyerRegistrationCreateManyAuctionInput | Prisma.BuyerRegistrationCreateManyAuctionInput[]
+export type BuyerRegistrationCreateManyAuctionHouseInputEnvelope = {
+  data: Prisma.BuyerRegistrationCreateManyAuctionHouseInput | Prisma.BuyerRegistrationCreateManyAuctionHouseInput[]
   skipDuplicates?: boolean
 }
 
-export type BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionInput = {
+export type BuyerRegistrationUpsertWithWhereUniqueWithoutAuctionHouseInput = {
   where: Prisma.BuyerRegistrationWhereUniqueInput
-  update: Prisma.XOR<Prisma.BuyerRegistrationUpdateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedUpdateWithoutAuctionInput>
-  create: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionInput>
+  update: Prisma.XOR<Prisma.BuyerRegistrationUpdateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedUpdateWithoutAuctionHouseInput>
+  create: Prisma.XOR<Prisma.BuyerRegistrationCreateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedCreateWithoutAuctionHouseInput>
 }
 
-export type BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionInput = {
+export type BuyerRegistrationUpdateWithWhereUniqueWithoutAuctionHouseInput = {
   where: Prisma.BuyerRegistrationWhereUniqueInput
-  data: Prisma.XOR<Prisma.BuyerRegistrationUpdateWithoutAuctionInput, Prisma.BuyerRegistrationUncheckedUpdateWithoutAuctionInput>
+  data: Prisma.XOR<Prisma.BuyerRegistrationUpdateWithoutAuctionHouseInput, Prisma.BuyerRegistrationUncheckedUpdateWithoutAuctionHouseInput>
 }
 
-export type BuyerRegistrationUpdateManyWithWhereWithoutAuctionInput = {
+export type BuyerRegistrationUpdateManyWithWhereWithoutAuctionHouseInput = {
   where: Prisma.BuyerRegistrationScalarWhereInput
-  data: Prisma.XOR<Prisma.BuyerRegistrationUpdateManyMutationInput, Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionInput>
+  data: Prisma.XOR<Prisma.BuyerRegistrationUpdateManyMutationInput, Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseInput>
 }
 
 export type BuyerRegistrationCreateManyBuyerInput = {
   id?: string
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
-  auctionId: string
+  auctionHouseId: string
   reviewedById?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
@@ -750,7 +750,7 @@ export type BuyerRegistrationCreateManyReviewedByInput = {
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
   buyerId: string
-  auctionId: string
+  auctionHouseId: string
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   createdAt?: Date | string
@@ -765,7 +765,7 @@ export type BuyerRegistrationUpdateWithoutBuyerInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  auction?: Prisma.AuctionUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedBuyerRegistrationsNestedInput
 }
 
@@ -773,7 +773,7 @@ export type BuyerRegistrationUncheckedUpdateWithoutBuyerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auctionId?: Prisma.StringFieldUpdateOperationsInput | string
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -785,7 +785,7 @@ export type BuyerRegistrationUncheckedUpdateManyWithoutBuyerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auctionId?: Prisma.StringFieldUpdateOperationsInput | string
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -802,7 +802,7 @@ export type BuyerRegistrationUpdateWithoutReviewedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   buyer?: Prisma.UserUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
-  auction?: Prisma.AuctionUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutBuyerRegistrationsNestedInput
 }
 
 export type BuyerRegistrationUncheckedUpdateWithoutReviewedByInput = {
@@ -810,7 +810,7 @@ export type BuyerRegistrationUncheckedUpdateWithoutReviewedByInput = {
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  auctionId?: Prisma.StringFieldUpdateOperationsInput | string
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -822,14 +822,14 @@ export type BuyerRegistrationUncheckedUpdateManyWithoutReviewedByInput = {
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
-  auctionId?: Prisma.StringFieldUpdateOperationsInput | string
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type BuyerRegistrationCreateManyAuctionInput = {
+export type BuyerRegistrationCreateManyAuctionHouseInput = {
   id?: string
   status?: $Enums.BuyerRegistrationStatus
   notes?: string | null
@@ -841,7 +841,7 @@ export type BuyerRegistrationCreateManyAuctionInput = {
   updatedAt?: Date | string
 }
 
-export type BuyerRegistrationUpdateWithoutAuctionInput = {
+export type BuyerRegistrationUpdateWithoutAuctionHouseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -853,7 +853,7 @@ export type BuyerRegistrationUpdateWithoutAuctionInput = {
   reviewedBy?: Prisma.UserUpdateOneWithoutReviewedBuyerRegistrationsNestedInput
 }
 
-export type BuyerRegistrationUncheckedUpdateWithoutAuctionInput = {
+export type BuyerRegistrationUncheckedUpdateWithoutAuctionHouseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -865,7 +865,7 @@ export type BuyerRegistrationUncheckedUpdateWithoutAuctionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type BuyerRegistrationUncheckedUpdateManyWithoutAuctionInput = {
+export type BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBuyerRegistrationStatusFieldUpdateOperationsInput | $Enums.BuyerRegistrationStatus
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -884,14 +884,14 @@ export type BuyerRegistrationSelect<ExtArgs extends runtime.Types.Extensions.Int
   status?: boolean
   notes?: boolean
   buyerId?: boolean
-  auctionId?: boolean
+  auctionHouseId?: boolean
   reviewedById?: boolean
   approvedAt?: boolean
   rejectedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["buyerRegistration"]>
 
@@ -900,14 +900,14 @@ export type BuyerRegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.T
   status?: boolean
   notes?: boolean
   buyerId?: boolean
-  auctionId?: boolean
+  auctionHouseId?: boolean
   reviewedById?: boolean
   approvedAt?: boolean
   rejectedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["buyerRegistration"]>
 
@@ -916,14 +916,14 @@ export type BuyerRegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   status?: boolean
   notes?: boolean
   buyerId?: boolean
-  auctionId?: boolean
+  auctionHouseId?: boolean
   reviewedById?: boolean
   approvedAt?: boolean
   rejectedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>
 }, ExtArgs["result"]["buyerRegistration"]>
 
@@ -932,7 +932,7 @@ export type BuyerRegistrationSelectScalar = {
   status?: boolean
   notes?: boolean
   buyerId?: boolean
-  auctionId?: boolean
+  auctionHouseId?: boolean
   reviewedById?: boolean
   approvedAt?: boolean
   rejectedAt?: boolean
@@ -940,20 +940,20 @@ export type BuyerRegistrationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BuyerRegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "notes" | "buyerId" | "auctionId" | "reviewedById" | "approvedAt" | "rejectedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["buyerRegistration"]>
+export type BuyerRegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "notes" | "buyerId" | "auctionHouseId" | "reviewedById" | "approvedAt" | "rejectedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["buyerRegistration"]>
 export type BuyerRegistrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>
 }
 export type BuyerRegistrationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>
 }
 export type BuyerRegistrationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  auction?: boolean | Prisma.AuctionDefaultArgs<ExtArgs>
+  auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   reviewedBy?: boolean | Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>
 }
 
@@ -961,7 +961,7 @@ export type $BuyerRegistrationPayload<ExtArgs extends runtime.Types.Extensions.I
   name: "BuyerRegistration"
   objects: {
     buyer: Prisma.$UserPayload<ExtArgs>
-    auction: Prisma.$AuctionPayload<ExtArgs>
+    auctionHouse: Prisma.$AuctionHousePayload<ExtArgs>
     reviewedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -969,7 +969,7 @@ export type $BuyerRegistrationPayload<ExtArgs extends runtime.Types.Extensions.I
     status: $Enums.BuyerRegistrationStatus
     notes: string | null
     buyerId: string
-    auctionId: string
+    auctionHouseId: string
     reviewedById: string | null
     approvedAt: Date | null
     rejectedAt: Date | null
@@ -1370,7 +1370,7 @@ readonly fields: BuyerRegistrationFieldRefs;
 export interface Prisma__BuyerRegistrationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   buyer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  auction<T extends Prisma.AuctionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionDefaultArgs<ExtArgs>>): Prisma.Prisma__AuctionClient<runtime.Types.Result.GetResult<Prisma.$AuctionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  auctionHouse<T extends Prisma.AuctionHouseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouseDefaultArgs<ExtArgs>>): Prisma.Prisma__AuctionHouseClient<runtime.Types.Result.GetResult<Prisma.$AuctionHousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reviewedBy<T extends Prisma.BuyerRegistration$reviewedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BuyerRegistration$reviewedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1405,7 +1405,7 @@ export interface BuyerRegistrationFieldRefs {
   readonly status: Prisma.FieldRef<"BuyerRegistration", 'BuyerRegistrationStatus'>
   readonly notes: Prisma.FieldRef<"BuyerRegistration", 'String'>
   readonly buyerId: Prisma.FieldRef<"BuyerRegistration", 'String'>
-  readonly auctionId: Prisma.FieldRef<"BuyerRegistration", 'String'>
+  readonly auctionHouseId: Prisma.FieldRef<"BuyerRegistration", 'String'>
   readonly reviewedById: Prisma.FieldRef<"BuyerRegistration", 'String'>
   readonly approvedAt: Prisma.FieldRef<"BuyerRegistration", 'DateTime'>
   readonly rejectedAt: Prisma.FieldRef<"BuyerRegistration", 'DateTime'>

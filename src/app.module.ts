@@ -8,6 +8,7 @@ import { AuctionsModule } from './auctions/auctions.module';
 import { AuthModule } from './auth/auth.module';
 import { LotsModule } from './lots/lots.module';
 import { LiveModule } from './live/live.module';
+import { AuctionHousesModule } from './auction-houses/auction-houses.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { LiveModule } from './live/live.module';
     AuthModule,
     UsersModule,
     AuctionsModule,
+    AuctionHousesModule,
     LotsModule,
     LiveModule,
   ],

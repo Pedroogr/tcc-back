@@ -60,6 +60,11 @@ export type SellerProfile = Prisma.SellerProfileModel
  */
 export type AuctionHouse = Prisma.AuctionHouseModel
 /**
+ * Model OfficeInvite
+ * 
+ */
+export type OfficeInvite = Prisma.OfficeInviteModel
+/**
  * Model Auction
  * 
  */

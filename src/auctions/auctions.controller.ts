@@ -35,6 +35,11 @@ export class AuctionsController {
     return this.auctionsService.findAll();
   }
 
+  @Get('public')
+  findPublic() {
+    return this.auctionsService.findPublic();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.auctionsService.findOne(id);

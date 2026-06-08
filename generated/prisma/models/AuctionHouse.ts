@@ -257,6 +257,8 @@ export type AuctionHouseWhereInput = {
   auctions?: Prisma.AuctionListRelationFilter
   consignments?: Prisma.ConsignmentListRelationFilter
   saleRecords?: Prisma.SaleListRelationFilter
+  buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
+  officeInvites?: Prisma.OfficeInviteListRelationFilter
 }
 
 export type AuctionHouseOrderByWithRelationInput = {
@@ -277,6 +279,8 @@ export type AuctionHouseOrderByWithRelationInput = {
   auctions?: Prisma.AuctionOrderByRelationAggregateInput
   consignments?: Prisma.ConsignmentOrderByRelationAggregateInput
   saleRecords?: Prisma.SaleOrderByRelationAggregateInput
+  buyerRegistrations?: Prisma.BuyerRegistrationOrderByRelationAggregateInput
+  officeInvites?: Prisma.OfficeInviteOrderByRelationAggregateInput
 }
 
 export type AuctionHouseWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +304,8 @@ export type AuctionHouseWhereUniqueInput = Prisma.AtLeast<{
   auctions?: Prisma.AuctionListRelationFilter
   consignments?: Prisma.ConsignmentListRelationFilter
   saleRecords?: Prisma.SaleListRelationFilter
+  buyerRegistrations?: Prisma.BuyerRegistrationListRelationFilter
+  officeInvites?: Prisma.OfficeInviteListRelationFilter
 }, "id" | "document" | "email">
 
 export type AuctionHouseOrderByWithAggregationInput = {
@@ -360,6 +366,8 @@ export type AuctionHouseCreateInput = {
   auctions?: Prisma.AuctionCreateNestedManyWithoutAuctionHouseInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutAuctionHouseInput
   saleRecords?: Prisma.SaleCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseUncheckedCreateInput = {
@@ -380,6 +388,8 @@ export type AuctionHouseUncheckedCreateInput = {
   auctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutAuctionHouseInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutAuctionHouseInput
   saleRecords?: Prisma.SaleUncheckedCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteUncheckedCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseUpdateInput = {
@@ -400,6 +410,8 @@ export type AuctionHouseUpdateInput = {
   auctions?: Prisma.AuctionUpdateManyWithoutAuctionHouseNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutAuctionHouseNestedInput
   saleRecords?: Prisma.SaleUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseUncheckedUpdateInput = {
@@ -420,6 +432,8 @@ export type AuctionHouseUncheckedUpdateInput = {
   auctions?: Prisma.AuctionUncheckedUpdateManyWithoutAuctionHouseNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutAuctionHouseNestedInput
   saleRecords?: Prisma.SaleUncheckedUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUncheckedUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseCreateManyInput = {
@@ -524,6 +538,11 @@ export type AuctionHouseMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type AuctionHouseNullableScalarRelationFilter = {
+  is?: Prisma.AuctionHouseWhereInput | null
+  isNot?: Prisma.AuctionHouseWhereInput | null
+}
+
 export type AuctionHouseScalarRelationFilter = {
   is?: Prisma.AuctionHouseWhereInput
   isNot?: Prisma.AuctionHouseWhereInput
@@ -535,6 +554,22 @@ export type EnumAuctionHouseStatusFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type AuctionHouseCreateNestedOneWithoutOfficeInvitesInput = {
+  create?: Prisma.XOR<Prisma.AuctionHouseCreateWithoutOfficeInvitesInput, Prisma.AuctionHouseUncheckedCreateWithoutOfficeInvitesInput>
+  connectOrCreate?: Prisma.AuctionHouseCreateOrConnectWithoutOfficeInvitesInput
+  connect?: Prisma.AuctionHouseWhereUniqueInput
+}
+
+export type AuctionHouseUpdateOneWithoutOfficeInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionHouseCreateWithoutOfficeInvitesInput, Prisma.AuctionHouseUncheckedCreateWithoutOfficeInvitesInput>
+  connectOrCreate?: Prisma.AuctionHouseCreateOrConnectWithoutOfficeInvitesInput
+  upsert?: Prisma.AuctionHouseUpsertWithoutOfficeInvitesInput
+  disconnect?: Prisma.AuctionHouseWhereInput | boolean
+  delete?: Prisma.AuctionHouseWhereInput | boolean
+  connect?: Prisma.AuctionHouseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionHouseUpdateToOneWithWhereWithoutOfficeInvitesInput, Prisma.AuctionHouseUpdateWithoutOfficeInvitesInput>, Prisma.AuctionHouseUncheckedUpdateWithoutOfficeInvitesInput>
 }
 
 export type AuctionHouseCreateNestedOneWithoutAuctionsInput = {
@@ -565,6 +600,20 @@ export type AuctionHouseUpdateOneRequiredWithoutConsignmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionHouseUpdateToOneWithWhereWithoutConsignmentsInput, Prisma.AuctionHouseUpdateWithoutConsignmentsInput>, Prisma.AuctionHouseUncheckedUpdateWithoutConsignmentsInput>
 }
 
+export type AuctionHouseCreateNestedOneWithoutBuyerRegistrationsInput = {
+  create?: Prisma.XOR<Prisma.AuctionHouseCreateWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUncheckedCreateWithoutBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.AuctionHouseCreateOrConnectWithoutBuyerRegistrationsInput
+  connect?: Prisma.AuctionHouseWhereUniqueInput
+}
+
+export type AuctionHouseUpdateOneRequiredWithoutBuyerRegistrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionHouseCreateWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUncheckedCreateWithoutBuyerRegistrationsInput>
+  connectOrCreate?: Prisma.AuctionHouseCreateOrConnectWithoutBuyerRegistrationsInput
+  upsert?: Prisma.AuctionHouseUpsertWithoutBuyerRegistrationsInput
+  connect?: Prisma.AuctionHouseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionHouseUpdateToOneWithWhereWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUpdateWithoutBuyerRegistrationsInput>, Prisma.AuctionHouseUncheckedUpdateWithoutBuyerRegistrationsInput>
+}
+
 export type AuctionHouseCreateNestedOneWithoutSaleRecordsInput = {
   create?: Prisma.XOR<Prisma.AuctionHouseCreateWithoutSaleRecordsInput, Prisma.AuctionHouseUncheckedCreateWithoutSaleRecordsInput>
   connectOrCreate?: Prisma.AuctionHouseCreateOrConnectWithoutSaleRecordsInput
@@ -577,6 +626,106 @@ export type AuctionHouseUpdateOneRequiredWithoutSaleRecordsNestedInput = {
   upsert?: Prisma.AuctionHouseUpsertWithoutSaleRecordsInput
   connect?: Prisma.AuctionHouseWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionHouseUpdateToOneWithWhereWithoutSaleRecordsInput, Prisma.AuctionHouseUpdateWithoutSaleRecordsInput>, Prisma.AuctionHouseUncheckedUpdateWithoutSaleRecordsInput>
+}
+
+export type AuctionHouseCreateWithoutOfficeInvitesInput = {
+  id?: string
+  name: string
+  document?: string | null
+  email: string
+  passwordHash: string
+  phone?: string | null
+  city?: string | null
+  state?: string | null
+  country?: string | null
+  logoUrl?: string | null
+  status?: $Enums.AuctionHouseStatus
+  mustChangePassword?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctions?: Prisma.AuctionCreateNestedManyWithoutAuctionHouseInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutAuctionHouseInput
+  saleRecords?: Prisma.SaleCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionHouseInput
+}
+
+export type AuctionHouseUncheckedCreateWithoutOfficeInvitesInput = {
+  id?: string
+  name: string
+  document?: string | null
+  email: string
+  passwordHash: string
+  phone?: string | null
+  city?: string | null
+  state?: string | null
+  country?: string | null
+  logoUrl?: string | null
+  status?: $Enums.AuctionHouseStatus
+  mustChangePassword?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutAuctionHouseInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutAuctionHouseInput
+  saleRecords?: Prisma.SaleUncheckedCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionHouseInput
+}
+
+export type AuctionHouseCreateOrConnectWithoutOfficeInvitesInput = {
+  where: Prisma.AuctionHouseWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionHouseCreateWithoutOfficeInvitesInput, Prisma.AuctionHouseUncheckedCreateWithoutOfficeInvitesInput>
+}
+
+export type AuctionHouseUpsertWithoutOfficeInvitesInput = {
+  update: Prisma.XOR<Prisma.AuctionHouseUpdateWithoutOfficeInvitesInput, Prisma.AuctionHouseUncheckedUpdateWithoutOfficeInvitesInput>
+  create: Prisma.XOR<Prisma.AuctionHouseCreateWithoutOfficeInvitesInput, Prisma.AuctionHouseUncheckedCreateWithoutOfficeInvitesInput>
+  where?: Prisma.AuctionHouseWhereInput
+}
+
+export type AuctionHouseUpdateToOneWithWhereWithoutOfficeInvitesInput = {
+  where?: Prisma.AuctionHouseWhereInput
+  data: Prisma.XOR<Prisma.AuctionHouseUpdateWithoutOfficeInvitesInput, Prisma.AuctionHouseUncheckedUpdateWithoutOfficeInvitesInput>
+}
+
+export type AuctionHouseUpdateWithoutOfficeInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAuctionHouseStatusFieldUpdateOperationsInput | $Enums.AuctionHouseStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctions?: Prisma.AuctionUpdateManyWithoutAuctionHouseNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutAuctionHouseNestedInput
+  saleRecords?: Prisma.SaleUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionHouseNestedInput
+}
+
+export type AuctionHouseUncheckedUpdateWithoutOfficeInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAuctionHouseStatusFieldUpdateOperationsInput | $Enums.AuctionHouseStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctions?: Prisma.AuctionUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  saleRecords?: Prisma.SaleUncheckedUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseCreateWithoutAuctionsInput = {
@@ -596,6 +745,8 @@ export type AuctionHouseCreateWithoutAuctionsInput = {
   updatedAt?: Date | string
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutAuctionHouseInput
   saleRecords?: Prisma.SaleCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseUncheckedCreateWithoutAuctionsInput = {
@@ -615,6 +766,8 @@ export type AuctionHouseUncheckedCreateWithoutAuctionsInput = {
   updatedAt?: Date | string
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutAuctionHouseInput
   saleRecords?: Prisma.SaleUncheckedCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteUncheckedCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseCreateOrConnectWithoutAuctionsInput = {
@@ -650,6 +803,8 @@ export type AuctionHouseUpdateWithoutAuctionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   consignments?: Prisma.ConsignmentUpdateManyWithoutAuctionHouseNestedInput
   saleRecords?: Prisma.SaleUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseUncheckedUpdateWithoutAuctionsInput = {
@@ -669,6 +824,8 @@ export type AuctionHouseUncheckedUpdateWithoutAuctionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutAuctionHouseNestedInput
   saleRecords?: Prisma.SaleUncheckedUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUncheckedUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseCreateWithoutConsignmentsInput = {
@@ -688,6 +845,8 @@ export type AuctionHouseCreateWithoutConsignmentsInput = {
   updatedAt?: Date | string
   auctions?: Prisma.AuctionCreateNestedManyWithoutAuctionHouseInput
   saleRecords?: Prisma.SaleCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseUncheckedCreateWithoutConsignmentsInput = {
@@ -707,6 +866,8 @@ export type AuctionHouseUncheckedCreateWithoutConsignmentsInput = {
   updatedAt?: Date | string
   auctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutAuctionHouseInput
   saleRecords?: Prisma.SaleUncheckedCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteUncheckedCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseCreateOrConnectWithoutConsignmentsInput = {
@@ -742,6 +903,8 @@ export type AuctionHouseUpdateWithoutConsignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auctions?: Prisma.AuctionUpdateManyWithoutAuctionHouseNestedInput
   saleRecords?: Prisma.SaleUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseUncheckedUpdateWithoutConsignmentsInput = {
@@ -761,6 +924,108 @@ export type AuctionHouseUncheckedUpdateWithoutConsignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auctions?: Prisma.AuctionUncheckedUpdateManyWithoutAuctionHouseNestedInput
   saleRecords?: Prisma.SaleUncheckedUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUncheckedUpdateManyWithoutAuctionHouseNestedInput
+}
+
+export type AuctionHouseCreateWithoutBuyerRegistrationsInput = {
+  id?: string
+  name: string
+  document?: string | null
+  email: string
+  passwordHash: string
+  phone?: string | null
+  city?: string | null
+  state?: string | null
+  country?: string | null
+  logoUrl?: string | null
+  status?: $Enums.AuctionHouseStatus
+  mustChangePassword?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctions?: Prisma.AuctionCreateNestedManyWithoutAuctionHouseInput
+  consignments?: Prisma.ConsignmentCreateNestedManyWithoutAuctionHouseInput
+  saleRecords?: Prisma.SaleCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteCreateNestedManyWithoutAuctionHouseInput
+}
+
+export type AuctionHouseUncheckedCreateWithoutBuyerRegistrationsInput = {
+  id?: string
+  name: string
+  document?: string | null
+  email: string
+  passwordHash: string
+  phone?: string | null
+  city?: string | null
+  state?: string | null
+  country?: string | null
+  logoUrl?: string | null
+  status?: $Enums.AuctionHouseStatus
+  mustChangePassword?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutAuctionHouseInput
+  consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutAuctionHouseInput
+  saleRecords?: Prisma.SaleUncheckedCreateNestedManyWithoutSaleRecordedByAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteUncheckedCreateNestedManyWithoutAuctionHouseInput
+}
+
+export type AuctionHouseCreateOrConnectWithoutBuyerRegistrationsInput = {
+  where: Prisma.AuctionHouseWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionHouseCreateWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUncheckedCreateWithoutBuyerRegistrationsInput>
+}
+
+export type AuctionHouseUpsertWithoutBuyerRegistrationsInput = {
+  update: Prisma.XOR<Prisma.AuctionHouseUpdateWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUncheckedUpdateWithoutBuyerRegistrationsInput>
+  create: Prisma.XOR<Prisma.AuctionHouseCreateWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUncheckedCreateWithoutBuyerRegistrationsInput>
+  where?: Prisma.AuctionHouseWhereInput
+}
+
+export type AuctionHouseUpdateToOneWithWhereWithoutBuyerRegistrationsInput = {
+  where?: Prisma.AuctionHouseWhereInput
+  data: Prisma.XOR<Prisma.AuctionHouseUpdateWithoutBuyerRegistrationsInput, Prisma.AuctionHouseUncheckedUpdateWithoutBuyerRegistrationsInput>
+}
+
+export type AuctionHouseUpdateWithoutBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAuctionHouseStatusFieldUpdateOperationsInput | $Enums.AuctionHouseStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctions?: Prisma.AuctionUpdateManyWithoutAuctionHouseNestedInput
+  consignments?: Prisma.ConsignmentUpdateManyWithoutAuctionHouseNestedInput
+  saleRecords?: Prisma.SaleUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUpdateManyWithoutAuctionHouseNestedInput
+}
+
+export type AuctionHouseUncheckedUpdateWithoutBuyerRegistrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  document?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAuctionHouseStatusFieldUpdateOperationsInput | $Enums.AuctionHouseStatus
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctions?: Prisma.AuctionUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  saleRecords?: Prisma.SaleUncheckedUpdateManyWithoutSaleRecordedByAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUncheckedUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseCreateWithoutSaleRecordsInput = {
@@ -780,6 +1045,8 @@ export type AuctionHouseCreateWithoutSaleRecordsInput = {
   updatedAt?: Date | string
   auctions?: Prisma.AuctionCreateNestedManyWithoutAuctionHouseInput
   consignments?: Prisma.ConsignmentCreateNestedManyWithoutAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseUncheckedCreateWithoutSaleRecordsInput = {
@@ -799,6 +1066,8 @@ export type AuctionHouseUncheckedCreateWithoutSaleRecordsInput = {
   updatedAt?: Date | string
   auctions?: Prisma.AuctionUncheckedCreateNestedManyWithoutAuctionHouseInput
   consignments?: Prisma.ConsignmentUncheckedCreateNestedManyWithoutAuctionHouseInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedCreateNestedManyWithoutAuctionHouseInput
+  officeInvites?: Prisma.OfficeInviteUncheckedCreateNestedManyWithoutAuctionHouseInput
 }
 
 export type AuctionHouseCreateOrConnectWithoutSaleRecordsInput = {
@@ -834,6 +1103,8 @@ export type AuctionHouseUpdateWithoutSaleRecordsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auctions?: Prisma.AuctionUpdateManyWithoutAuctionHouseNestedInput
   consignments?: Prisma.ConsignmentUpdateManyWithoutAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUpdateManyWithoutAuctionHouseNestedInput
 }
 
 export type AuctionHouseUncheckedUpdateWithoutSaleRecordsInput = {
@@ -853,6 +1124,8 @@ export type AuctionHouseUncheckedUpdateWithoutSaleRecordsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auctions?: Prisma.AuctionUncheckedUpdateManyWithoutAuctionHouseNestedInput
   consignments?: Prisma.ConsignmentUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  buyerRegistrations?: Prisma.BuyerRegistrationUncheckedUpdateManyWithoutAuctionHouseNestedInput
+  officeInvites?: Prisma.OfficeInviteUncheckedUpdateManyWithoutAuctionHouseNestedInput
 }
 
 
@@ -864,12 +1137,16 @@ export type AuctionHouseCountOutputType = {
   auctions: number
   consignments: number
   saleRecords: number
+  buyerRegistrations: number
+  officeInvites: number
 }
 
 export type AuctionHouseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auctions?: boolean | AuctionHouseCountOutputTypeCountAuctionsArgs
   consignments?: boolean | AuctionHouseCountOutputTypeCountConsignmentsArgs
   saleRecords?: boolean | AuctionHouseCountOutputTypeCountSaleRecordsArgs
+  buyerRegistrations?: boolean | AuctionHouseCountOutputTypeCountBuyerRegistrationsArgs
+  officeInvites?: boolean | AuctionHouseCountOutputTypeCountOfficeInvitesArgs
 }
 
 /**
@@ -903,6 +1180,20 @@ export type AuctionHouseCountOutputTypeCountSaleRecordsArgs<ExtArgs extends runt
   where?: Prisma.SaleWhereInput
 }
 
+/**
+ * AuctionHouseCountOutputType without action
+ */
+export type AuctionHouseCountOutputTypeCountBuyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BuyerRegistrationWhereInput
+}
+
+/**
+ * AuctionHouseCountOutputType without action
+ */
+export type AuctionHouseCountOutputTypeCountOfficeInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OfficeInviteWhereInput
+}
+
 
 export type AuctionHouseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -922,6 +1213,8 @@ export type AuctionHouseSelect<ExtArgs extends runtime.Types.Extensions.Internal
   auctions?: boolean | Prisma.AuctionHouse$auctionsArgs<ExtArgs>
   consignments?: boolean | Prisma.AuctionHouse$consignmentsArgs<ExtArgs>
   saleRecords?: boolean | Prisma.AuctionHouse$saleRecordsArgs<ExtArgs>
+  buyerRegistrations?: boolean | Prisma.AuctionHouse$buyerRegistrationsArgs<ExtArgs>
+  officeInvites?: boolean | Prisma.AuctionHouse$officeInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.AuctionHouseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["auctionHouse"]>
 
@@ -981,6 +1274,8 @@ export type AuctionHouseInclude<ExtArgs extends runtime.Types.Extensions.Interna
   auctions?: boolean | Prisma.AuctionHouse$auctionsArgs<ExtArgs>
   consignments?: boolean | Prisma.AuctionHouse$consignmentsArgs<ExtArgs>
   saleRecords?: boolean | Prisma.AuctionHouse$saleRecordsArgs<ExtArgs>
+  buyerRegistrations?: boolean | Prisma.AuctionHouse$buyerRegistrationsArgs<ExtArgs>
+  officeInvites?: boolean | Prisma.AuctionHouse$officeInvitesArgs<ExtArgs>
   _count?: boolean | Prisma.AuctionHouseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AuctionHouseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -992,6 +1287,8 @@ export type $AuctionHousePayload<ExtArgs extends runtime.Types.Extensions.Intern
     auctions: Prisma.$AuctionPayload<ExtArgs>[]
     consignments: Prisma.$ConsignmentPayload<ExtArgs>[]
     saleRecords: Prisma.$SalePayload<ExtArgs>[]
+    buyerRegistrations: Prisma.$BuyerRegistrationPayload<ExtArgs>[]
+    officeInvites: Prisma.$OfficeInvitePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1405,6 +1702,8 @@ export interface Prisma__AuctionHouseClient<T, Null = never, ExtArgs extends run
   auctions<T extends Prisma.AuctionHouse$auctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouse$auctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consignments<T extends Prisma.AuctionHouse$consignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouse$consignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   saleRecords<T extends Prisma.AuctionHouse$saleRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouse$saleRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  buyerRegistrations<T extends Prisma.AuctionHouse$buyerRegistrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouse$buyerRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BuyerRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  officeInvites<T extends Prisma.AuctionHouse$officeInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouse$officeInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OfficeInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1910,6 +2209,54 @@ export type AuctionHouse$saleRecordsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.SaleScalarFieldEnum | Prisma.SaleScalarFieldEnum[]
+}
+
+/**
+ * AuctionHouse.buyerRegistrations
+ */
+export type AuctionHouse$buyerRegistrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BuyerRegistration
+   */
+  select?: Prisma.BuyerRegistrationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BuyerRegistration
+   */
+  omit?: Prisma.BuyerRegistrationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerRegistrationInclude<ExtArgs> | null
+  where?: Prisma.BuyerRegistrationWhereInput
+  orderBy?: Prisma.BuyerRegistrationOrderByWithRelationInput | Prisma.BuyerRegistrationOrderByWithRelationInput[]
+  cursor?: Prisma.BuyerRegistrationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BuyerRegistrationScalarFieldEnum | Prisma.BuyerRegistrationScalarFieldEnum[]
+}
+
+/**
+ * AuctionHouse.officeInvites
+ */
+export type AuctionHouse$officeInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OfficeInvite
+   */
+  select?: Prisma.OfficeInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OfficeInvite
+   */
+  omit?: Prisma.OfficeInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OfficeInviteInclude<ExtArgs> | null
+  where?: Prisma.OfficeInviteWhereInput
+  orderBy?: Prisma.OfficeInviteOrderByWithRelationInput | Prisma.OfficeInviteOrderByWithRelationInput[]
+  cursor?: Prisma.OfficeInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OfficeInviteScalarFieldEnum | Prisma.OfficeInviteScalarFieldEnum[]
 }
 
 /**

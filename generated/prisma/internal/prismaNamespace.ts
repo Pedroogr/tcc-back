@@ -388,6 +388,7 @@ export const ModelName = {
   BuyerProfile: 'BuyerProfile',
   SellerProfile: 'SellerProfile',
   AuctionHouse: 'AuctionHouse',
+  OfficeInvite: 'OfficeInvite',
   Auction: 'Auction',
   AuctionSettings: 'AuctionSettings',
   Consignment: 'Consignment',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "buyerProfile" | "sellerProfile" | "auctionHouse" | "auction" | "auctionSettings" | "consignment" | "lot" | "lotMedia" | "buyerRegistration" | "bid" | "stream" | "sale"
+    modelProps: "user" | "buyerProfile" | "sellerProfile" | "auctionHouse" | "officeInvite" | "auction" | "auctionSettings" | "consignment" | "lot" | "lotMedia" | "buyerRegistration" | "bid" | "stream" | "sale"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -709,6 +710,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AuctionHouseCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AuctionHouseCountAggregateOutputType> | number
+        }
+      }
+    }
+    OfficeInvite: {
+      payload: Prisma.$OfficeInvitePayload<ExtArgs>
+      fields: Prisma.OfficeInviteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OfficeInviteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OfficeInviteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>
+        }
+        findFirst: {
+          args: Prisma.OfficeInviteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OfficeInviteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>
+        }
+        findMany: {
+          args: Prisma.OfficeInviteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>[]
+        }
+        create: {
+          args: Prisma.OfficeInviteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>
+        }
+        createMany: {
+          args: Prisma.OfficeInviteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OfficeInviteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>[]
+        }
+        delete: {
+          args: Prisma.OfficeInviteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>
+        }
+        update: {
+          args: Prisma.OfficeInviteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>
+        }
+        deleteMany: {
+          args: Prisma.OfficeInviteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OfficeInviteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OfficeInviteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>[]
+        }
+        upsert: {
+          args: Prisma.OfficeInviteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfficeInvitePayload>
+        }
+        aggregate: {
+          args: Prisma.OfficeInviteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOfficeInvite>
+        }
+        groupBy: {
+          args: Prisma.OfficeInviteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OfficeInviteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OfficeInviteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OfficeInviteCountAggregateOutputType> | number
         }
       }
     }
@@ -1482,6 +1557,21 @@ export const AuctionHouseScalarFieldEnum = {
 export type AuctionHouseScalarFieldEnum = (typeof AuctionHouseScalarFieldEnum)[keyof typeof AuctionHouseScalarFieldEnum]
 
 
+export const OfficeInviteScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  auctionHouseId: 'auctionHouseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OfficeInviteScalarFieldEnum = (typeof OfficeInviteScalarFieldEnum)[keyof typeof OfficeInviteScalarFieldEnum]
+
+
 export const AuctionScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -1572,7 +1662,7 @@ export const BuyerRegistrationScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   buyerId: 'buyerId',
-  auctionId: 'auctionId',
+  auctionHouseId: 'auctionHouseId',
   reviewedById: 'reviewedById',
   approvedAt: 'approvedAt',
   rejectedAt: 'rejectedAt',
@@ -1759,6 +1849,20 @@ export type ListEnumAuctionHouseStatusFieldRefInput<$PrismaModel> = FieldRefInpu
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'OfficeInviteStatus'
+ */
+export type EnumOfficeInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OfficeInviteStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OfficeInviteStatus[]'
+ */
+export type ListEnumOfficeInviteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OfficeInviteStatus[]'>
     
 
 
@@ -2043,6 +2147,7 @@ export type GlobalOmitConfig = {
   buyerProfile?: Prisma.BuyerProfileOmit
   sellerProfile?: Prisma.SellerProfileOmit
   auctionHouse?: Prisma.AuctionHouseOmit
+  officeInvite?: Prisma.OfficeInviteOmit
   auction?: Prisma.AuctionOmit
   auctionSettings?: Prisma.AuctionSettingsOmit
   consignment?: Prisma.ConsignmentOmit

@@ -1,13 +1,27 @@
 import { Type } from 'class-transformer';
 import { LotStatus } from '../../../generated/prisma/enums';
 import {
+  IsArray,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
   Min,
+  ValidateNested,
 } from 'class-validator';
+
+export class LotImageUploadDto {
+  @IsString()
+  fileName!: string;
+
+  @IsString()
+  dataUrl!: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
 
 export class CreateLotDto {
   @IsString()
@@ -65,4 +79,10 @@ export class CreateLotDto {
   @IsOptional()
   @IsUUID()
   consignmentId?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LotImageUploadDto)
+  images?: LotImageUploadDto[];
 }

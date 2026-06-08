@@ -4,7 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
-import { BuyerRegistrationStatus } from '../../generated/prisma/enums';
+import {
+  AuctionStatus,
+  BuyerRegistrationStatus,
+} from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBuyerRegistrationDto } from './dto/create-buyer-registration.dto';
@@ -31,6 +34,41 @@ export class AuctionsService {
     return this.prisma.auction.findMany({
       include: this.auctionInclude(),
       orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  findPublic() {
+    return this.prisma.auction.findMany({
+      where: {
+        status: {
+          notIn: [AuctionStatus.DRAFT, AuctionStatus.CANCELED],
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        scheduledAt: true,
+        startedAt: true,
+        finishedAt: true,
+        status: true,
+        mode: true,
+        auctionHouseId: true,
+        auctionHouse: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            lots: true,
+          },
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: [{ scheduledAt: 'asc' }, { createdAt: 'desc' }],
     });
   }
 
@@ -70,17 +108,29 @@ export class AuctionsService {
     data: CreateBuyerRegistrationDto,
     actor: AuthenticatedActor,
   ) {
-    if (actor.type !== 'USER' || !actor.user.buyerProfile) {
+    if (actor.type !== 'USER') {
       throw new ForbiddenException(
-        'Apenas compradores podem solicitar liberacao para lances',
+        'Apenas usuarios comuns podem solicitar liberacao para lances',
       );
     }
 
-    await this.findOne(id);
+    const auction = await this.prisma.auction.findUnique({
+      where: { id },
+      select: { id: true, auctionHouseId: true },
+    });
+
+    if (!auction) {
+      throw new NotFoundException('Leilao nao encontrado');
+    }
 
     const existingRegistration = await this.prisma.buyerRegistration.findUnique(
       {
-        where: { buyerId_auctionId: { buyerId: actor.user.id, auctionId: id } },
+        where: {
+          buyerId_auctionHouseId: {
+            buyerId: actor.user.id,
+            auctionHouseId: auction.auctionHouseId,
+          },
+        },
       },
     );
 
@@ -95,10 +145,15 @@ export class AuctionsService {
     }
 
     return this.prisma.buyerRegistration.upsert({
-      where: { buyerId_auctionId: { buyerId: actor.user.id, auctionId: id } },
+      where: {
+        buyerId_auctionHouseId: {
+          buyerId: actor.user.id,
+          auctionHouseId: auction.auctionHouseId,
+        },
+      },
       create: {
         buyer: { connect: { id: actor.user.id } },
-        auction: { connect: { id } },
+        auctionHouse: { connect: { id: auction.auctionHouseId } },
         notes: data.notes,
       },
       update: {
@@ -113,8 +168,14 @@ export class AuctionsService {
   async findBuyerRegistrations(id: string, actor: AuthenticatedActor) {
     await this.assertAuctionHouseOwner(id, actor);
 
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException(
+        'Apenas escritorios podem visualizar solicitacoes',
+      );
+    }
+
     return this.prisma.buyerRegistration.findMany({
-      where: { auctionId: id },
+      where: { auctionHouseId: actor.auctionHouse.id },
       include: { buyer: { select: this.registrationBuyerSelect() } },
       orderBy: { createdAt: 'desc' },
     });
@@ -128,12 +189,21 @@ export class AuctionsService {
   ) {
     await this.assertAuctionHouseOwner(auctionId, actor);
 
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException(
+        'Apenas escritorios podem revisar solicitacoes',
+      );
+    }
+
     const registration = await this.prisma.buyerRegistration.findUnique({
       where: { id: registrationId },
-      select: { id: true, auctionId: true },
+      select: { id: true, auctionHouseId: true },
     });
 
-    if (!registration || registration.auctionId !== auctionId) {
+    if (
+      !registration ||
+      registration.auctionHouseId !== actor.auctionHouse.id
+    ) {
       throw new NotFoundException('Solicitacao de comprador nao encontrada');
     }
 
