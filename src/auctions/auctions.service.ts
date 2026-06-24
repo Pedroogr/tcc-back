@@ -1,8 +1,12 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { mkdir, unlink, writeFile } from 'fs/promises';
+import { join } from 'path';
 import { Prisma } from '../../generated/prisma/client';
 import {
   AuctionStatus,
@@ -14,6 +18,19 @@ import { CreateBuyerRegistrationDto } from './dto/create-buyer-registration.dto'
 import { CreateAuctionDto } from './dto/create-auction.dto';
 import { ReviewBuyerRegistrationDto } from './dto/review-buyer-registration.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
+import type { AuctionThumbnailUpload } from './auctions.controller';
+
+const auctionThumbnailMaxSize = 5 * 1024 * 1024;
+const auctionThumbnailMimeTypes = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+]);
+const auctionThumbnailExtensions: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+};
 
 @Injectable()
 export class AuctionsService {
@@ -48,17 +65,20 @@ export class AuctionsService {
         id: true,
         title: true,
         description: true,
+        thumbnailUrl: true,
         scheduledAt: true,
         startedAt: true,
         finishedAt: true,
         status: true,
-        mode: true,
         auctionHouseId: true,
         auctionHouse: {
           select: {
             id: true,
             name: true,
           },
+        },
+        stream: {
+          select: this.safeStreamSelect(),
         },
         _count: {
           select: {
@@ -101,6 +121,53 @@ export class AuctionsService {
     return this.prisma.auction.delete({
       where: { id },
     });
+  }
+
+  async uploadThumbnail(
+    id: string,
+    file: AuctionThumbnailUpload | undefined,
+    actor: AuthenticatedActor,
+  ) {
+    const auction = await this.assertAuctionHouseOwner(id, actor);
+    this.assertValidThumbnail(file);
+
+    const uploadDir = join(process.cwd(), 'public', 'uploads', 'auctions');
+    await mkdir(uploadDir, { recursive: true });
+
+    const extension = auctionThumbnailExtensions[file.mimetype];
+    const fileName = `${id}-${randomUUID()}.${extension}`;
+    const filePath = join(uploadDir, fileName);
+    const thumbnailUrl = `/uploads/auctions/${fileName}`;
+
+    await writeFile(filePath, file.buffer);
+
+    try {
+      const updatedAuction = await this.prisma.auction.update({
+        where: { id },
+        data: { thumbnailUrl },
+        include: this.auctionInclude(),
+      });
+
+      await this.removeStoredThumbnail(auction.thumbnailUrl);
+      return updatedAuction;
+    } catch (error) {
+      await unlink(filePath).catch(() => undefined);
+      throw error;
+    }
+  }
+
+  async removeThumbnail(id: string, actor: AuthenticatedActor) {
+    const auction = await this.assertAuctionHouseOwner(id, actor);
+
+    const updatedAuction = await this.prisma.auction.update({
+      where: { id },
+      data: { thumbnailUrl: null },
+      include: this.auctionInclude(),
+    });
+
+    await this.removeStoredThumbnail(auction.thumbnailUrl);
+
+    return updatedAuction;
   }
 
   async registerBuyer(
@@ -230,7 +297,6 @@ export class AuctionsService {
       description: data.description,
       scheduledAt: data.scheduledAt ? new Date(data.scheduledAt) : undefined,
       status: data.status,
-      mode: data.mode,
       auctionHouse: {
         connect: { id: auctionHouseId },
       },
@@ -245,7 +311,6 @@ export class AuctionsService {
       description: data.description,
       scheduledAt: data.scheduledAt ? new Date(data.scheduledAt) : undefined,
       status: data.status,
-      mode: data.mode,
       auctionHouse: data.auctionHouseId
         ? { connect: { id: data.auctionHouseId } }
         : undefined,
@@ -254,9 +319,45 @@ export class AuctionsService {
 
   private auctionInclude() {
     return {
-      auctionHouse: true,
+      auctionHouse: {
+        select: this.safeAuctionHouseSelect(),
+      },
       lots: true,
+      stream: {
+        select: this.safeStreamSelect(),
+      },
     } satisfies Prisma.AuctionInclude;
+  }
+
+  private safeAuctionHouseSelect() {
+    return {
+      id: true,
+      name: true,
+      document: true,
+      email: true,
+      phone: true,
+      city: true,
+      state: true,
+      country: true,
+      logoUrl: true,
+      status: true,
+      mustChangePassword: true,
+      createdAt: true,
+      updatedAt: true,
+    } satisfies Prisma.AuctionHouseSelect;
+  }
+
+  private safeStreamSelect() {
+    return {
+      id: true,
+      status: true,
+      streamUrl: true,
+      protocol: true,
+      startedAt: true,
+      endedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    } satisfies Prisma.StreamSelect;
   }
 
   private registrationBuyerSelect() {
@@ -279,7 +380,7 @@ export class AuctionsService {
 
     const auction = await this.prisma.auction.findUnique({
       where: { id },
-      select: { id: true, auctionHouseId: true },
+      select: { id: true, auctionHouseId: true, thumbnailUrl: true },
     });
 
     if (!auction) {
@@ -291,5 +392,35 @@ export class AuctionsService {
         'Escritorio nao pode gerenciar remate de outro escritorio',
       );
     }
+
+    return auction;
+  }
+
+  private assertValidThumbnail(
+    file: AuctionThumbnailUpload | undefined,
+  ): asserts file is AuctionThumbnailUpload {
+    if (!file) {
+      throw new BadRequestException('Selecione uma imagem de capa do remate.');
+    }
+
+    if (!auctionThumbnailMimeTypes.has(file.mimetype)) {
+      throw new BadRequestException('Imagem invalida. Envie JPG, PNG ou WEBP.');
+    }
+
+    if (file.size > auctionThumbnailMaxSize) {
+      throw new BadRequestException('A imagem de capa deve ter no maximo 5MB.');
+    }
+  }
+
+  private async removeStoredThumbnail(thumbnailUrl?: string | null) {
+    if (!thumbnailUrl?.startsWith('/uploads/auctions/')) {
+      return;
+    }
+
+    const fileName = thumbnailUrl.replace('/uploads/auctions/', '');
+
+    await unlink(
+      join(process.cwd(), 'public', 'uploads', 'auctions', fileName),
+    ).catch(() => undefined);
   }
 }

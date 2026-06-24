@@ -263,6 +263,14 @@ export class LotsService {
       consignment: true,
       media: { orderBy: { sortOrder: 'asc' } },
       sale: true,
+      bids: {
+        orderBy: { createdAt: 'desc' },
+        include: {
+          bidder: {
+            select: { id: true, name: true },
+          },
+        },
+      },
     } satisfies Prisma.LotInclude;
   }
 

@@ -1512,7 +1512,6 @@ export const BuyerProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   verificationStatus: 'verificationStatus',
-  creditLimit: 'creditLimit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1576,11 +1575,11 @@ export const AuctionScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  thumbnailUrl: 'thumbnailUrl',
   scheduledAt: 'scheduledAt',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
   status: 'status',
-  mode: 'mode',
   auctionHouseId: 'auctionHouseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1612,7 +1611,6 @@ export const ConsignmentScalarFieldEnum = {
   reviewNotes: 'reviewNotes',
   reviewedAt: 'reviewedAt',
   sellerId: 'sellerId',
-  reviewedById: 'reviewedById',
   auctionHouseId: 'auctionHouseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1663,7 +1661,6 @@ export const BuyerRegistrationScalarFieldEnum = {
   notes: 'notes',
   buyerId: 'buyerId',
   auctionHouseId: 'auctionHouseId',
-  reviewedById: 'reviewedById',
   approvedAt: 'approvedAt',
   rejectedAt: 'rejectedAt',
   createdAt: 'createdAt',
@@ -1818,20 +1815,6 @@ export type ListEnumVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInpu
 
 
 /**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-/**
  * Reference to a field of type 'AuctionHouseStatus'
  */
 export type EnumAuctionHouseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionHouseStatus'>
@@ -1881,20 +1864,6 @@ export type ListEnumAuctionStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
- * Reference to a field of type 'AuctionMode'
- */
-export type EnumAuctionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionMode'>
-    
-
-
-/**
- * Reference to a field of type 'AuctionMode[]'
- */
-export type ListEnumAuctionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionMode[]'>
-    
-
-
-/**
  * Reference to a field of type 'CommercialUnit'
  */
 export type EnumCommercialUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommercialUnit'>
@@ -1905,6 +1874,20 @@ export type EnumCommercialUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'CommercialUnit[]'
  */
 export type ListEnumCommercialUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommercialUnit[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 

@@ -31,7 +31,6 @@ export type ConsignmentMinAggregateOutputType = {
   reviewNotes: string | null
   reviewedAt: Date | null
   sellerId: string | null
-  reviewedById: string | null
   auctionHouseId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -44,7 +43,6 @@ export type ConsignmentMaxAggregateOutputType = {
   reviewNotes: string | null
   reviewedAt: Date | null
   sellerId: string | null
-  reviewedById: string | null
   auctionHouseId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,7 +55,6 @@ export type ConsignmentCountAggregateOutputType = {
   reviewNotes: number
   reviewedAt: number
   sellerId: number
-  reviewedById: number
   auctionHouseId: number
   createdAt: number
   updatedAt: number
@@ -72,7 +69,6 @@ export type ConsignmentMinAggregateInputType = {
   reviewNotes?: true
   reviewedAt?: true
   sellerId?: true
-  reviewedById?: true
   auctionHouseId?: true
   createdAt?: true
   updatedAt?: true
@@ -85,7 +81,6 @@ export type ConsignmentMaxAggregateInputType = {
   reviewNotes?: true
   reviewedAt?: true
   sellerId?: true
-  reviewedById?: true
   auctionHouseId?: true
   createdAt?: true
   updatedAt?: true
@@ -98,7 +93,6 @@ export type ConsignmentCountAggregateInputType = {
   reviewNotes?: true
   reviewedAt?: true
   sellerId?: true
-  reviewedById?: true
   auctionHouseId?: true
   createdAt?: true
   updatedAt?: true
@@ -184,7 +178,6 @@ export type ConsignmentGroupByOutputType = {
   reviewNotes: string | null
   reviewedAt: Date | null
   sellerId: string
-  reviewedById: string | null
   auctionHouseId: string
   createdAt: Date
   updatedAt: Date
@@ -218,12 +211,10 @@ export type ConsignmentWhereInput = {
   reviewNotes?: Prisma.StringNullableFilter<"Consignment"> | string | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"Consignment"> | Date | string | null
   sellerId?: Prisma.StringFilter<"Consignment"> | string
-  reviewedById?: Prisma.StringNullableFilter<"Consignment"> | string | null
   auctionHouseId?: Prisma.StringFilter<"Consignment"> | string
   createdAt?: Prisma.DateTimeFilter<"Consignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Consignment"> | Date | string
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   auctionHouse?: Prisma.XOR<Prisma.AuctionHouseScalarRelationFilter, Prisma.AuctionHouseWhereInput>
   lot?: Prisma.XOR<Prisma.LotNullableScalarRelationFilter, Prisma.LotWhereInput> | null
 }
@@ -235,12 +226,10 @@ export type ConsignmentOrderByWithRelationInput = {
   reviewNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerId?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   auctionHouseId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   seller?: Prisma.UserOrderByWithRelationInput
-  reviewedBy?: Prisma.UserOrderByWithRelationInput
   auctionHouse?: Prisma.AuctionHouseOrderByWithRelationInput
   lot?: Prisma.LotOrderByWithRelationInput
 }
@@ -255,12 +244,10 @@ export type ConsignmentWhereUniqueInput = Prisma.AtLeast<{
   reviewNotes?: Prisma.StringNullableFilter<"Consignment"> | string | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"Consignment"> | Date | string | null
   sellerId?: Prisma.StringFilter<"Consignment"> | string
-  reviewedById?: Prisma.StringNullableFilter<"Consignment"> | string | null
   auctionHouseId?: Prisma.StringFilter<"Consignment"> | string
   createdAt?: Prisma.DateTimeFilter<"Consignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Consignment"> | Date | string
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  reviewedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   auctionHouse?: Prisma.XOR<Prisma.AuctionHouseScalarRelationFilter, Prisma.AuctionHouseWhereInput>
   lot?: Prisma.XOR<Prisma.LotNullableScalarRelationFilter, Prisma.LotWhereInput> | null
 }, "id">
@@ -272,7 +259,6 @@ export type ConsignmentOrderByWithAggregationInput = {
   reviewNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sellerId?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
   auctionHouseId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -291,7 +277,6 @@ export type ConsignmentScalarWhereWithAggregatesInput = {
   reviewNotes?: Prisma.StringNullableWithAggregatesFilter<"Consignment"> | string | null
   reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Consignment"> | Date | string | null
   sellerId?: Prisma.StringWithAggregatesFilter<"Consignment"> | string
-  reviewedById?: Prisma.StringNullableWithAggregatesFilter<"Consignment"> | string | null
   auctionHouseId?: Prisma.StringWithAggregatesFilter<"Consignment"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Consignment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Consignment"> | Date | string
@@ -306,7 +291,6 @@ export type ConsignmentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   seller: Prisma.UserCreateNestedOneWithoutConsignmentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedConsignmentsInput
   auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutConsignmentsInput
   lot?: Prisma.LotCreateNestedOneWithoutConsignmentInput
 }
@@ -318,7 +302,6 @@ export type ConsignmentUncheckedCreateInput = {
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
   sellerId: string
-  reviewedById?: string | null
   auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -334,7 +317,6 @@ export type ConsignmentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   seller?: Prisma.UserUpdateOneRequiredWithoutConsignmentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedConsignmentsNestedInput
   auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutConsignmentsNestedInput
   lot?: Prisma.LotUpdateOneWithoutConsignmentNestedInput
 }
@@ -346,7 +328,6 @@ export type ConsignmentUncheckedUpdateInput = {
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -360,7 +341,6 @@ export type ConsignmentCreateManyInput = {
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
   sellerId: string
-  reviewedById?: string | null
   auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -383,7 +363,6 @@ export type ConsignmentUncheckedUpdateManyInput = {
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -406,7 +385,6 @@ export type ConsignmentCountOrderByAggregateInput = {
   reviewNotes?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrder
   auctionHouseId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -419,7 +397,6 @@ export type ConsignmentMaxOrderByAggregateInput = {
   reviewNotes?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrder
   auctionHouseId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -432,7 +409,6 @@ export type ConsignmentMinOrderByAggregateInput = {
   reviewNotes?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
-  reviewedById?: Prisma.SortOrder
   auctionHouseId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -450,24 +426,10 @@ export type ConsignmentCreateNestedManyWithoutSellerInput = {
   connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
 }
 
-export type ConsignmentCreateNestedManyWithoutReviewedByInput = {
-  create?: Prisma.XOR<Prisma.ConsignmentCreateWithoutReviewedByInput, Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput> | Prisma.ConsignmentCreateWithoutReviewedByInput[] | Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput | Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput[]
-  createMany?: Prisma.ConsignmentCreateManyReviewedByInputEnvelope
-  connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-}
-
 export type ConsignmentUncheckedCreateNestedManyWithoutSellerInput = {
   create?: Prisma.XOR<Prisma.ConsignmentCreateWithoutSellerInput, Prisma.ConsignmentUncheckedCreateWithoutSellerInput> | Prisma.ConsignmentCreateWithoutSellerInput[] | Prisma.ConsignmentUncheckedCreateWithoutSellerInput[]
   connectOrCreate?: Prisma.ConsignmentCreateOrConnectWithoutSellerInput | Prisma.ConsignmentCreateOrConnectWithoutSellerInput[]
   createMany?: Prisma.ConsignmentCreateManySellerInputEnvelope
-  connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-}
-
-export type ConsignmentUncheckedCreateNestedManyWithoutReviewedByInput = {
-  create?: Prisma.XOR<Prisma.ConsignmentCreateWithoutReviewedByInput, Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput> | Prisma.ConsignmentCreateWithoutReviewedByInput[] | Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput | Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput[]
-  createMany?: Prisma.ConsignmentCreateManyReviewedByInputEnvelope
   connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
 }
 
@@ -485,20 +447,6 @@ export type ConsignmentUpdateManyWithoutSellerNestedInput = {
   deleteMany?: Prisma.ConsignmentScalarWhereInput | Prisma.ConsignmentScalarWhereInput[]
 }
 
-export type ConsignmentUpdateManyWithoutReviewedByNestedInput = {
-  create?: Prisma.XOR<Prisma.ConsignmentCreateWithoutReviewedByInput, Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput> | Prisma.ConsignmentCreateWithoutReviewedByInput[] | Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput | Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput[]
-  upsert?: Prisma.ConsignmentUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.ConsignmentUpsertWithWhereUniqueWithoutReviewedByInput[]
-  createMany?: Prisma.ConsignmentCreateManyReviewedByInputEnvelope
-  set?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  disconnect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  delete?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  update?: Prisma.ConsignmentUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.ConsignmentUpdateWithWhereUniqueWithoutReviewedByInput[]
-  updateMany?: Prisma.ConsignmentUpdateManyWithWhereWithoutReviewedByInput | Prisma.ConsignmentUpdateManyWithWhereWithoutReviewedByInput[]
-  deleteMany?: Prisma.ConsignmentScalarWhereInput | Prisma.ConsignmentScalarWhereInput[]
-}
-
 export type ConsignmentUncheckedUpdateManyWithoutSellerNestedInput = {
   create?: Prisma.XOR<Prisma.ConsignmentCreateWithoutSellerInput, Prisma.ConsignmentUncheckedCreateWithoutSellerInput> | Prisma.ConsignmentCreateWithoutSellerInput[] | Prisma.ConsignmentUncheckedCreateWithoutSellerInput[]
   connectOrCreate?: Prisma.ConsignmentCreateOrConnectWithoutSellerInput | Prisma.ConsignmentCreateOrConnectWithoutSellerInput[]
@@ -510,20 +458,6 @@ export type ConsignmentUncheckedUpdateManyWithoutSellerNestedInput = {
   connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
   update?: Prisma.ConsignmentUpdateWithWhereUniqueWithoutSellerInput | Prisma.ConsignmentUpdateWithWhereUniqueWithoutSellerInput[]
   updateMany?: Prisma.ConsignmentUpdateManyWithWhereWithoutSellerInput | Prisma.ConsignmentUpdateManyWithWhereWithoutSellerInput[]
-  deleteMany?: Prisma.ConsignmentScalarWhereInput | Prisma.ConsignmentScalarWhereInput[]
-}
-
-export type ConsignmentUncheckedUpdateManyWithoutReviewedByNestedInput = {
-  create?: Prisma.XOR<Prisma.ConsignmentCreateWithoutReviewedByInput, Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput> | Prisma.ConsignmentCreateWithoutReviewedByInput[] | Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput[]
-  connectOrCreate?: Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput | Prisma.ConsignmentCreateOrConnectWithoutReviewedByInput[]
-  upsert?: Prisma.ConsignmentUpsertWithWhereUniqueWithoutReviewedByInput | Prisma.ConsignmentUpsertWithWhereUniqueWithoutReviewedByInput[]
-  createMany?: Prisma.ConsignmentCreateManyReviewedByInputEnvelope
-  set?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  disconnect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  delete?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  connect?: Prisma.ConsignmentWhereUniqueInput | Prisma.ConsignmentWhereUniqueInput[]
-  update?: Prisma.ConsignmentUpdateWithWhereUniqueWithoutReviewedByInput | Prisma.ConsignmentUpdateWithWhereUniqueWithoutReviewedByInput[]
-  updateMany?: Prisma.ConsignmentUpdateManyWithWhereWithoutReviewedByInput | Prisma.ConsignmentUpdateManyWithWhereWithoutReviewedByInput[]
   deleteMany?: Prisma.ConsignmentScalarWhereInput | Prisma.ConsignmentScalarWhereInput[]
 }
 
@@ -597,7 +531,6 @@ export type ConsignmentCreateWithoutSellerInput = {
   reviewedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedConsignmentsInput
   auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutConsignmentsInput
   lot?: Prisma.LotCreateNestedOneWithoutConsignmentInput
 }
@@ -608,7 +541,6 @@ export type ConsignmentUncheckedCreateWithoutSellerInput = {
   sellerNotes?: string | null
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
-  reviewedById?: string | null
   auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -622,42 +554,6 @@ export type ConsignmentCreateOrConnectWithoutSellerInput = {
 
 export type ConsignmentCreateManySellerInputEnvelope = {
   data: Prisma.ConsignmentCreateManySellerInput | Prisma.ConsignmentCreateManySellerInput[]
-  skipDuplicates?: boolean
-}
-
-export type ConsignmentCreateWithoutReviewedByInput = {
-  id?: string
-  status?: $Enums.ConsignmentStatus
-  sellerNotes?: string | null
-  reviewNotes?: string | null
-  reviewedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  seller: Prisma.UserCreateNestedOneWithoutConsignmentsInput
-  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutConsignmentsInput
-  lot?: Prisma.LotCreateNestedOneWithoutConsignmentInput
-}
-
-export type ConsignmentUncheckedCreateWithoutReviewedByInput = {
-  id?: string
-  status?: $Enums.ConsignmentStatus
-  sellerNotes?: string | null
-  reviewNotes?: string | null
-  reviewedAt?: Date | string | null
-  sellerId: string
-  auctionHouseId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  lot?: Prisma.LotUncheckedCreateNestedOneWithoutConsignmentInput
-}
-
-export type ConsignmentCreateOrConnectWithoutReviewedByInput = {
-  where: Prisma.ConsignmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.ConsignmentCreateWithoutReviewedByInput, Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput>
-}
-
-export type ConsignmentCreateManyReviewedByInputEnvelope = {
-  data: Prisma.ConsignmentCreateManyReviewedByInput | Prisma.ConsignmentCreateManyReviewedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -687,26 +583,9 @@ export type ConsignmentScalarWhereInput = {
   reviewNotes?: Prisma.StringNullableFilter<"Consignment"> | string | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"Consignment"> | Date | string | null
   sellerId?: Prisma.StringFilter<"Consignment"> | string
-  reviewedById?: Prisma.StringNullableFilter<"Consignment"> | string | null
   auctionHouseId?: Prisma.StringFilter<"Consignment"> | string
   createdAt?: Prisma.DateTimeFilter<"Consignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Consignment"> | Date | string
-}
-
-export type ConsignmentUpsertWithWhereUniqueWithoutReviewedByInput = {
-  where: Prisma.ConsignmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.ConsignmentUpdateWithoutReviewedByInput, Prisma.ConsignmentUncheckedUpdateWithoutReviewedByInput>
-  create: Prisma.XOR<Prisma.ConsignmentCreateWithoutReviewedByInput, Prisma.ConsignmentUncheckedCreateWithoutReviewedByInput>
-}
-
-export type ConsignmentUpdateWithWhereUniqueWithoutReviewedByInput = {
-  where: Prisma.ConsignmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.ConsignmentUpdateWithoutReviewedByInput, Prisma.ConsignmentUncheckedUpdateWithoutReviewedByInput>
-}
-
-export type ConsignmentUpdateManyWithWhereWithoutReviewedByInput = {
-  where: Prisma.ConsignmentScalarWhereInput
-  data: Prisma.XOR<Prisma.ConsignmentUpdateManyMutationInput, Prisma.ConsignmentUncheckedUpdateManyWithoutReviewedByInput>
 }
 
 export type ConsignmentCreateWithoutAuctionHouseInput = {
@@ -718,7 +597,6 @@ export type ConsignmentCreateWithoutAuctionHouseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   seller: Prisma.UserCreateNestedOneWithoutConsignmentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedConsignmentsInput
   lot?: Prisma.LotCreateNestedOneWithoutConsignmentInput
 }
 
@@ -729,7 +607,6 @@ export type ConsignmentUncheckedCreateWithoutAuctionHouseInput = {
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
   sellerId: string
-  reviewedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lot?: Prisma.LotUncheckedCreateNestedOneWithoutConsignmentInput
@@ -770,7 +647,6 @@ export type ConsignmentCreateWithoutLotInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   seller: Prisma.UserCreateNestedOneWithoutConsignmentsInput
-  reviewedBy?: Prisma.UserCreateNestedOneWithoutReviewedConsignmentsInput
   auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutConsignmentsInput
 }
 
@@ -781,7 +657,6 @@ export type ConsignmentUncheckedCreateWithoutLotInput = {
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
   sellerId: string
-  reviewedById?: string | null
   auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -812,7 +687,6 @@ export type ConsignmentUpdateWithoutLotInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   seller?: Prisma.UserUpdateOneRequiredWithoutConsignmentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedConsignmentsNestedInput
   auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutConsignmentsNestedInput
 }
 
@@ -823,7 +697,6 @@ export type ConsignmentUncheckedUpdateWithoutLotInput = {
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -835,19 +708,6 @@ export type ConsignmentCreateManySellerInput = {
   sellerNotes?: string | null
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
-  reviewedById?: string | null
-  auctionHouseId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ConsignmentCreateManyReviewedByInput = {
-  id?: string
-  status?: $Enums.ConsignmentStatus
-  sellerNotes?: string | null
-  reviewNotes?: string | null
-  reviewedAt?: Date | string | null
-  sellerId: string
   auctionHouseId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -861,7 +721,6 @@ export type ConsignmentUpdateWithoutSellerInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedConsignmentsNestedInput
   auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutConsignmentsNestedInput
   lot?: Prisma.LotUpdateOneWithoutConsignmentNestedInput
 }
@@ -872,7 +731,6 @@ export type ConsignmentUncheckedUpdateWithoutSellerInput = {
   sellerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -885,45 +743,6 @@ export type ConsignmentUncheckedUpdateManyWithoutSellerInput = {
   sellerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ConsignmentUpdateWithoutReviewedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumConsignmentStatusFieldUpdateOperationsInput | $Enums.ConsignmentStatus
-  sellerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  seller?: Prisma.UserUpdateOneRequiredWithoutConsignmentsNestedInput
-  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutConsignmentsNestedInput
-  lot?: Prisma.LotUpdateOneWithoutConsignmentNestedInput
-}
-
-export type ConsignmentUncheckedUpdateWithoutReviewedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumConsignmentStatusFieldUpdateOperationsInput | $Enums.ConsignmentStatus
-  sellerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sellerId?: Prisma.StringFieldUpdateOperationsInput | string
-  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lot?: Prisma.LotUncheckedUpdateOneWithoutConsignmentNestedInput
-}
-
-export type ConsignmentUncheckedUpdateManyWithoutReviewedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumConsignmentStatusFieldUpdateOperationsInput | $Enums.ConsignmentStatus
-  sellerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -936,7 +755,6 @@ export type ConsignmentCreateManyAuctionHouseInput = {
   reviewNotes?: string | null
   reviewedAt?: Date | string | null
   sellerId: string
-  reviewedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -950,7 +768,6 @@ export type ConsignmentUpdateWithoutAuctionHouseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   seller?: Prisma.UserUpdateOneRequiredWithoutConsignmentsNestedInput
-  reviewedBy?: Prisma.UserUpdateOneWithoutReviewedConsignmentsNestedInput
   lot?: Prisma.LotUpdateOneWithoutConsignmentNestedInput
 }
 
@@ -961,7 +778,6 @@ export type ConsignmentUncheckedUpdateWithoutAuctionHouseInput = {
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lot?: Prisma.LotUncheckedUpdateOneWithoutConsignmentNestedInput
@@ -974,7 +790,6 @@ export type ConsignmentUncheckedUpdateManyWithoutAuctionHouseInput = {
   reviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
-  reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -988,12 +803,10 @@ export type ConsignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   reviewNotes?: boolean
   reviewedAt?: boolean
   sellerId?: boolean
-  reviewedById?: boolean
   auctionHouseId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Consignment$reviewedByArgs<ExtArgs>
   auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   lot?: boolean | Prisma.Consignment$lotArgs<ExtArgs>
 }, ExtArgs["result"]["consignment"]>
@@ -1005,12 +818,10 @@ export type ConsignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   reviewNotes?: boolean
   reviewedAt?: boolean
   sellerId?: boolean
-  reviewedById?: boolean
   auctionHouseId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Consignment$reviewedByArgs<ExtArgs>
   auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consignment"]>
 
@@ -1021,12 +832,10 @@ export type ConsignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   reviewNotes?: boolean
   reviewedAt?: boolean
   sellerId?: boolean
-  reviewedById?: boolean
   auctionHouseId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Consignment$reviewedByArgs<ExtArgs>
   auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consignment"]>
 
@@ -1037,27 +846,23 @@ export type ConsignmentSelectScalar = {
   reviewNotes?: boolean
   reviewedAt?: boolean
   sellerId?: boolean
-  reviewedById?: boolean
   auctionHouseId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ConsignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "sellerNotes" | "reviewNotes" | "reviewedAt" | "sellerId" | "reviewedById" | "auctionHouseId" | "createdAt" | "updatedAt", ExtArgs["result"]["consignment"]>
+export type ConsignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "sellerNotes" | "reviewNotes" | "reviewedAt" | "sellerId" | "auctionHouseId" | "createdAt" | "updatedAt", ExtArgs["result"]["consignment"]>
 export type ConsignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Consignment$reviewedByArgs<ExtArgs>
   auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
   lot?: boolean | Prisma.Consignment$lotArgs<ExtArgs>
 }
 export type ConsignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Consignment$reviewedByArgs<ExtArgs>
   auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
 }
 export type ConsignmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  reviewedBy?: boolean | Prisma.Consignment$reviewedByArgs<ExtArgs>
   auctionHouse?: boolean | Prisma.AuctionHouseDefaultArgs<ExtArgs>
 }
 
@@ -1065,7 +870,6 @@ export type $ConsignmentPayload<ExtArgs extends runtime.Types.Extensions.Interna
   name: "Consignment"
   objects: {
     seller: Prisma.$UserPayload<ExtArgs>
-    reviewedBy: Prisma.$UserPayload<ExtArgs> | null
     auctionHouse: Prisma.$AuctionHousePayload<ExtArgs>
     lot: Prisma.$LotPayload<ExtArgs> | null
   }
@@ -1076,7 +880,6 @@ export type $ConsignmentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     reviewNotes: string | null
     reviewedAt: Date | null
     sellerId: string
-    reviewedById: string | null
     auctionHouseId: string
     createdAt: Date
     updatedAt: Date
@@ -1475,7 +1278,6 @@ readonly fields: ConsignmentFieldRefs;
 export interface Prisma__ConsignmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   seller<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  reviewedBy<T extends Prisma.Consignment$reviewedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consignment$reviewedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   auctionHouse<T extends Prisma.AuctionHouseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuctionHouseDefaultArgs<ExtArgs>>): Prisma.Prisma__AuctionHouseClient<runtime.Types.Result.GetResult<Prisma.$AuctionHousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   lot<T extends Prisma.Consignment$lotArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consignment$lotArgs<ExtArgs>>): Prisma.Prisma__LotClient<runtime.Types.Result.GetResult<Prisma.$LotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1513,7 +1315,6 @@ export interface ConsignmentFieldRefs {
   readonly reviewNotes: Prisma.FieldRef<"Consignment", 'String'>
   readonly reviewedAt: Prisma.FieldRef<"Consignment", 'DateTime'>
   readonly sellerId: Prisma.FieldRef<"Consignment", 'String'>
-  readonly reviewedById: Prisma.FieldRef<"Consignment", 'String'>
   readonly auctionHouseId: Prisma.FieldRef<"Consignment", 'String'>
   readonly createdAt: Prisma.FieldRef<"Consignment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Consignment", 'DateTime'>
@@ -1915,25 +1716,6 @@ export type ConsignmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Consignments to delete.
    */
   limit?: number
-}
-
-/**
- * Consignment.reviewedBy
- */
-export type Consignment$reviewedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

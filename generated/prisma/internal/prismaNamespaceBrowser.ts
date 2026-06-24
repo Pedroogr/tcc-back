@@ -103,7 +103,6 @@ export const BuyerProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   verificationStatus: 'verificationStatus',
-  creditLimit: 'creditLimit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -167,11 +166,11 @@ export const AuctionScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  thumbnailUrl: 'thumbnailUrl',
   scheduledAt: 'scheduledAt',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
   status: 'status',
-  mode: 'mode',
   auctionHouseId: 'auctionHouseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -203,7 +202,6 @@ export const ConsignmentScalarFieldEnum = {
   reviewNotes: 'reviewNotes',
   reviewedAt: 'reviewedAt',
   sellerId: 'sellerId',
-  reviewedById: 'reviewedById',
   auctionHouseId: 'auctionHouseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -254,7 +252,6 @@ export const BuyerRegistrationScalarFieldEnum = {
   notes: 'notes',
   buyerId: 'buyerId',
   auctionHouseId: 'auctionHouseId',
-  reviewedById: 'reviewedById',
   approvedAt: 'approvedAt',
   rejectedAt: 'rejectedAt',
   createdAt: 'createdAt',

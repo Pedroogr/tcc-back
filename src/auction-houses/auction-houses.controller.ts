@@ -44,6 +44,15 @@ export class AuctionHousesController {
   }
 
   @UseGuards(ActorJwtAuthGuard)
+  @Get(':id/buyer-registrations/me')
+  findMyRegistration(
+    @Req() request: AuthenticatedActorRequest,
+    @Param('id') id: string,
+  ) {
+    return this.auctionHousesService.findMyRegistration(id, request.actor);
+  }
+
+  @UseGuards(ActorJwtAuthGuard)
   @Patch('me/buyer-registrations/:registrationId')
   reviewMyBuyerRegistration(
     @Req() request: AuthenticatedActorRequest,

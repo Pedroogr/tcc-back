@@ -7,8 +7,11 @@ import {
   Patch,
   Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ActorJwtAuthGuard } from '../auth/actor-jwt-auth.guard';
 import type { AuthenticatedActorRequest } from '../auth/actor-jwt-auth.guard';
 import { AuctionsService } from './auctions.service';
@@ -16,6 +19,13 @@ import { CreateBuyerRegistrationDto } from './dto/create-buyer-registration.dto'
 import { CreateAuctionDto } from './dto/create-auction.dto';
 import { ReviewBuyerRegistrationDto } from './dto/review-buyer-registration.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
+
+export type AuctionThumbnailUpload = {
+  originalname: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+};
 
 @Controller('auctions')
 export class AuctionsController {
@@ -88,6 +98,26 @@ export class AuctionsController {
     @Body() body: UpdateAuctionDto,
   ) {
     return this.auctionsService.update(id, body, request.actor);
+  }
+
+  @UseGuards(ActorJwtAuthGuard)
+  @Post(':id/thumbnail')
+  @UseInterceptors(FileInterceptor('thumbnail'))
+  uploadThumbnail(
+    @Req() request: AuthenticatedActorRequest,
+    @Param('id') id: string,
+    @UploadedFile() file?: AuctionThumbnailUpload,
+  ) {
+    return this.auctionsService.uploadThumbnail(id, file, request.actor);
+  }
+
+  @UseGuards(ActorJwtAuthGuard)
+  @Delete(':id/thumbnail')
+  removeThumbnail(
+    @Req() request: AuthenticatedActorRequest,
+    @Param('id') id: string,
+  ) {
+    return this.auctionsService.removeThumbnail(id, request.actor);
   }
 
   @UseGuards(ActorJwtAuthGuard)

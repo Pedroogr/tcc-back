@@ -211,6 +211,23 @@ export class AuctionHousesService {
     });
   }
 
+  async findMyRegistration(auctionHouseId: string, actor: AuthenticatedActor) {
+    if (actor.type !== 'USER') {
+      throw new ForbiddenException(
+        'Apenas usuarios comuns possuem cadastro de comprador',
+      );
+    }
+
+    return this.prisma.buyerRegistration.findUnique({
+      where: {
+        buyerId_auctionHouseId: {
+          buyerId: actor.user.id,
+          auctionHouseId,
+        },
+      },
+    });
+  }
+
   async reviewMyBuyerRegistration(
     registrationId: string,
     data: ReviewBuyerRegistrationDto,

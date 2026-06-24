@@ -20,25 +20,14 @@ export type BuyerProfileModel = runtime.Types.Result.DefaultSelection<Prisma.$Bu
 
 export type AggregateBuyerProfile = {
   _count: BuyerProfileCountAggregateOutputType | null
-  _avg: BuyerProfileAvgAggregateOutputType | null
-  _sum: BuyerProfileSumAggregateOutputType | null
   _min: BuyerProfileMinAggregateOutputType | null
   _max: BuyerProfileMaxAggregateOutputType | null
-}
-
-export type BuyerProfileAvgAggregateOutputType = {
-  creditLimit: runtime.Decimal | null
-}
-
-export type BuyerProfileSumAggregateOutputType = {
-  creditLimit: runtime.Decimal | null
 }
 
 export type BuyerProfileMinAggregateOutputType = {
   id: string | null
   userId: string | null
   verificationStatus: $Enums.VerificationStatus | null
-  creditLimit: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,7 +36,6 @@ export type BuyerProfileMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   verificationStatus: $Enums.VerificationStatus | null
-  creditLimit: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,26 +44,16 @@ export type BuyerProfileCountAggregateOutputType = {
   id: number
   userId: number
   verificationStatus: number
-  creditLimit: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
-export type BuyerProfileAvgAggregateInputType = {
-  creditLimit?: true
-}
-
-export type BuyerProfileSumAggregateInputType = {
-  creditLimit?: true
-}
-
 export type BuyerProfileMinAggregateInputType = {
   id?: true
   userId?: true
   verificationStatus?: true
-  creditLimit?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -84,7 +62,6 @@ export type BuyerProfileMaxAggregateInputType = {
   id?: true
   userId?: true
   verificationStatus?: true
-  creditLimit?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -93,7 +70,6 @@ export type BuyerProfileCountAggregateInputType = {
   id?: true
   userId?: true
   verificationStatus?: true
-  creditLimit?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -137,18 +113,6 @@ export type BuyerProfileAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: BuyerProfileAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: BuyerProfileSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: BuyerProfileMinAggregateInputType
@@ -179,8 +143,6 @@ export type BuyerProfileGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: BuyerProfileCountAggregateInputType | true
-  _avg?: BuyerProfileAvgAggregateInputType
-  _sum?: BuyerProfileSumAggregateInputType
   _min?: BuyerProfileMinAggregateInputType
   _max?: BuyerProfileMaxAggregateInputType
 }
@@ -189,12 +151,9 @@ export type BuyerProfileGroupByOutputType = {
   id: string
   userId: string
   verificationStatus: $Enums.VerificationStatus
-  creditLimit: runtime.Decimal | null
   createdAt: Date
   updatedAt: Date
   _count: BuyerProfileCountAggregateOutputType | null
-  _avg: BuyerProfileAvgAggregateOutputType | null
-  _sum: BuyerProfileSumAggregateOutputType | null
   _min: BuyerProfileMinAggregateOutputType | null
   _max: BuyerProfileMaxAggregateOutputType | null
 }
@@ -221,7 +180,6 @@ export type BuyerProfileWhereInput = {
   id?: Prisma.StringFilter<"BuyerProfile"> | string
   userId?: Prisma.StringFilter<"BuyerProfile"> | string
   verificationStatus?: Prisma.EnumVerificationStatusFilter<"BuyerProfile"> | $Enums.VerificationStatus
-  creditLimit?: Prisma.DecimalNullableFilter<"BuyerProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -231,7 +189,6 @@ export type BuyerProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
-  creditLimit?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -244,7 +201,6 @@ export type BuyerProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.BuyerProfileWhereInput[]
   NOT?: Prisma.BuyerProfileWhereInput | Prisma.BuyerProfileWhereInput[]
   verificationStatus?: Prisma.EnumVerificationStatusFilter<"BuyerProfile"> | $Enums.VerificationStatus
-  creditLimit?: Prisma.DecimalNullableFilter<"BuyerProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -254,14 +210,11 @@ export type BuyerProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
-  creditLimit?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BuyerProfileCountOrderByAggregateInput
-  _avg?: Prisma.BuyerProfileAvgOrderByAggregateInput
   _max?: Prisma.BuyerProfileMaxOrderByAggregateInput
   _min?: Prisma.BuyerProfileMinOrderByAggregateInput
-  _sum?: Prisma.BuyerProfileSumOrderByAggregateInput
 }
 
 export type BuyerProfileScalarWhereWithAggregatesInput = {
@@ -271,7 +224,6 @@ export type BuyerProfileScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"BuyerProfile"> | string
   userId?: Prisma.StringWithAggregatesFilter<"BuyerProfile"> | string
   verificationStatus?: Prisma.EnumVerificationStatusWithAggregatesFilter<"BuyerProfile"> | $Enums.VerificationStatus
-  creditLimit?: Prisma.DecimalNullableWithAggregatesFilter<"BuyerProfile"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BuyerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BuyerProfile"> | Date | string
 }
@@ -279,7 +231,6 @@ export type BuyerProfileScalarWhereWithAggregatesInput = {
 export type BuyerProfileCreateInput = {
   id?: string
   verificationStatus?: $Enums.VerificationStatus
-  creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBuyerProfileInput
@@ -289,7 +240,6 @@ export type BuyerProfileUncheckedCreateInput = {
   id?: string
   userId: string
   verificationStatus?: $Enums.VerificationStatus
-  creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -297,7 +247,6 @@ export type BuyerProfileUncheckedCreateInput = {
 export type BuyerProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBuyerProfileNestedInput
@@ -307,7 +256,6 @@ export type BuyerProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -316,7 +264,6 @@ export type BuyerProfileCreateManyInput = {
   id?: string
   userId: string
   verificationStatus?: $Enums.VerificationStatus
-  creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -324,7 +271,6 @@ export type BuyerProfileCreateManyInput = {
 export type BuyerProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -333,7 +279,6 @@ export type BuyerProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -347,20 +292,14 @@ export type BuyerProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
-  creditLimit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type BuyerProfileAvgOrderByAggregateInput = {
-  creditLimit?: Prisma.SortOrder
 }
 
 export type BuyerProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
-  creditLimit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -369,13 +308,8 @@ export type BuyerProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
-  creditLimit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type BuyerProfileSumOrderByAggregateInput = {
-  creditLimit?: Prisma.SortOrder
 }
 
 export type BuyerProfileCreateNestedOneWithoutUserInput = {
@@ -414,18 +348,9 @@ export type EnumVerificationStatusFieldUpdateOperationsInput = {
   set?: $Enums.VerificationStatus
 }
 
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type BuyerProfileCreateWithoutUserInput = {
   id?: string
   verificationStatus?: $Enums.VerificationStatus
-  creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -433,7 +358,6 @@ export type BuyerProfileCreateWithoutUserInput = {
 export type BuyerProfileUncheckedCreateWithoutUserInput = {
   id?: string
   verificationStatus?: $Enums.VerificationStatus
-  creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -457,7 +381,6 @@ export type BuyerProfileUpdateToOneWithWhereWithoutUserInput = {
 export type BuyerProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -465,7 +388,6 @@ export type BuyerProfileUpdateWithoutUserInput = {
 export type BuyerProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -476,7 +398,6 @@ export type BuyerProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
-  creditLimit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -486,7 +407,6 @@ export type BuyerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
-  creditLimit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -496,7 +416,6 @@ export type BuyerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
-  creditLimit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -506,12 +425,11 @@ export type BuyerProfileSelectScalar = {
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
-  creditLimit?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BuyerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "verificationStatus" | "creditLimit" | "createdAt" | "updatedAt", ExtArgs["result"]["buyerProfile"]>
+export type BuyerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "verificationStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["buyerProfile"]>
 export type BuyerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -531,7 +449,6 @@ export type $BuyerProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     userId: string
     verificationStatus: $Enums.VerificationStatus
-    creditLimit: runtime.Decimal | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["buyerProfile"]>
@@ -961,7 +878,6 @@ export interface BuyerProfileFieldRefs {
   readonly id: Prisma.FieldRef<"BuyerProfile", 'String'>
   readonly userId: Prisma.FieldRef<"BuyerProfile", 'String'>
   readonly verificationStatus: Prisma.FieldRef<"BuyerProfile", 'VerificationStatus'>
-  readonly creditLimit: Prisma.FieldRef<"BuyerProfile", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"BuyerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BuyerProfile", 'DateTime'>
 }

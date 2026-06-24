@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { LotsModule } from './lots/lots.module';
 import { LiveModule } from './live/live.module';
 import { AuctionHousesModule } from './auction-houses/auction-houses.module';
+import { StreamsModule } from './streams/streams.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AuctionHousesModule } from './auction-houses/auction-houses.module';
     AuctionHousesModule,
     LotsModule,
     LiveModule,
+    StreamsModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

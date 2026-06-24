@@ -64,16 +64,6 @@ export const AuctionStatus = {
 export type AuctionStatus = (typeof AuctionStatus)[keyof typeof AuctionStatus]
 
 
-export const AuctionMode = {
-  LIVE: 'LIVE',
-  PRE_BID: 'PRE_BID',
-  TIMED: 'TIMED',
-  HYBRID: 'HYBRID'
-} as const
-
-export type AuctionMode = (typeof AuctionMode)[keyof typeof AuctionMode]
-
-
 export const LotStatus = {
   DRAFT: 'DRAFT',
   UNDER_REVIEW: 'UNDER_REVIEW',
