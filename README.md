@@ -25,6 +25,18 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Configuração local
+
+1. Copie `.env.example` para `.env`.
+2. Suba o PostgreSQL com `docker compose up -d postgres`.
+3. Aplique as migrations com `npx prisma migrate deploy`.
+4. Inicie a API com `npm run start:dev`.
+
+O PostgreSQL deste projeto fica exposto na porta `5434`, pois a porta `5433`
+já pode estar sendo usada por outro banco local. No DBeaver, use host
+`localhost`, porta `5434`, banco `cattle_auction` e as credenciais do `.env`
+local.
+
 ## Project setup
 
 ```bash
