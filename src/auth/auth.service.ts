@@ -38,6 +38,10 @@ export class AuthService {
       throw new UnauthorizedException('E-mail ou senha invalidos');
     }
 
+    if (user.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Conta inativa');
+    }
+
     return {
       accessToken: await this.jwtService.signAsync({
         sub: user.id,
@@ -82,6 +86,10 @@ export class AuthService {
 
     if (!passwordMatches) {
       throw new UnauthorizedException('E-mail ou senha invalidos');
+    }
+
+    if (auctionHouse.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Conta inativa');
     }
 
     return {
