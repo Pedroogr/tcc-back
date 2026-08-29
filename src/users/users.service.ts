@@ -97,6 +97,17 @@ export class UsersService {
   async remove(id: string) {
     await this.findOne(id);
 
+    const [sales, consignments] = await Promise.all([
+      this.prisma.sale.count({ where: { buyerId: id } }),
+      this.prisma.consignment.count({ where: { sellerId: id } }),
+    ]);
+
+    if (sales > 0 || consignments > 0) {
+      throw new ConflictException(
+        'Usuario possui vendas ou consignacoes vinculadas',
+      );
+    }
+
     return this.prisma.user.delete({
       where: { id },
       select: this.safeUserSelect(),

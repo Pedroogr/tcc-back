@@ -18,6 +18,8 @@ type JwtPayload = {
 const authenticatedUserSelect = {
   id: true,
   email: true,
+  platformRole: true,
+  status: true,
   buyerProfile: true,
   sellerProfile: true,
 } satisfies Prisma.UserSelect;
@@ -64,6 +66,10 @@ export class JwtAuthGuard implements CanActivate {
 
     if (!user) {
       throw new UnauthorizedException('Usuario nao encontrado');
+    }
+
+    if (user.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Conta inativa');
     }
 
     request.user = user;
