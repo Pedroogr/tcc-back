@@ -21,6 +21,7 @@ const authenticatedAdminSelect = {
   name: true,
   email: true,
   platformRole: true,
+  status: true,
 } satisfies Prisma.UserSelect;
 
 export type AuthenticatedAdmin = Prisma.UserGetPayload<{
@@ -67,6 +68,10 @@ export class SystemAdminGuard implements CanActivate {
 
     if (!user) {
       throw new UnauthorizedException('Usuario nao encontrado');
+    }
+
+    if (user.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Conta inativa');
     }
 
     if (user.platformRole !== 'SYSTEM_ADMIN') {
