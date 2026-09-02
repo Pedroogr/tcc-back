@@ -6,11 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
-import {
-  BidStatus,
-  LotStatus,
-  SaleStatus,
-} from '../../generated/prisma/enums';
+import { BidStatus, LotStatus, SaleStatus } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { CommerceGateway } from '../commerce/commerce.gateway';
 import { PrismaService } from '../prisma/prisma.service';
@@ -52,7 +48,9 @@ const saleQuerySelect = {
   },
 } satisfies Prisma.SaleSelect;
 
-type SaleQueryResult = Prisma.SaleGetPayload<{ select: typeof saleQuerySelect }>;
+type SaleQueryResult = Prisma.SaleGetPayload<{
+  select: typeof saleQuerySelect;
+}>;
 
 type ContactSource = {
   id: string;
@@ -126,9 +124,7 @@ export class SalesService {
       }
 
       if (lot.sale) {
-        throw new ConflictException(
-          'Este lote ja possui uma venda confirmada',
-        );
+        throw new ConflictException('Este lote ja possui uma venda confirmada');
       }
 
       const winningBid = await tx.bid.findFirst({

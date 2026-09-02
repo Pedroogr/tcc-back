@@ -73,7 +73,9 @@ describe('CommerceGateway', () => {
     await gateway.handleAuctionJoin({ auctionId: 'auction-1' }, buyerSocket);
 
     expect(buyerSocket.join).toHaveBeenCalledWith('auction:auction-1:prices');
-    expect(buyerSocket.join).not.toHaveBeenCalledWith('auction:auction-1:office');
+    expect(buyerSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:office',
+    );
   });
 
   it('joins only the owner office to the detailed room', async () => {
@@ -109,7 +111,9 @@ describe('CommerceGateway', () => {
     await gateway.handleAuctionJoin({ auctionId: 'auction-1' }, officeSocket);
 
     expect(officeSocket.join).toHaveBeenCalledWith('auction:auction-1:prices');
-    expect(officeSocket.join).not.toHaveBeenCalledWith('auction:auction-1:office');
+    expect(officeSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:office',
+    );
   });
 
   it('derives the notification room from the authenticated token', async () => {
@@ -150,8 +154,8 @@ describe('CommerceGateway', () => {
         bidder: { id: 'buyer-1', name: 'Comprador Sigiloso' },
       },
     );
-    const [, pricePayload] =
-      roomEmitter('auction:auction-1:prices').emit.mock.calls[0];
+    const [, pricePayload] = roomEmitter('auction:auction-1:prices').emit.mock
+      .calls[0];
     expect(JSON.stringify(pricePayload)).not.toContain('Comprador Sigiloso');
     expect(pricePayload).not.toHaveProperty('bidder');
   });

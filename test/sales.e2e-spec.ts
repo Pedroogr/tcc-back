@@ -77,16 +77,28 @@ describe('post-auction sales (e2e)', () => {
       status: LotStatus.SOLD,
       consignmentId: consignment.id,
     });
-    await createSale(context.prisma, consignedLot.id, buyer.id, auctionHouse.id, {
-      finalPrice: 1250,
-    });
+    await createSale(
+      context.prisma,
+      consignedLot.id,
+      buyer.id,
+      auctionHouse.id,
+      {
+        finalPrice: 1250,
+      },
+    );
 
     const officeOnlyLot = await createLot(context.prisma, auction.id, {
       status: LotStatus.SOLD,
     });
-    await createSale(context.prisma, officeOnlyLot.id, buyer.id, auctionHouse.id, {
-      finalPrice: 800,
-    });
+    await createSale(
+      context.prisma,
+      officeOnlyLot.id,
+      buyer.id,
+      auctionHouse.id,
+      {
+        finalPrice: 800,
+      },
+    );
 
     const officeToken = await login(context, auctionHouse.email);
     const buyerToken = await login(context, buyer.email);

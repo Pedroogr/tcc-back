@@ -244,7 +244,11 @@ export class LotsService {
       minBidIncrement: Prisma.Decimal;
     },
   ) {
-    for (let attempt = 1; attempt <= MAX_BID_TRANSACTION_ATTEMPTS; attempt += 1) {
+    for (
+      let attempt = 1;
+      attempt <= MAX_BID_TRANSACTION_ATTEMPTS;
+      attempt += 1
+    ) {
       try {
         return await this.prisma.$transaction(
           async (tx) => {

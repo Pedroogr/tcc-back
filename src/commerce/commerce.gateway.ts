@@ -98,7 +98,9 @@ export class CommerceGateway {
       createdAt: bid.createdAt,
     };
 
-    this.server.to(this.priceRoom(auctionId)).emit('bid:price-updated', priceUpdate);
+    this.server
+      .to(this.priceRoom(auctionId))
+      .emit('bid:price-updated', priceUpdate);
     this.server.to(this.officeRoom(auctionId)).emit('bid:office-recorded', bid);
   }
 
