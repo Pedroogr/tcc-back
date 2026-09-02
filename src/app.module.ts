@@ -12,6 +12,7 @@ import { AuctionHousesModule } from './auction-houses/auction-houses.module';
 import { StreamsModule } from './streams/streams.module';
 import { AdminModule } from './admin/admin.module';
 import { CommerceModule } from './commerce/commerce.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CommerceModule } from './commerce/commerce.module';
     StreamsModule,
     AdminModule,
     CommerceModule,
+    SalesModule,
   ],
 })
 export class AppModule {}
