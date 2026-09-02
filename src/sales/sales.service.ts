@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '../../generated/prisma/client';
 import {
   BidStatus,
   LotStatus,
@@ -18,8 +19,40 @@ import {
   ContactView,
   OfficeSaleView,
   SaleAggregate,
+  SellerSaleView,
+  WinnerSaleView,
   presentOfficeSale,
+  presentSellerSale,
+  presentWinnerSale,
 } from './sale-presenter';
+
+const contactSelect = {
+  id: true,
+  name: true,
+  email: true,
+  phone: true,
+} satisfies Prisma.UserSelect;
+
+const saleQuerySelect = {
+  id: true,
+  finalPrice: true,
+  soldAt: true,
+  status: true,
+  notes: true,
+  buyer: { select: contactSelect },
+  saleRecordedByAuctionHouse: { select: contactSelect },
+  lot: {
+    select: {
+      id: true,
+      code: true,
+      title: true,
+      auction: { select: { id: true, title: true } },
+      consignment: { select: { seller: { select: contactSelect } } },
+    },
+  },
+} satisfies Prisma.SaleSelect;
+
+type SaleQueryResult = Prisma.SaleGetPayload<{ select: typeof saleQuerySelect }>;
 
 type ContactSource = {
   id: string;
@@ -167,6 +200,89 @@ export class SalesService {
     });
 
     return presentOfficeSale(aggregate);
+  }
+
+  async findForAuctionHouse(
+    actor: AuthenticatedActor,
+  ): Promise<OfficeSaleView[]> {
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException(
+        'Apenas o escritorio pode consultar as vendas do remate',
+      );
+    }
+
+    const sales = await this.prisma.sale.findMany({
+      where: {
+        status: SaleStatus.CONFIRMED,
+        saleRecordedByAuctionHouseId: actor.auctionHouse.id,
+      },
+      orderBy: { soldAt: 'desc' },
+      select: saleQuerySelect,
+    });
+
+    return sales.map((sale) => presentOfficeSale(this.toAggregate(sale)));
+  }
+
+  async findWonByUser(actor: AuthenticatedActor): Promise<WinnerSaleView[]> {
+    if (actor.type !== 'USER') {
+      throw new ForbiddenException(
+        'Apenas usuarios podem consultar seus arremates',
+      );
+    }
+
+    const sales = await this.prisma.sale.findMany({
+      where: {
+        status: SaleStatus.CONFIRMED,
+        buyerId: actor.user.id,
+      },
+      orderBy: { soldAt: 'desc' },
+      select: saleQuerySelect,
+    });
+
+    return sales.map((sale) => presentWinnerSale(this.toAggregate(sale)));
+  }
+
+  async findSoldBySeller(actor: AuthenticatedActor): Promise<SellerSaleView[]> {
+    if (actor.type !== 'USER') {
+      throw new ForbiddenException(
+        'Apenas usuarios podem consultar suas vendas',
+      );
+    }
+
+    const sales = await this.prisma.sale.findMany({
+      where: {
+        status: SaleStatus.CONFIRMED,
+        lot: { consignment: { sellerId: actor.user.id } },
+      },
+      orderBy: { soldAt: 'desc' },
+      select: saleQuerySelect,
+    });
+
+    return sales.map((sale) => presentSellerSale(this.toAggregate(sale)));
+  }
+
+  private toAggregate(sale: SaleQueryResult): SaleAggregate {
+    return {
+      id: sale.id,
+      lot: {
+        id: sale.lot.id,
+        code: sale.lot.code,
+        title: sale.lot.title,
+      },
+      auction: {
+        id: sale.lot.auction?.id ?? '',
+        title: sale.lot.auction?.title ?? '',
+      },
+      finalPrice: sale.finalPrice.toString(),
+      soldAt: sale.soldAt,
+      status: sale.status,
+      notes: sale.notes ?? null,
+      buyer: this.toContact(sale.buyer),
+      seller: sale.lot.consignment?.seller
+        ? this.toContact(sale.lot.consignment.seller)
+        : null,
+      auctionHouse: this.toContact(sale.saleRecordedByAuctionHouse),
+    };
   }
 
   private toContact(source: ContactSource): ContactView {
