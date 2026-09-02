@@ -1,8 +1,11 @@
 import {
   AuctionStatus,
   BidStatus,
+  BuyerRegistrationStatus,
+  ConsignmentStatus,
   LotStatus,
   Prisma,
+  SaleStatus,
   StreamStatus,
 } from '../../generated/prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
@@ -109,6 +112,57 @@ export async function createBid(
       bidderId,
       amount: 100,
       status: BidStatus.VALID,
+      ...overrides,
+    },
+  });
+}
+
+export async function createBuyerRegistration(
+  prisma: PrismaService,
+  buyerId: string,
+  auctionHouseId: string,
+  overrides: Partial<Prisma.BuyerRegistrationUncheckedCreateInput> = {},
+) {
+  return prisma.buyerRegistration.create({
+    data: {
+      buyerId,
+      auctionHouseId,
+      status: BuyerRegistrationStatus.APPROVED,
+      ...overrides,
+    },
+  });
+}
+
+export async function createConsignment(
+  prisma: PrismaService,
+  sellerId: string,
+  auctionHouseId: string,
+  overrides: Partial<Prisma.ConsignmentUncheckedCreateInput> = {},
+) {
+  return prisma.consignment.create({
+    data: {
+      sellerId,
+      auctionHouseId,
+      status: ConsignmentStatus.APPROVED,
+      ...overrides,
+    },
+  });
+}
+
+export async function createSale(
+  prisma: PrismaService,
+  lotId: string,
+  buyerId: string,
+  saleRecordedByAuctionHouseId: string,
+  overrides: Partial<Prisma.SaleUncheckedCreateInput> = {},
+) {
+  return prisma.sale.create({
+    data: {
+      lotId,
+      buyerId,
+      saleRecordedByAuctionHouseId,
+      finalPrice: 100,
+      status: SaleStatus.CONFIRMED,
       ...overrides,
     },
   });
