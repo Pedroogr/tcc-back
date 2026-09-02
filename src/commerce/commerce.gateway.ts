@@ -150,7 +150,7 @@ export class CommerceGateway {
   }
 
   private extractToken(client: Socket) {
-    const authToken = client.handshake.auth?.token;
+    const authToken: unknown = client.handshake.auth?.token;
 
     if (typeof authToken === 'string' && authToken.trim()) {
       return authToken;
