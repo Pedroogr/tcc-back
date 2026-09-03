@@ -2,10 +2,7 @@ jest.mock('../prisma/prisma.service', () => ({
   PrismaService: class PrismaService {},
 }));
 
-import {
-  BadRequestException,
-  ForbiddenException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { AuctionStatus, StreamStatus } from '../../generated/prisma/enums';
 import type { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import type { PrismaService } from '../prisma/prisma.service';

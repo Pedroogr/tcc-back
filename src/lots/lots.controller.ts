@@ -40,6 +40,15 @@ export class LotsController {
   }
 
   @UseGuards(ActorJwtAuthGuard)
+  @Get(':id/bids')
+  findBidHistory(
+    @Req() request: AuthenticatedActorRequest,
+    @Param('id') id: string,
+  ) {
+    return this.lotsService.findBidHistory(id, request.actor);
+  }
+
+  @UseGuards(ActorJwtAuthGuard)
   @Post(':id/bids')
   createBid(
     @Req() request: AuthenticatedActorRequest,

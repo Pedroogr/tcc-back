@@ -21,7 +21,7 @@ export class LiveGateway {
     @MessageBody() data: { room: string; role: 'transmitter' | 'viewer' },
     @ConnectedSocket() client: Socket,
   ) {
-    client.join(data.room);
+    void client.join(data.room);
 
     if (data.role === 'viewer') {
       client.to(data.room).emit('viewer-ready', {
