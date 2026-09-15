@@ -58,7 +58,7 @@ describe('CommerceGateway', () => {
     gateway.server = server as never;
   });
 
-  it('joins a buyer only to the anonymous price room', async () => {
+  it('joins a buyer to the anonymous price and winner announcement rooms', async () => {
     jwtService.verifyAsync.mockResolvedValue({
       sub: 'buyer-1',
       actorType: 'USER',
@@ -73,6 +73,7 @@ describe('CommerceGateway', () => {
     await gateway.handleAuctionJoin({ auctionId: 'auction-1' }, buyerSocket);
 
     expect(buyerSocket.join).toHaveBeenCalledWith('auction:auction-1:prices');
+    expect(buyerSocket.join).toHaveBeenCalledWith('auction:auction-1:buyers');
     expect(buyerSocket.join).not.toHaveBeenCalledWith(
       'auction:auction-1:office',
     );
@@ -113,6 +114,9 @@ describe('CommerceGateway', () => {
     expect(officeSocket.join).toHaveBeenCalledWith('auction:auction-1:prices');
     expect(officeSocket.join).not.toHaveBeenCalledWith(
       'auction:auction-1:office',
+    );
+    expect(officeSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:buyers',
     );
   });
 
@@ -160,18 +164,36 @@ describe('CommerceGateway', () => {
     expect(pricePayload).not.toHaveProperty('bidder');
   });
 
-  it('announces a sold lot to the price room without any identity', () => {
+  it('keeps the sold event anonymous and announces the winner only to buyers', () => {
     const soldAt = new Date('2026-09-02T12:30:00.000Z');
 
     gateway.emitLotSold('auction-1', {
       lotId: 'lot-1',
+      lotCode: 'L-01',
+      lotTitle: 'Lote Premium',
       finalPrice: '1100',
       soldAt,
+      winnerName: 'Comprador Vencedor',
     });
 
     expect(roomEmitter('auction:auction-1:prices').emit).toHaveBeenCalledWith(
       'lot:sold',
-      { lotId: 'lot-1', finalPrice: '1100', soldAt },
+      {
+        lotId: 'lot-1',
+        finalPrice: '1100',
+        soldAt,
+      },
+    );
+    expect(roomEmitter('auction:auction-1:buyers').emit).toHaveBeenCalledWith(
+      'lot:winner-announced',
+      {
+        lotId: 'lot-1',
+        lotCode: 'L-01',
+        lotTitle: 'Lote Premium',
+        finalPrice: '1100',
+        soldAt,
+        winnerName: 'Comprador Vencedor',
+      },
     );
   });
 

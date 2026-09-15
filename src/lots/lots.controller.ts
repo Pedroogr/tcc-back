@@ -13,6 +13,7 @@ import { ActorJwtAuthGuard } from '../auth/actor-jwt-auth.guard';
 import type { AuthenticatedActorRequest } from '../auth/actor-jwt-auth.guard';
 import { CreateBidDto } from './dto/create-bid.dto';
 import { CreateLotDto } from './dto/create-lot.dto';
+import { SetLotStageDto } from './dto/set-lot-stage.dto';
 import { UpdateLotDto } from './dto/update-lot.dto';
 import { LotsService } from './lots.service';
 
@@ -56,6 +57,16 @@ export class LotsController {
     @Body() body: CreateBidDto,
   ) {
     return this.lotsService.createBid(id, body, request.actor);
+  }
+
+  @UseGuards(ActorJwtAuthGuard)
+  @Patch(':id/stage')
+  setStage(
+    @Req() request: AuthenticatedActorRequest,
+    @Param('id') id: string,
+    @Body() body: SetLotStageDto,
+  ) {
+    return this.lotsService.setStage(id, body, request.actor);
   }
 
   @UseGuards(ActorJwtAuthGuard)

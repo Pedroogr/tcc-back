@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Socket } from 'socket.io-client';
 import request from 'supertest';
 import { AuctionStatus } from '../generated/prisma/enums';

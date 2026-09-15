@@ -1,8 +1,8 @@
 // Shared realtime payload contracts for the commerce gateway (RF06-RF10).
 //
 // Privacy rules encoded by these types:
-// - Buyers only ever receive `BidPriceUpdatedPayload` / `LotSoldPayload`, which
-//   never carry a bidder identity.
+// - Bid updates never carry a bidder identity. A sold lot reveals only the
+//   winner's display name after the office confirms the sale.
 // - Only the owner office receives `OfficeBidPayload`, which carries the bidder.
 // - Only the winning buyer receives `SaleWonPayload`.
 
@@ -24,6 +24,12 @@ export type LotSoldPayload = {
   lotId: string;
   finalPrice: string;
   soldAt: Date;
+};
+
+export type LotWinnerAnnouncedPayload = LotSoldPayload & {
+  lotCode: string;
+  lotTitle: string;
+  winnerName: string;
 };
 
 export type SaleWonPayload = {

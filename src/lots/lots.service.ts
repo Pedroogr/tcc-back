@@ -19,6 +19,7 @@ import { CommerceGateway } from '../commerce/commerce.gateway';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBidDto } from './dto/create-bid.dto';
 import { CreateLotDto } from './dto/create-lot.dto';
+import { SetLotStageDto } from './dto/set-lot-stage.dto';
 import { UpdateLotDto } from './dto/update-lot.dto';
 
 const MAX_BID_TRANSACTION_ATTEMPTS = 3;
@@ -89,6 +90,13 @@ export class LotsService {
 
   async update(id: string, data: UpdateLotDto, actor: AuthenticatedActor) {
     await this.assertLotManager(id, actor);
+
+    if (data.status !== undefined || data.auctionId !== undefined) {
+      throw new BadRequestException(
+        'Status e remate do lote nao podem ser alterados por esta rota',
+      );
+    }
+
     const imageMedia = await this.saveLotImages(data.images);
 
     const updated = await this.prisma.lot.update({
@@ -101,6 +109,112 @@ export class LotsService {
     });
 
     return this.toPublicLot(updated);
+  }
+
+  async setStage(id: string, data: SetLotStageDto, actor: AuthenticatedActor) {
+    if (actor.type !== 'AUCTION_HOUSE') {
+      throw new ForbiddenException(
+        'Apenas escritorios podem colocar ou retirar lotes da pista',
+      );
+    }
+
+    for (
+      let attempt = 1;
+      attempt <= MAX_BID_TRANSACTION_ATTEMPTS;
+      attempt += 1
+    ) {
+      try {
+        return await this.prisma.$transaction(
+          async (tx) => {
+            const lot = await tx.lot.findUnique({
+              where: { id },
+              select: {
+                id: true,
+                status: true,
+                auctionId: true,
+                auction: { select: { auctionHouseId: true } },
+              },
+            });
+
+            if (!lot) {
+              throw new NotFoundException('Lote nao encontrado');
+            }
+
+            if (lot.auction?.auctionHouseId !== actor.auctionHouse.id) {
+              throw new ForbiddenException(
+                'Escritorio nao pode gerenciar lote de outro escritorio',
+              );
+            }
+
+            if (lot.status === data.status) {
+              const unchanged = await tx.lot.findUniqueOrThrow({
+                where: { id },
+                include: this.lotInclude(),
+              });
+
+              return this.toPublicLot(unchanged);
+            }
+
+            const canEnterStage =
+              data.status === LotStatus.IN_AUCTION &&
+              [
+                LotStatus.DRAFT,
+                LotStatus.UNDER_REVIEW,
+                LotStatus.APPROVED,
+                LotStatus.AVAILABLE,
+              ].some((status) => status === lot.status);
+            const canLeaveStage =
+              data.status === LotStatus.AVAILABLE &&
+              lot.status === LotStatus.IN_AUCTION;
+
+            if (!canEnterStage && !canLeaveStage) {
+              throw new BadRequestException(
+                'Transicao de etapa invalida para este lote',
+              );
+            }
+
+            if (data.status === LotStatus.IN_AUCTION) {
+              const activeLot = await tx.lot.findFirst({
+                where: {
+                  auctionId: lot.auctionId,
+                  status: LotStatus.IN_AUCTION,
+                  id: { not: id },
+                },
+                select: { id: true },
+              });
+
+              if (activeLot) {
+                throw new BadRequestException(
+                  'Ja existe outro lote em pista neste remate',
+                );
+              }
+            }
+
+            const updated = await tx.lot.update({
+              where: { id },
+              data: { status: data.status },
+              include: this.lotInclude(),
+            });
+
+            return this.toPublicLot(updated);
+          },
+          { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+        );
+      } catch (error) {
+        if (
+          this.isSerializationFailure(error) &&
+          attempt < MAX_BID_TRANSACTION_ATTEMPTS
+        ) {
+          continue;
+        }
+
+        throw error;
+      }
+    }
+
+    throw new BadRequestException(
+      'Nao foi possivel atualizar a etapa do lote. Tente novamente.',
+    );
   }
 
   async remove(id: string, actor: AuthenticatedActor) {
@@ -356,8 +470,6 @@ export class LotsService {
         data.initialPrice !== undefined
           ? new Prisma.Decimal(data.initialPrice)
           : undefined,
-      status: data.status,
-      auction: data.auctionId ? { connect: { id: data.auctionId } } : undefined,
       consignment: data.consignmentId
         ? { connect: { id: data.consignmentId } }
         : undefined,

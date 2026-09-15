@@ -182,8 +182,11 @@ export class SalesService {
 
     this.commerceGateway.emitLotSold(aggregate.auction.id, {
       lotId: aggregate.lot.id,
+      lotCode: aggregate.lot.code,
+      lotTitle: aggregate.lot.title,
       finalPrice: aggregate.finalPrice,
       soldAt: sale.soldAt,
+      winnerName: aggregate.buyer.name,
     });
     this.commerceGateway.emitSaleWon(sale.buyerId, {
       saleId: aggregate.id,

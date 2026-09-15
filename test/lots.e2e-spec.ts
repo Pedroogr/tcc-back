@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
 import request from 'supertest';
 import {
   AuctionStatus,
@@ -9,6 +8,7 @@ import {
   E2E_PASSWORD,
   createAuction,
   createAuctionHouse,
+  createConsignment,
   createLot,
   createUser,
 } from './support/factories';
@@ -72,7 +72,7 @@ describe('lots E2E', () => {
         await request(c.httpServer)
           .patch(`/lots/${body(created).id}`)
           .set('Authorization', `Bearer ${token}`)
-          .send({ title: 'Updated', status: LotStatus.AVAILABLE })
+          .send({ title: 'Updated' })
       ).status,
     ).toBe(200);
     expect(
@@ -90,7 +90,7 @@ describe('lots E2E', () => {
       status: AuctionStatus.LIVE,
     });
     const lot = await createLot(c.prisma, auction.id, {
-      status: LotStatus.AVAILABLE,
+      status: LotStatus.IN_AUCTION,
       initialPrice: 100,
     });
     const buyer = await createUser(c.prisma);
@@ -121,18 +121,103 @@ describe('lots E2E', () => {
         await request(c.httpServer)
           .post(`/lots/${lot.id}/bids`)
           .set('Authorization', `Bearer ${token}`)
-          .send({ amount: 99 })
+          .send({ amount: 95 })
       ).status,
     ).toBe(400);
     const second = await request(c.httpServer)
       .post(`/lots/${lot.id}/bids`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ amount: 101 });
+      .send({ amount: 105 });
     expect(second.status).toBe(201);
     expect(
       (await c.prisma.bid.findUnique({ where: { id: body(first).id } }))
         ?.status,
     ).toBe('OUTBID');
+  });
+
+  it('restricts stage transitions to the owning office and valid states', async () => {
+    const house = await createAuctionHouse(c.prisma);
+    const auction = await createAuction(c.prisma, house.id);
+    const otherHouse = await createAuctionHouse(c.prisma);
+    const otherAuction = await createAuction(c.prisma, otherHouse.id);
+    const seller = await createUser(c.prisma);
+    const consignment = await createConsignment(c.prisma, seller.id, house.id);
+    const lot = await createLot(c.prisma, auction.id, {
+      status: LotStatus.UNDER_REVIEW,
+      consignmentId: consignment.id,
+    });
+    const officeToken = await login(c, house.email);
+    const sellerToken = await login(c, seller.email);
+
+    await request(c.httpServer)
+      .patch(`/lots/${lot.id}/stage`)
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send({ status: LotStatus.IN_AUCTION })
+      .expect(403);
+    await request(c.httpServer)
+      .patch(`/lots/${lot.id}`)
+      .set('Authorization', `Bearer ${officeToken}`)
+      .send({ status: LotStatus.IN_AUCTION })
+      .expect(400);
+    await request(c.httpServer)
+      .patch(`/lots/${lot.id}`)
+      .set('Authorization', `Bearer ${officeToken}`)
+      .send({ auctionId: otherAuction.id })
+      .expect(400);
+    expect(
+      await c.prisma.lot.findUnique({
+        where: { id: lot.id },
+        select: { auctionId: true },
+      }),
+    ).toEqual({ auctionId: auction.id });
+
+    const inAuction = await request(c.httpServer)
+      .patch(`/lots/${lot.id}/stage`)
+      .set('Authorization', `Bearer ${officeToken}`)
+      .send({ status: LotStatus.IN_AUCTION });
+    expect(inAuction.status).toBe(200);
+    expect(body(inAuction).status).toBe(LotStatus.IN_AUCTION);
+
+    const available = await request(c.httpServer)
+      .patch(`/lots/${lot.id}/stage`)
+      .set('Authorization', `Bearer ${officeToken}`)
+      .send({ status: LotStatus.AVAILABLE });
+    expect(available.status).toBe(200);
+    expect(body(available).status).toBe(LotStatus.AVAILABLE);
+
+    await c.prisma.lot.update({
+      where: { id: lot.id },
+      data: { status: LotStatus.SOLD },
+    });
+    await request(c.httpServer)
+      .patch(`/lots/${lot.id}/stage`)
+      .set('Authorization', `Bearer ${officeToken}`)
+      .send({ status: LotStatus.IN_AUCTION })
+      .expect(400);
+  });
+
+  it('rejects a second lot in auction at the same time', async () => {
+    const house = await createAuctionHouse(c.prisma);
+    const auction = await createAuction(c.prisma, house.id);
+    await createLot(c.prisma, auction.id, {
+      status: LotStatus.IN_AUCTION,
+    });
+    const waitingLot = await createLot(c.prisma, auction.id, {
+      status: LotStatus.AVAILABLE,
+    });
+    const token = await login(c, house.email);
+
+    await request(c.httpServer)
+      .patch(`/lots/${waitingLot.id}/stage`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: LotStatus.IN_AUCTION })
+      .expect(400);
+
+    expect(
+      await c.prisma.lot.count({
+        where: { auctionId: auction.id, status: LotStatus.IN_AUCTION },
+      }),
+    ).toBe(1);
   });
 
   it('saves valid lot images and rejects malformed image data', async () => {

@@ -48,7 +48,7 @@ testes da rota afetada.
 
 ## RF06-RF10: lances em tempo real e pós-leilão (2026-09-02)
 
-Implementados na branch `feat/rf06-rf10-realtime-sales`.
+Disponíveis na `main`.
 
 - **RF06 – Tempo real:** `CommerceGateway` (Socket.IO autenticado) emite
   `bid:price-updated` (preço anônimo) à sala `auction:<id>:prices` após cada
@@ -58,32 +58,34 @@ Implementados na branch `feat/rf06-rf10-realtime-sales`.
   (retry em `P2034`), mantendo apenas um `WINNING`. Histórico nominal exposto só
   ao escritório dono via `GET /lots/:id/bids` e à sala privada
   `auction:<id>:office` (`bid:office-recorded`). Respostas públicas nunca trazem
-  `bidder`/`bidderId`; `GET /lots` expõe apenas `currentPrice`.
+  `bidder`/`bidderId`; `GET /lots` expõe apenas `currentPrice`. O DTO rejeita
+  valores fora do passo de R$ 5 antes da persistência.
+- **Controle da pista:** `PATCH /lots/:id/stage` é exclusivo do escritório dono,
+  aceita apenas entrada/retirada válidas e impede dois lotes simultâneos em pista
+  no mesmo remate. O `PATCH /lots/:id` genérico não altera mais status nem remate.
 - **RF08 – Confirmação da venda:** `POST /sales` valida escritório dono, lote em
   pista, lance vencedor e ausência de venda; cria a venda `CONFIRMED` e marca o
   lote `SOLD` na mesma transação.
-- **RF09 – Notificação do vencedor:** `emitSaleWon` envia `sale:won` somente à
-  sala privada `user:<buyerId>`; o registro persiste em "Meus arremates".
+- **RF09 – Notificação do vencedor:** `lot:sold` mantém a atualização pública
+  sem identidade; `lot:winner-announced` anuncia nome, lote e valor final somente
+  à sala `auction:<id>:buyers`. `emitSaleWon` envia `sale:won` apenas à sala
+  privada `user:<buyerId>`; o registro persiste em "Meus arremates".
 - **RF10 – Contatos pós-leilão:** `GET /sales` (escritório: comprador+vendedor),
   `GET /sales/me` (comprador: responsável) e `GET /sales/sold`
   (vendedor: comprador). Lote sem consignação usa o escritório como responsável.
 
 ### Privacidade dos eventos (auditado)
 
-- `bid:price-updated` e `lot:sold`: `{ lotId, amount|finalPrice, createdAt|soldAt }`, sem identidade.
+- `bid:price-updated`: `{ lotId, amount, createdAt }`, sem identidade durante os lances.
+- `lot:sold`: `{ lotId, finalPrice, soldAt }`, sem identidade.
+- `lot:winner-announced`: `{ lotId, lotCode, lotTitle, finalPrice, soldAt,
+  winnerName }`, apenas para contas de usuário na sala `auction:<id>:buyers`
+  depois da venda confirmada.
 - `bid:office-recorded`: com `bidder`, apenas para `auction:<id>:office`.
 - `sale:won`: apenas para `user:<buyerId>`.
 
 ### Verificação executada
 
 - `npm test -- --runInBand` → 28 testes unitários OK (commerce, sales, streams).
-- `npm run test:e2e` → 28 testes OK em `auth`, `bidding`, `sales`, `static-pages`.
-- `npm run build` → OK.
-
-### Pontos de atenção
-
-- `test/app.e2e-spec.ts` é o boilerplate `nest new` (`GET / → "Hello World!"`),
-  incompatível com este app e sempre falho; ainda não versionado — remover.
-- `npm run lint` já tinha erros pré-existentes de tipagem de socket em
-  `streams.gateway.ts`, `live.gateway.ts` e `test/support/socket.ts`; o novo
-  código segue os mesmos padrões do existente.
+- `npm run test:e2e` → 73 testes OK nas 11 suítes E2E.
+- `npm run lint` e `npm run build` → OK.

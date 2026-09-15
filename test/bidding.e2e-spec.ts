@@ -104,6 +104,27 @@ describe('bidding (e2e)', () => {
     expect(JSON.stringify(publicLot.body)).not.toContain(secondBuyer.email);
   });
 
+  it('rejects a bid outside the R$ 5 step without storing it', async () => {
+    const auctionHouse = await createAuctionHouse(context.prisma);
+    const auction = await createAuction(context.prisma, auctionHouse.id);
+    const lot = await createLot(context.prisma, auction.id, {
+      status: LotStatus.IN_AUCTION,
+    });
+    const buyer = await createUser(context.prisma);
+    await createBuyerRegistration(context.prisma, buyer.id, auctionHouse.id);
+    const token = await login(context, buyer.email);
+
+    const response = await request(context.httpServer)
+      .post(`/lots/${lot.id}/bids`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ amount: 1002 });
+
+    expect(response.status).toBe(400);
+    expect(await context.prisma.bid.count({ where: { lotId: lot.id } })).toBe(
+      0,
+    );
+  });
+
   it('rejects bids on a lot that is not in auction', async () => {
     const auctionHouse = await createAuctionHouse(context.prisma);
     const auction = await createAuction(context.prisma, auctionHouse.id);

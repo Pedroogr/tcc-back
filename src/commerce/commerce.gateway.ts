@@ -11,6 +11,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import type {
   BidPriceUpdatedPayload,
   LotSoldPayload,
+  LotWinnerAnnouncedPayload,
   OfficeBidPayload,
   SaleWonPayload,
 } from './commerce-events';
@@ -25,7 +26,9 @@ type CommerceActor = {
  *
  * Rooms are role-scoped so privacy is enforced by delivery, not by client
  * filtering:
- * - `auction:<id>:prices` receives only anonymous price/sold updates.
+ * - `auction:<id>:prices` receives anonymous price and sold updates.
+ * - `auction:<id>:buyers` receives the winner's name after a lot is sold and
+ *   is joined only by user accounts watching the auction.
  * - `auction:<id>:office` receives detailed bids and is joined only by the
  *   auction's owner office.
  * - `user:<id>` receives the private win notification for a single buyer.
@@ -70,10 +73,9 @@ export class CommerceGateway {
 
       await client.join(this.priceRoom(auctionId));
 
-      if (
-        actor.type === 'AUCTION_HOUSE' &&
-        actor.id === auction.auctionHouseId
-      ) {
+      if (actor.type === 'USER') {
+        await client.join(this.buyerRoom(auctionId));
+      } else if (actor.id === auction.auctionHouseId) {
         await client.join(this.officeRoom(auctionId));
       }
     } catch (error) {
@@ -104,8 +106,17 @@ export class CommerceGateway {
     this.server.to(this.officeRoom(auctionId)).emit('bid:office-recorded', bid);
   }
 
-  emitLotSold(auctionId: string, payload: LotSoldPayload) {
-    this.server.to(this.priceRoom(auctionId)).emit('lot:sold', payload);
+  emitLotSold(auctionId: string, payload: LotWinnerAnnouncedPayload) {
+    const soldPayload: LotSoldPayload = {
+      lotId: payload.lotId,
+      finalPrice: payload.finalPrice,
+      soldAt: payload.soldAt,
+    };
+
+    this.server.to(this.priceRoom(auctionId)).emit('lot:sold', soldPayload);
+    this.server
+      .to(this.buyerRoom(auctionId))
+      .emit('lot:winner-announced', payload);
   }
 
   emitSaleWon(userId: string, payload: SaleWonPayload) {
@@ -185,6 +196,10 @@ export class CommerceGateway {
 
   private officeRoom(auctionId: string) {
     return `auction:${auctionId}:office`;
+  }
+
+  private buyerRoom(auctionId: string) {
+    return `auction:${auctionId}:buyers`;
   }
 
   private userRoom(userId: string) {

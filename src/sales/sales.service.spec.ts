@@ -103,8 +103,9 @@ function buildContext(
 }
 
 describe('SalesService.create', () => {
-  it('records the winning bid as a sale, marks the lot sold and notifies only the winner', async () => {
-    const { service, tx, commerceGateway, winningBid } = buildContext();
+  it('announces the winner when recording the winning bid as a sale', async () => {
+    const { service, tx, commerceGateway, winningBid, createdSale } =
+      buildContext();
 
     const sale = await service.create(
       { lotId: 'lot-1', notes: 'Frete por conta do comprador' },
@@ -124,6 +125,14 @@ describe('SalesService.create', () => {
     expect(tx.lot.update).toHaveBeenCalledWith({
       where: { id: 'lot-1' },
       data: { status: LotStatus.SOLD },
+    });
+    expect(commerceGateway.emitLotSold).toHaveBeenCalledWith('auction-1', {
+      lotId: 'lot-1',
+      lotCode: 'L-01',
+      lotTitle: 'Lote Premium',
+      finalPrice: '1100',
+      soldAt: createdSale.soldAt,
+      winnerName: 'Comprador Vencedor',
     });
     expect(commerceGateway.emitLotSold).toHaveBeenCalledTimes(1);
     expect(commerceGateway.emitSaleWon).toHaveBeenCalledWith(
