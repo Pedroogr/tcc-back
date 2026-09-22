@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: cattle_auction_postgres
+    container_name: tcc-back
     restart: always
     environment:
       POSTGRES_USER: postgres
