@@ -13,6 +13,7 @@ import { StreamsModule } from './streams/streams.module';
 import { AdminModule } from './admin/admin.module';
 import { CommerceModule } from './commerce/commerce.module';
 import { SalesModule } from './sales/sales.module';
+import { OperatorModule } from './operator/operator.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SalesModule } from './sales/sales.module';
     AdminModule,
     CommerceModule,
     SalesModule,
+    OperatorModule,
   ],
 })
 export class AppModule {}
