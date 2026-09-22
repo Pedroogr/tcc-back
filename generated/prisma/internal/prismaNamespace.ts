@@ -396,6 +396,7 @@ export const ModelName = {
   LotMedia: 'LotMedia',
   BuyerRegistration: 'BuyerRegistration',
   Bid: 'Bid',
+  OperatorAccess: 'OperatorAccess',
   Stream: 'Stream',
   Sale: 'Sale'
 } as const
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "buyerProfile" | "sellerProfile" | "auctionHouse" | "officeInvite" | "auction" | "auctionSettings" | "consignment" | "lot" | "lotMedia" | "buyerRegistration" | "bid" | "stream" | "sale"
+    modelProps: "user" | "buyerProfile" | "sellerProfile" | "auctionHouse" | "officeInvite" | "auction" | "auctionSettings" | "consignment" | "lot" | "lotMedia" | "buyerRegistration" | "bid" | "operatorAccess" | "stream" | "sale"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1305,6 +1306,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OperatorAccess: {
+      payload: Prisma.$OperatorAccessPayload<ExtArgs>
+      fields: Prisma.OperatorAccessFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperatorAccessFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperatorAccessFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>
+        }
+        findFirst: {
+          args: Prisma.OperatorAccessFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperatorAccessFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>
+        }
+        findMany: {
+          args: Prisma.OperatorAccessFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>[]
+        }
+        create: {
+          args: Prisma.OperatorAccessCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>
+        }
+        createMany: {
+          args: Prisma.OperatorAccessCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperatorAccessCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>[]
+        }
+        delete: {
+          args: Prisma.OperatorAccessDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>
+        }
+        update: {
+          args: Prisma.OperatorAccessUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperatorAccessDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperatorAccessUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperatorAccessUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperatorAccessUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperatorAccessPayload>
+        }
+        aggregate: {
+          args: Prisma.OperatorAccessAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperatorAccess>
+        }
+        groupBy: {
+          args: Prisma.OperatorAccessGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperatorAccessGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperatorAccessCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperatorAccessCountAggregateOutputType> | number
+        }
+      }
+    }
     Stream: {
       payload: Prisma.$StreamPayload<ExtArgs>
       fields: Prisma.StreamFieldRefs
@@ -1676,13 +1751,30 @@ export const BidScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
   status: 'status',
+  source: 'source',
   bidderId: 'bidderId',
   lotId: 'lotId',
+  operatorAccessId: 'operatorAccessId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type BidScalarFieldEnum = (typeof BidScalarFieldEnum)[keyof typeof BidScalarFieldEnum]
+
+
+export const OperatorAccessScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  revokedAt: 'revokedAt',
+  auctionId: 'auctionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperatorAccessScalarFieldEnum = (typeof OperatorAccessScalarFieldEnum)[keyof typeof OperatorAccessScalarFieldEnum]
 
 
 export const StreamScalarFieldEnum = {
@@ -1992,6 +2084,20 @@ export type ListEnumBidStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
+ * Reference to a field of type 'BidSource'
+ */
+export type EnumBidSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BidSource'>
+    
+
+
+/**
+ * Reference to a field of type 'BidSource[]'
+ */
+export type ListEnumBidSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BidSource[]'>
+    
+
+
+/**
  * Reference to a field of type 'StreamStatus'
  */
 export type EnumStreamStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StreamStatus'>
@@ -2140,6 +2246,7 @@ export type GlobalOmitConfig = {
   lotMedia?: Prisma.LotMediaOmit
   buyerRegistration?: Prisma.BuyerRegistrationOmit
   bid?: Prisma.BidOmit
+  operatorAccess?: Prisma.OperatorAccessOmit
   stream?: Prisma.StreamOmit
   sale?: Prisma.SaleOmit
 }

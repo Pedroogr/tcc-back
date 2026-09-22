@@ -234,6 +234,7 @@ export type AuctionWhereInput = {
   settings?: Prisma.XOR<Prisma.AuctionSettingsNullableScalarRelationFilter, Prisma.AuctionSettingsWhereInput> | null
   stream?: Prisma.XOR<Prisma.StreamNullableScalarRelationFilter, Prisma.StreamWhereInput> | null
   lots?: Prisma.LotListRelationFilter
+  operatorAccesses?: Prisma.OperatorAccessListRelationFilter
 }
 
 export type AuctionOrderByWithRelationInput = {
@@ -252,6 +253,7 @@ export type AuctionOrderByWithRelationInput = {
   settings?: Prisma.AuctionSettingsOrderByWithRelationInput
   stream?: Prisma.StreamOrderByWithRelationInput
   lots?: Prisma.LotOrderByRelationAggregateInput
+  operatorAccesses?: Prisma.OperatorAccessOrderByRelationAggregateInput
 }
 
 export type AuctionWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +275,7 @@ export type AuctionWhereUniqueInput = Prisma.AtLeast<{
   settings?: Prisma.XOR<Prisma.AuctionSettingsNullableScalarRelationFilter, Prisma.AuctionSettingsWhereInput> | null
   stream?: Prisma.XOR<Prisma.StreamNullableScalarRelationFilter, Prisma.StreamWhereInput> | null
   lots?: Prisma.LotListRelationFilter
+  operatorAccesses?: Prisma.OperatorAccessListRelationFilter
 }, "id">
 
 export type AuctionOrderByWithAggregationInput = {
@@ -324,6 +327,7 @@ export type AuctionCreateInput = {
   settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
   stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateInput = {
@@ -341,6 +345,7 @@ export type AuctionUncheckedCreateInput = {
   settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
   stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUpdateInput = {
@@ -358,6 +363,7 @@ export type AuctionUpdateInput = {
   settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
   stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateInput = {
@@ -375,6 +381,7 @@ export type AuctionUncheckedUpdateInput = {
   settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
   stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionCreateManyInput = {
@@ -556,6 +563,20 @@ export type AuctionUpdateOneWithoutLotsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionUpdateToOneWithWhereWithoutLotsInput, Prisma.AuctionUpdateWithoutLotsInput>, Prisma.AuctionUncheckedUpdateWithoutLotsInput>
 }
 
+export type AuctionCreateNestedOneWithoutOperatorAccessesInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutOperatorAccessesInput, Prisma.AuctionUncheckedCreateWithoutOperatorAccessesInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutOperatorAccessesInput
+  connect?: Prisma.AuctionWhereUniqueInput
+}
+
+export type AuctionUpdateOneRequiredWithoutOperatorAccessesNestedInput = {
+  create?: Prisma.XOR<Prisma.AuctionCreateWithoutOperatorAccessesInput, Prisma.AuctionUncheckedCreateWithoutOperatorAccessesInput>
+  connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutOperatorAccessesInput
+  upsert?: Prisma.AuctionUpsertWithoutOperatorAccessesInput
+  connect?: Prisma.AuctionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AuctionUpdateToOneWithWhereWithoutOperatorAccessesInput, Prisma.AuctionUpdateWithoutOperatorAccessesInput>, Prisma.AuctionUncheckedUpdateWithoutOperatorAccessesInput>
+}
+
 export type AuctionCreateNestedOneWithoutStreamInput = {
   create?: Prisma.XOR<Prisma.AuctionCreateWithoutStreamInput, Prisma.AuctionUncheckedCreateWithoutStreamInput>
   connectOrCreate?: Prisma.AuctionCreateOrConnectWithoutStreamInput
@@ -584,6 +605,7 @@ export type AuctionCreateWithoutAuctionHouseInput = {
   settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
   stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateWithoutAuctionHouseInput = {
@@ -600,6 +622,7 @@ export type AuctionUncheckedCreateWithoutAuctionHouseInput = {
   settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
   stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionCreateOrConnectWithoutAuctionHouseInput = {
@@ -659,6 +682,7 @@ export type AuctionCreateWithoutSettingsInput = {
   auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
   stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateWithoutSettingsInput = {
@@ -675,6 +699,7 @@ export type AuctionUncheckedCreateWithoutSettingsInput = {
   updatedAt?: Date | string
   stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionCreateOrConnectWithoutSettingsInput = {
@@ -707,6 +732,7 @@ export type AuctionUpdateWithoutSettingsInput = {
   auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
   stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateWithoutSettingsInput = {
@@ -723,6 +749,7 @@ export type AuctionUncheckedUpdateWithoutSettingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionCreateWithoutLotsInput = {
@@ -739,6 +766,7 @@ export type AuctionCreateWithoutLotsInput = {
   auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
   settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
   stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateWithoutLotsInput = {
@@ -755,6 +783,7 @@ export type AuctionUncheckedCreateWithoutLotsInput = {
   updatedAt?: Date | string
   settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
   stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionCreateOrConnectWithoutLotsInput = {
@@ -787,6 +816,7 @@ export type AuctionUpdateWithoutLotsInput = {
   auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
   settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
   stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateWithoutLotsInput = {
@@ -803,6 +833,91 @@ export type AuctionUncheckedUpdateWithoutLotsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
   stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionCreateWithoutOperatorAccessesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
+  settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionUncheckedCreateWithoutOperatorAccessesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  thumbnailUrl?: string | null
+  scheduledAt?: Date | string | null
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  status?: $Enums.AuctionStatus
+  auctionHouseId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
+  stream?: Prisma.StreamUncheckedCreateNestedOneWithoutAuctionInput
+  lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+}
+
+export type AuctionCreateOrConnectWithoutOperatorAccessesInput = {
+  where: Prisma.AuctionWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutOperatorAccessesInput, Prisma.AuctionUncheckedCreateWithoutOperatorAccessesInput>
+}
+
+export type AuctionUpsertWithoutOperatorAccessesInput = {
+  update: Prisma.XOR<Prisma.AuctionUpdateWithoutOperatorAccessesInput, Prisma.AuctionUncheckedUpdateWithoutOperatorAccessesInput>
+  create: Prisma.XOR<Prisma.AuctionCreateWithoutOperatorAccessesInput, Prisma.AuctionUncheckedCreateWithoutOperatorAccessesInput>
+  where?: Prisma.AuctionWhereInput
+}
+
+export type AuctionUpdateToOneWithWhereWithoutOperatorAccessesInput = {
+  where?: Prisma.AuctionWhereInput
+  data: Prisma.XOR<Prisma.AuctionUpdateWithoutOperatorAccessesInput, Prisma.AuctionUncheckedUpdateWithoutOperatorAccessesInput>
+}
+
+export type AuctionUpdateWithoutOperatorAccessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
+  settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+}
+
+export type AuctionUncheckedUpdateWithoutOperatorAccessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAuctionStatusFieldUpdateOperationsInput | $Enums.AuctionStatus
+  auctionHouseId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
+  stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
+  lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionCreateWithoutStreamInput = {
@@ -819,6 +934,7 @@ export type AuctionCreateWithoutStreamInput = {
   auctionHouse: Prisma.AuctionHouseCreateNestedOneWithoutAuctionsInput
   settings?: Prisma.AuctionSettingsCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionUncheckedCreateWithoutStreamInput = {
@@ -835,6 +951,7 @@ export type AuctionUncheckedCreateWithoutStreamInput = {
   updatedAt?: Date | string
   settings?: Prisma.AuctionSettingsUncheckedCreateNestedOneWithoutAuctionInput
   lots?: Prisma.LotUncheckedCreateNestedManyWithoutAuctionInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedCreateNestedManyWithoutAuctionInput
 }
 
 export type AuctionCreateOrConnectWithoutStreamInput = {
@@ -867,6 +984,7 @@ export type AuctionUpdateWithoutStreamInput = {
   auctionHouse?: Prisma.AuctionHouseUpdateOneRequiredWithoutAuctionsNestedInput
   settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateWithoutStreamInput = {
@@ -883,6 +1001,7 @@ export type AuctionUncheckedUpdateWithoutStreamInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionCreateManyAuctionHouseInput = {
@@ -912,6 +1031,7 @@ export type AuctionUpdateWithoutAuctionHouseInput = {
   settings?: Prisma.AuctionSettingsUpdateOneWithoutAuctionNestedInput
   stream?: Prisma.StreamUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateWithoutAuctionHouseInput = {
@@ -928,6 +1048,7 @@ export type AuctionUncheckedUpdateWithoutAuctionHouseInput = {
   settings?: Prisma.AuctionSettingsUncheckedUpdateOneWithoutAuctionNestedInput
   stream?: Prisma.StreamUncheckedUpdateOneWithoutAuctionNestedInput
   lots?: Prisma.LotUncheckedUpdateManyWithoutAuctionNestedInput
+  operatorAccesses?: Prisma.OperatorAccessUncheckedUpdateManyWithoutAuctionNestedInput
 }
 
 export type AuctionUncheckedUpdateManyWithoutAuctionHouseInput = {
@@ -950,10 +1071,12 @@ export type AuctionUncheckedUpdateManyWithoutAuctionHouseInput = {
 
 export type AuctionCountOutputType = {
   lots: number
+  operatorAccesses: number
 }
 
 export type AuctionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lots?: boolean | AuctionCountOutputTypeCountLotsArgs
+  operatorAccesses?: boolean | AuctionCountOutputTypeCountOperatorAccessesArgs
 }
 
 /**
@@ -973,6 +1096,13 @@ export type AuctionCountOutputTypeCountLotsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.LotWhereInput
 }
 
+/**
+ * AuctionCountOutputType without action
+ */
+export type AuctionCountOutputTypeCountOperatorAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OperatorAccessWhereInput
+}
+
 
 export type AuctionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -990,6 +1120,7 @@ export type AuctionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   settings?: boolean | Prisma.Auction$settingsArgs<ExtArgs>
   stream?: boolean | Prisma.Auction$streamArgs<ExtArgs>
   lots?: boolean | Prisma.Auction$lotsArgs<ExtArgs>
+  operatorAccesses?: boolean | Prisma.Auction$operatorAccessesArgs<ExtArgs>
   _count?: boolean | Prisma.AuctionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["auction"]>
 
@@ -1043,6 +1174,7 @@ export type AuctionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   settings?: boolean | Prisma.Auction$settingsArgs<ExtArgs>
   stream?: boolean | Prisma.Auction$streamArgs<ExtArgs>
   lots?: boolean | Prisma.Auction$lotsArgs<ExtArgs>
+  operatorAccesses?: boolean | Prisma.Auction$operatorAccessesArgs<ExtArgs>
   _count?: boolean | Prisma.AuctionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AuctionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1059,6 +1191,7 @@ export type $AuctionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     settings: Prisma.$AuctionSettingsPayload<ExtArgs> | null
     stream: Prisma.$StreamPayload<ExtArgs> | null
     lots: Prisma.$LotPayload<ExtArgs>[]
+    operatorAccesses: Prisma.$OperatorAccessPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1470,6 +1603,7 @@ export interface Prisma__AuctionClient<T, Null = never, ExtArgs extends runtime.
   settings<T extends Prisma.Auction$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$settingsArgs<ExtArgs>>): Prisma.Prisma__AuctionSettingsClient<runtime.Types.Result.GetResult<Prisma.$AuctionSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   stream<T extends Prisma.Auction$streamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$streamArgs<ExtArgs>>): Prisma.Prisma__StreamClient<runtime.Types.Result.GetResult<Prisma.$StreamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   lots<T extends Prisma.Auction$lotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$lotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  operatorAccesses<T extends Prisma.Auction$operatorAccessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Auction$operatorAccessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperatorAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1970,6 +2104,30 @@ export type Auction$lotsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.LotScalarFieldEnum | Prisma.LotScalarFieldEnum[]
+}
+
+/**
+ * Auction.operatorAccesses
+ */
+export type Auction$operatorAccessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperatorAccess
+   */
+  select?: Prisma.OperatorAccessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperatorAccess
+   */
+  omit?: Prisma.OperatorAccessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperatorAccessInclude<ExtArgs> | null
+  where?: Prisma.OperatorAccessWhereInput
+  orderBy?: Prisma.OperatorAccessOrderByWithRelationInput | Prisma.OperatorAccessOrderByWithRelationInput[]
+  cursor?: Prisma.OperatorAccessWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OperatorAccessScalarFieldEnum | Prisma.OperatorAccessScalarFieldEnum[]
 }
 
 /**

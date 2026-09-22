@@ -11,6 +11,7 @@ const e2eTables = [
   'SellerProfile',
   'AuctionSettings',
   'Stream',
+  'OperatorAccess',
   'Auction',
   'OfficeInvite',
   'AuctionHouse',

@@ -89,6 +89,8 @@ describe('bidding (e2e)', () => {
     );
     expect(secondResponse.body).not.toHaveProperty('bidderId');
     expect(secondResponse.body).not.toHaveProperty('bidder');
+    expect(secondResponse.body).not.toHaveProperty('operatorAccessId');
+    expect(secondResponse.body).not.toHaveProperty('source');
 
     const stored = await context.prisma.bid.findMany({
       where: { lotId: lot.id },
@@ -96,6 +98,11 @@ describe('bidding (e2e)', () => {
     });
     expect(stored).toHaveLength(2);
     expect(stored.map((bid) => bid.status)).toEqual(['OUTBID', 'WINNING']);
+    expect(stored).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ source: 'ONLINE', operatorAccessId: null }),
+      ]),
+    );
 
     const publicLot = await request(context.httpServer).get(`/lots/${lot.id}`);
     expect(publicLot.body.currentPrice).toBe('1100');
@@ -160,6 +167,28 @@ describe('bidding (e2e)', () => {
     expect(response.status).toBe(403);
   });
 
+  it('rejects an approved legacy buyer whose IE is missing', async () => {
+    const auctionHouse = await createAuctionHouse(context.prisma);
+    const auction = await createAuction(context.prisma, auctionHouse.id);
+    const lot = await createLot(context.prisma, auction.id, {
+      status: LotStatus.IN_AUCTION,
+    });
+    const buyer = (await createBuyer(context.prisma, { ie: null, ieUf: null }))
+      .user;
+    await createBuyerRegistration(context.prisma, buyer.id, auctionHouse.id);
+    const token = await login(context, buyer.email);
+
+    const response = await request(context.httpServer)
+      .post(`/lots/${lot.id}/bids`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ amount: 1000 });
+
+    expect(response.status).toBe(403);
+    expect(await context.prisma.bid.count({ where: { lotId: lot.id } })).toBe(
+      0,
+    );
+  });
+
   it('hides the bid history from buyers but shows it to the owner office', async () => {
     const auctionHouse = await createAuctionHouse(context.prisma);
     const auction = await createAuction(context.prisma, auctionHouse.id);
@@ -213,11 +242,13 @@ describe('bidding (e2e)', () => {
         expect.objectContaining({
           amount: '1100',
           status: 'WINNING',
+          source: 'ONLINE',
           bidder: { id: secondBuyer.id, name: 'Comprador B' },
         }),
         expect.objectContaining({
           amount: '1000',
           status: 'OUTBID',
+          source: 'ONLINE',
           bidder: { id: firstBuyer.id, name: 'Comprador A' },
         }),
       ]),

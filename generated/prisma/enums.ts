@@ -109,6 +109,14 @@ export const BidStatus = {
 export type BidStatus = (typeof BidStatus)[keyof typeof BidStatus]
 
 
+export const BidSource = {
+  ONLINE: 'ONLINE',
+  ON_SITE: 'ON_SITE'
+} as const
+
+export type BidSource = (typeof BidSource)[keyof typeof BidSource]
+
+
 export const StreamStatus = {
   WAITING: 'WAITING',
   LIVE: 'LIVE',

@@ -78,6 +78,11 @@ export type BuyerRegistration = Prisma.BuyerRegistrationModel
  */
 export type Bid = Prisma.BidModel
 /**
+ * Model OperatorAccess
+ * 
+ */
+export type OperatorAccess = Prisma.OperatorAccessModel
+/**
  * Model Stream
  * 
  */

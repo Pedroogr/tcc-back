@@ -141,6 +141,7 @@ describe('CommerceGateway', () => {
       lotId: 'lot-1',
       amount: '1100',
       createdAt,
+      source: 'ONLINE',
       bidder: { id: 'buyer-1', name: 'Comprador Sigiloso' },
     });
 
@@ -155,6 +156,7 @@ describe('CommerceGateway', () => {
         lotId: 'lot-1',
         amount: '1100',
         createdAt,
+        source: 'ONLINE',
         bidder: { id: 'buyer-1', name: 'Comprador Sigiloso' },
       },
     );

@@ -6,11 +6,14 @@
 // - Only the owner office receives `OfficeBidPayload`, which carries the bidder.
 // - Only the winning buyer receives `SaleWonPayload`.
 
+import type { BidSource } from '../../generated/prisma/enums';
+
 export type OfficeBidPayload = {
   bidId: string;
   lotId: string;
   amount: string;
   createdAt: Date;
+  source: BidSource;
   bidder: { id: string; name: string };
 };
 

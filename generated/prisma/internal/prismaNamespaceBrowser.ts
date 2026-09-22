@@ -63,6 +63,7 @@ export const ModelName = {
   LotMedia: 'LotMedia',
   BuyerRegistration: 'BuyerRegistration',
   Bid: 'Bid',
+  OperatorAccess: 'OperatorAccess',
   Stream: 'Stream',
   Sale: 'Sale'
 } as const
@@ -267,13 +268,30 @@ export const BidScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
   status: 'status',
+  source: 'source',
   bidderId: 'bidderId',
   lotId: 'lotId',
+  operatorAccessId: 'operatorAccessId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type BidScalarFieldEnum = (typeof BidScalarFieldEnum)[keyof typeof BidScalarFieldEnum]
+
+
+export const OperatorAccessScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  revokedAt: 'revokedAt',
+  auctionId: 'auctionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperatorAccessScalarFieldEnum = (typeof OperatorAccessScalarFieldEnum)[keyof typeof OperatorAccessScalarFieldEnum]
 
 
 export const StreamScalarFieldEnum = {

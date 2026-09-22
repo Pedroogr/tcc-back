@@ -9,26 +9,26 @@ import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { Prisma } from '../../generated/prisma/client';
 import {
+  BidSource,
   BidStatus,
-  BuyerRegistrationStatus,
   LotStatus,
   MediaType,
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
-import { CommerceGateway } from '../commerce/commerce.gateway';
 import { PrismaService } from '../prisma/prisma.service';
+import { BidsService } from './bids.service';
 import { CreateBidDto } from './dto/create-bid.dto';
 import { CreateLotDto } from './dto/create-lot.dto';
 import { SetLotStageDto } from './dto/set-lot-stage.dto';
 import { UpdateLotDto } from './dto/update-lot.dto';
 
-const MAX_BID_TRANSACTION_ATTEMPTS = 3;
+const MAX_TRANSACTION_ATTEMPTS = 3;
 
 @Injectable()
 export class LotsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly commerceGateway: CommerceGateway,
+    private readonly bidsService: BidsService,
   ) {}
 
   async create(data: CreateLotDto, actor: AuthenticatedActor) {
@@ -118,11 +118,7 @@ export class LotsService {
       );
     }
 
-    for (
-      let attempt = 1;
-      attempt <= MAX_BID_TRANSACTION_ATTEMPTS;
-      attempt += 1
-    ) {
+    for (let attempt = 1; attempt <= MAX_TRANSACTION_ATTEMPTS; attempt += 1) {
       try {
         return await this.prisma.$transaction(
           async (tx) => {
@@ -203,7 +199,7 @@ export class LotsService {
       } catch (error) {
         if (
           this.isSerializationFailure(error) &&
-          attempt < MAX_BID_TRANSACTION_ATTEMPTS
+          attempt < MAX_TRANSACTION_ATTEMPTS
         ) {
           continue;
         }
@@ -232,78 +228,12 @@ export class LotsService {
       );
     }
 
-    const lot = await this.prisma.lot.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        status: true,
-        initialPrice: true,
-        auctionId: true,
-        auction: {
-          select: {
-            auctionHouseId: true,
-            id: true,
-            settings: {
-              select: {
-                minBidIncrement: true,
-              },
-            },
-          },
-        },
-      },
+    return this.bidsService.place({
+      source: BidSource.ONLINE,
+      lotId: id,
+      bidderId: actor.user.id,
+      amount: data.amount,
     });
-
-    if (!lot) {
-      throw new NotFoundException('Lote nao encontrado');
-    }
-
-    const auctionId = lot.auctionId;
-
-    if (!auctionId || !lot.auction) {
-      throw new ForbiddenException('Lote nao esta vinculado a um remate');
-    }
-
-    if (lot.status !== LotStatus.IN_AUCTION) {
-      throw new ForbiddenException('Lote nao esta em pista para lances');
-    }
-
-    const registration = await this.prisma.buyerRegistration.findUnique({
-      where: {
-        buyerId_auctionHouseId: {
-          buyerId: actor.user.id,
-          auctionHouseId: lot.auction.auctionHouseId,
-        },
-      },
-      select: { status: true },
-    });
-
-    if (registration?.status !== BuyerRegistrationStatus.APPROVED) {
-      throw new ForbiddenException(
-        'Usuario precisa estar aprovado pelo escritorio deste remate para realizar lances',
-      );
-    }
-
-    const created = await this.persistBid(id, actor.user.id, data, {
-      initialPrice: lot.initialPrice,
-      minBidIncrement:
-        lot.auction.settings?.minBidIncrement ?? new Prisma.Decimal(0),
-    });
-
-    this.commerceGateway.emitBidRecorded(auctionId, {
-      bidId: created.id,
-      lotId: created.lotId,
-      amount: created.amount.toString(),
-      createdAt: created.createdAt,
-      bidder: created.bidder,
-    });
-
-    return {
-      id: created.id,
-      lotId: created.lotId,
-      amount: created.amount,
-      status: created.status,
-      createdAt: created.createdAt,
-    };
   }
 
   async findBidHistory(id: string, actor: AuthenticatedActor) {
@@ -343,93 +273,11 @@ export class LotsService {
         lotId: true,
         amount: true,
         status: true,
+        source: true,
         createdAt: true,
         bidder: { select: { id: true, name: true } },
       },
     });
-  }
-
-  private async persistBid(
-    lotId: string,
-    bidderId: string,
-    data: CreateBidDto,
-    pricing: {
-      initialPrice: Prisma.Decimal | null;
-      minBidIncrement: Prisma.Decimal;
-    },
-  ) {
-    for (
-      let attempt = 1;
-      attempt <= MAX_BID_TRANSACTION_ATTEMPTS;
-      attempt += 1
-    ) {
-      try {
-        return await this.prisma.$transaction(
-          async (tx) => {
-            const currentWinningBid = await tx.bid.findFirst({
-              where: { lotId, status: BidStatus.WINNING },
-              orderBy: { amount: 'desc' },
-            });
-
-            const minimumAmount = currentWinningBid
-              ? currentWinningBid.amount.plus(pricing.minBidIncrement)
-              : (pricing.initialPrice ?? new Prisma.Decimal(0));
-            const amount = new Prisma.Decimal(data.amount);
-
-            if (amount.lt(minimumAmount)) {
-              throw new BadRequestException(
-                `Lance minimo para este lote e ${minimumAmount.toString()}`,
-              );
-            }
-
-            await tx.bid.updateMany({
-              where: { lotId, status: BidStatus.WINNING },
-              data: { status: BidStatus.OUTBID },
-            });
-
-            return tx.bid.create({
-              data: {
-                amount,
-                status: BidStatus.WINNING,
-                bidder: { connect: { id: bidderId } },
-                lot: { connect: { id: lotId } },
-              },
-              select: {
-                id: true,
-                lotId: true,
-                amount: true,
-                status: true,
-                createdAt: true,
-                bidder: { select: { id: true, name: true } },
-              },
-            });
-          },
-          { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-        );
-      } catch (error) {
-        if (
-          this.isSerializationFailure(error) &&
-          attempt < MAX_BID_TRANSACTION_ATTEMPTS
-        ) {
-          continue;
-        }
-
-        throw error;
-      }
-    }
-
-    throw new BadRequestException(
-      'Nao foi possivel registrar o lance. Tente novamente.',
-    );
-  }
-
-  private isSerializationFailure(error: unknown) {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      (error as { code?: string }).code === 'P2034'
-    );
   }
 
   private toLotCreateData(data: CreateLotDto): Prisma.LotCreateInput {
@@ -489,6 +337,15 @@ export class LotsService {
         select: { amount: true },
       },
     } satisfies Prisma.LotInclude;
+  }
+
+  private isSerializationFailure(error: unknown) {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      (error as { code?: string }).code === 'P2034'
+    );
   }
 
   // Public projection: derives an anonymous `currentPrice` from the winning bid

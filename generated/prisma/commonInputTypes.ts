@@ -477,6 +477,13 @@ export type EnumBidStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumBidStatusFilter<$PrismaModel> | $Enums.BidStatus
 }
 
+export type EnumBidSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.BidSource | Prisma.EnumBidSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBidSourceFilter<$PrismaModel> | $Enums.BidSource
+}
+
 export type EnumBidStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.BidStatus | Prisma.EnumBidStatusFieldRefInput<$PrismaModel>
   in?: $Enums.BidStatus[] | Prisma.ListEnumBidStatusFieldRefInput<$PrismaModel>
@@ -485,6 +492,16 @@ export type EnumBidStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumBidStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumBidStatusFilter<$PrismaModel>
+}
+
+export type EnumBidSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BidSource | Prisma.EnumBidSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBidSourceWithAggregatesFilter<$PrismaModel> | $Enums.BidSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBidSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBidSourceFilter<$PrismaModel>
 }
 
 export type EnumStreamStatusFilter<$PrismaModel = never> = {
@@ -986,6 +1003,13 @@ export type NestedEnumBidStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumBidStatusFilter<$PrismaModel> | $Enums.BidStatus
 }
 
+export type NestedEnumBidSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.BidSource | Prisma.EnumBidSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBidSourceFilter<$PrismaModel> | $Enums.BidSource
+}
+
 export type NestedEnumBidStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.BidStatus | Prisma.EnumBidStatusFieldRefInput<$PrismaModel>
   in?: $Enums.BidStatus[] | Prisma.ListEnumBidStatusFieldRefInput<$PrismaModel>
@@ -994,6 +1018,16 @@ export type NestedEnumBidStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumBidStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumBidStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumBidSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BidSource | Prisma.EnumBidSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BidSource[] | Prisma.ListEnumBidSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBidSourceWithAggregatesFilter<$PrismaModel> | $Enums.BidSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBidSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBidSourceFilter<$PrismaModel>
 }
 
 export type NestedEnumStreamStatusFilter<$PrismaModel = never> = {
