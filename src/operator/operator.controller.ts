@@ -60,7 +60,7 @@ export class OperatorController {
   @UseGuards(OperatorAuthGuard)
   @Get('session')
   session(@Req() request: OperatorRequest) {
-    return request.operatorActor;
+    return this.operatorService.getSession(request.operatorActor);
   }
 
   @UseGuards(OperatorAuthGuard)

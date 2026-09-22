@@ -247,11 +247,19 @@ export class BidsService {
   }
 
   private isSerializationFailure(error: unknown) {
+    if (typeof error !== 'object' || error === null) {
+      return false;
+    }
+
+    const transactionError = error as {
+      code?: string;
+      cause?: { kind?: string; originalCode?: string };
+    };
+
     return (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      (error as { code?: string }).code === 'P2034'
+      transactionError.code === 'P2034' ||
+      transactionError.cause?.kind === 'TransactionWriteConflict' ||
+      transactionError.cause?.originalCode === '40001'
     );
   }
 }

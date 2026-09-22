@@ -165,6 +165,17 @@ describe('operator bidding E2E', () => {
     const officeToken = await loginOffice(context, house.email);
     const operator = await activateOperator(context, officeToken, auction.id);
 
+    const session = await request(context.httpServer)
+      .get('/operator/session')
+      .set('Authorization', `Bearer ${operator.token}`);
+    expect(bodyOf(session).currentLot).toMatchObject({
+      id: lot.id,
+      code: lot.code,
+      status: 'IN_AUCTION',
+      currentPrice: '1000',
+      nextMinimumBid: '1100',
+    });
+
     const placed = await request(context.httpServer)
       .post('/operator/bids')
       .set('Authorization', `Bearer ${operator.token}`)

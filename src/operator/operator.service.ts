@@ -6,10 +6,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '../../generated/prisma/client';
 import {
   AuctionStatus,
   BidSource,
+  BidStatus,
   BuyerRegistrationStatus,
+  LotStatus,
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { BidsService } from '../lots/bids.service';
@@ -244,6 +247,54 @@ export class OperatorService {
       operatorAccessId: actor.operatorAccess.id,
       amount: data.amount,
     });
+  }
+
+  async getSession(actor: OperatorSessionActor) {
+    const currentLot = await this.prisma.lot.findFirst({
+      where: {
+        auctionId: actor.operatorAccess.auctionId,
+        status: LotStatus.IN_AUCTION,
+      },
+      select: {
+        id: true,
+        code: true,
+        title: true,
+        status: true,
+        initialPrice: true,
+        bids: {
+          where: { status: BidStatus.WINNING },
+          orderBy: { amount: 'desc' },
+          take: 1,
+          select: { amount: true },
+        },
+        auction: {
+          select: {
+            settings: { select: { minBidIncrement: true } },
+          },
+        },
+      },
+    });
+    const currentPrice = currentLot
+      ? (currentLot.bids[0]?.amount ?? currentLot.initialPrice)
+      : null;
+    const increment =
+      currentLot?.auction?.settings?.minBidIncrement ?? new Prisma.Decimal(0);
+
+    return {
+      ...actor,
+      currentLot: currentLot
+        ? {
+            id: currentLot.id,
+            code: currentLot.code,
+            title: currentLot.title,
+            status: currentLot.status,
+            currentPrice: currentPrice?.toString() ?? null,
+            nextMinimumBid: (currentPrice ?? new Prisma.Decimal(0))
+              .plus(increment)
+              .toString(),
+          }
+        : null,
+    };
   }
 
   private officeId(actor: AuthenticatedActor) {
