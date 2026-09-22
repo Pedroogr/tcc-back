@@ -1,10 +1,11 @@
 import { Socket } from 'socket.io-client';
 import request from 'supertest';
-import { AuctionStatus } from '../generated/prisma/enums';
+import { AuctionStatus, LotStatus } from '../generated/prisma/enums';
 import {
   E2E_PASSWORD,
   createAuction,
   createAuctionHouse,
+  createLot,
 } from './support/factories';
 import { resetDatabase } from './support/database';
 import { E2eContext, createE2eApp } from './support/e2e-app';
@@ -15,6 +16,21 @@ async function login(c: E2eContext, email: string) {
     .post('/auth/login')
     .send({ email, password: E2E_PASSWORD });
   return String(response.body.accessToken);
+}
+
+async function activateOperator(
+  c: E2eContext,
+  officeToken: string,
+  auctionId: string,
+) {
+  const created = await request(c.httpServer)
+    .post('/operator/accesses')
+    .set('Authorization', `Bearer ${officeToken}`)
+    .send({ auctionId, label: 'Pista principal' });
+  const activated = await request(c.httpServer)
+    .post('/operator/login')
+    .send({ code: created.body.code });
+  return String(activated.body.accessToken);
 }
 
 describe('WebSocket gateways E2E', () => {
@@ -88,5 +104,55 @@ describe('WebSocket gateways E2E', () => {
     const invalid = waitForEvent<{ message: string }>(socket, 'stream:error');
     socket.emit('stream:broadcaster-join', {});
     expect((await invalid).message).toContain('Remate');
+  });
+
+  it('limits an operator socket to its assigned auction and receives stage changes', async () => {
+    const house = await createAuctionHouse(c.prisma);
+    const auction = await createAuction(c.prisma, house.id, {
+      status: AuctionStatus.LIVE,
+    });
+    const otherAuction = await createAuction(c.prisma, house.id, {
+      status: AuctionStatus.LIVE,
+    });
+    const lot = await createLot(c.prisma, auction.id, {
+      code: '2',
+      title: 'Lote 2',
+      status: LotStatus.AVAILABLE,
+      initialPrice: 1000,
+    });
+    await c.prisma.auctionSettings.create({
+      data: { auctionId: auction.id, minBidIncrement: 100 },
+    });
+    const officeToken = await login(c, house.email);
+    const operatorToken = await activateOperator(c, officeToken, auction.id);
+    const operatorSocket = await connectSocket(c.baseUrl, operatorToken);
+    sockets.push(operatorSocket);
+
+    const denied = waitForEvent<{ message: string }>(
+      operatorSocket,
+      'commerce:error',
+    );
+    operatorSocket.emit('auction:join', { auctionId: otherAuction.id });
+    expect((await denied).message).toContain('remate');
+
+    operatorSocket.emit('auction:join', { auctionId: auction.id });
+    const stageChanged = waitForEvent<{
+      auctionId: string;
+      lot: { id: string; code: string; nextMinimumBid: string };
+    }>(operatorSocket, 'lot:stage-changed');
+    await request(c.httpServer)
+      .patch(`/lots/${lot.id}/stage`)
+      .set('Authorization', `Bearer ${officeToken}`)
+      .send({ status: LotStatus.IN_AUCTION })
+      .expect(200);
+
+    expect(await stageChanged).toEqual({
+      auctionId: auction.id,
+      lot: expect.objectContaining({
+        id: lot.id,
+        code: '2',
+        nextMinimumBid: '1100',
+      }),
+    });
   });
 });

@@ -23,6 +23,18 @@ export type BidPriceUpdatedPayload = {
   createdAt: Date;
 };
 
+export type LotStageChangedPayload = {
+  auctionId: string;
+  lot: {
+    id: string;
+    code: string;
+    title: string;
+    status: string;
+    currentPrice: string | null;
+    nextMinimumBid: string | null;
+  } | null;
+};
+
 export type LotSoldPayload = {
   lotId: string;
   finalPrice: string;

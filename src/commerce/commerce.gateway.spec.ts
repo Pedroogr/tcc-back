@@ -27,6 +27,7 @@ describe('CommerceGateway', () => {
     auctionHouse: { findUnique: jest.Mock };
     user: { findUnique: jest.Mock };
     auction: { findUnique: jest.Mock };
+    operatorAccess: { findUnique: jest.Mock };
   };
   let roomEmitters: Map<string, { emit: jest.Mock }>;
   let server: { to: jest.Mock };
@@ -47,6 +48,7 @@ describe('CommerceGateway', () => {
       auctionHouse: { findUnique: jest.fn() },
       user: { findUnique: jest.fn() },
       auction: { findUnique: jest.fn() },
+      operatorAccess: { findUnique: jest.fn() },
     };
     roomEmitters = new Map();
     server = { to: jest.fn((name: string) => roomEmitter(name)) };
@@ -164,6 +166,28 @@ describe('CommerceGateway', () => {
       .calls[0];
     expect(JSON.stringify(pricePayload)).not.toContain('Comprador Sigiloso');
     expect(pricePayload).not.toHaveProperty('bidder');
+  });
+
+  it('broadcasts the authoritative lot stage without personal data', () => {
+    const payload = {
+      auctionId: 'auction-1',
+      lot: {
+        id: 'lot-1',
+        code: '2',
+        title: 'Lote 2',
+        status: 'IN_AUCTION',
+        currentPrice: '1000',
+        nextMinimumBid: '1100',
+      },
+    };
+
+    gateway.emitLotStageChanged('auction-1', payload);
+
+    expect(roomEmitter('auction:auction-1:prices').emit).toHaveBeenCalledWith(
+      'lot:stage-changed',
+      payload,
+    );
+    expect(JSON.stringify(payload)).not.toMatch(/bidder|email|phone|document/i);
   });
 
   it('keeps the sold event anonymous and announces the winner only to buyers', () => {

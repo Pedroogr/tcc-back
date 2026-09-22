@@ -8,12 +8,14 @@ import {
   E2E_PASSWORD,
   createAuction,
   createAuctionHouse,
+  createBuyer,
   createConsignment,
   createLot,
   createUser,
 } from './support/factories';
 import { resetDatabase } from './support/database';
 import { E2eContext, createE2eApp } from './support/e2e-app';
+import { CommerceGateway } from '../src/commerce/commerce.gateway';
 
 const body = (r: { body: unknown }) => r.body as Record<string, any>;
 async function login(c: E2eContext, email: string) {
@@ -93,8 +95,8 @@ describe('lots E2E', () => {
       status: LotStatus.IN_AUCTION,
       initialPrice: 100,
     });
-    const buyer = await createUser(c.prisma);
-    const token = await login(c, buyer.email);
+    const buyer = await createBuyer(c.prisma);
+    const token = await login(c, buyer.user.email);
     expect(
       (
         await request(c.httpServer)
@@ -105,7 +107,7 @@ describe('lots E2E', () => {
     ).toBe(403);
     await c.prisma.buyerRegistration.create({
       data: {
-        buyerId: buyer.id,
+        buyerId: buyer.userId,
         auctionHouseId: house.id,
         status: BuyerRegistrationStatus.APPROVED,
       },
@@ -206,12 +208,16 @@ describe('lots E2E', () => {
       status: LotStatus.AVAILABLE,
     });
     const token = await login(c, house.email);
+    const emitStage = jest
+      .spyOn(c.app.get(CommerceGateway), 'emitLotStageChanged')
+      .mockImplementation(() => undefined);
 
     await request(c.httpServer)
       .patch(`/lots/${waitingLot.id}/stage`)
       .set('Authorization', `Bearer ${token}`)
       .send({ status: LotStatus.IN_AUCTION })
       .expect(400);
+    expect(emitStage).not.toHaveBeenCalled();
 
     expect(
       await c.prisma.lot.count({

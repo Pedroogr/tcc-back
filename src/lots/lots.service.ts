@@ -16,6 +16,8 @@ import {
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
+import { CommerceGateway } from '../commerce/commerce.gateway';
+import type { LotStageChangedPayload } from '../commerce/commerce-events';
 import { BidsService } from './bids.service';
 import { CreateBidDto } from './dto/create-bid.dto';
 import { CreateLotDto } from './dto/create-lot.dto';
@@ -29,6 +31,7 @@ export class LotsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly bidsService: BidsService,
+    private readonly commerceGateway: CommerceGateway,
   ) {}
 
   async create(data: CreateLotDto, actor: AuthenticatedActor) {
@@ -118,9 +121,17 @@ export class LotsService {
       );
     }
 
+    let committed:
+      | {
+          auctionId: string;
+          response: ReturnType<LotsService['toPublicLot']>;
+          stage: LotStageChangedPayload;
+        }
+      | undefined;
+
     for (let attempt = 1; attempt <= MAX_TRANSACTION_ATTEMPTS; attempt += 1) {
       try {
-        return await this.prisma.$transaction(
+        committed = await this.prisma.$transaction(
           async (tx) => {
             const lot = await tx.lot.findUnique({
               where: { id },
@@ -142,13 +153,14 @@ export class LotsService {
               );
             }
 
-            if (lot.status === data.status) {
-              const unchanged = await tx.lot.findUniqueOrThrow({
-                where: { id },
-                include: this.lotInclude(),
-              });
+            if (!lot.auctionId) {
+              throw new BadRequestException(
+                'Lote nao esta vinculado a um remate',
+              );
+            }
 
-              return this.toPublicLot(unchanged);
+            if (lot.status === data.status) {
+              return this.buildStageResult(tx, id, lot.auctionId);
             }
 
             const canEnterStage =
@@ -186,16 +198,16 @@ export class LotsService {
               }
             }
 
-            const updated = await tx.lot.update({
+            await tx.lot.update({
               where: { id },
               data: { status: data.status },
-              include: this.lotInclude(),
             });
 
-            return this.toPublicLot(updated);
+            return this.buildStageResult(tx, id, lot.auctionId);
           },
           { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
         );
+        break;
       } catch (error) {
         if (
           this.isSerializationFailure(error) &&
@@ -208,9 +220,17 @@ export class LotsService {
       }
     }
 
-    throw new BadRequestException(
-      'Nao foi possivel atualizar a etapa do lote. Tente novamente.',
+    if (!committed) {
+      throw new BadRequestException(
+        'Nao foi possivel atualizar a etapa do lote. Tente novamente.',
+      );
+    }
+
+    this.commerceGateway.emitLotStageChanged(
+      committed.auctionId,
+      committed.stage,
     );
+    return committed.response;
   }
 
   async remove(id: string, actor: AuthenticatedActor) {
@@ -346,6 +366,62 @@ export class LotsService {
       'code' in error &&
       (error as { code?: string }).code === 'P2034'
     );
+  }
+
+  private async buildStageResult(
+    tx: Prisma.TransactionClient,
+    id: string,
+    auctionId: string,
+  ) {
+    const lot = await tx.lot.findUniqueOrThrow({
+      where: { id },
+      include: this.lotInclude(),
+    });
+    const activeLot = await tx.lot.findFirst({
+      where: { auctionId, status: LotStatus.IN_AUCTION },
+      select: {
+        id: true,
+        code: true,
+        title: true,
+        status: true,
+        initialPrice: true,
+        bids: {
+          where: { status: BidStatus.WINNING },
+          orderBy: { amount: 'desc' },
+          take: 1,
+          select: { amount: true },
+        },
+        auction: {
+          select: {
+            settings: { select: { minBidIncrement: true } },
+          },
+        },
+      },
+    });
+
+    const response = this.toPublicLot(lot);
+    const currentPrice = activeLot
+      ? (activeLot.bids[0]?.amount ?? activeLot.initialPrice)
+      : null;
+    const increment =
+      activeLot?.auction?.settings?.minBidIncrement ?? new Prisma.Decimal(0);
+    const stage: LotStageChangedPayload = {
+      auctionId,
+      lot: activeLot
+        ? {
+            id: activeLot.id,
+            code: activeLot.code,
+            title: activeLot.title,
+            status: activeLot.status,
+            currentPrice: currentPrice?.toString() ?? null,
+            nextMinimumBid: (currentPrice ?? new Prisma.Decimal(0))
+              .plus(increment)
+              .toString(),
+          }
+        : null,
+    };
+
+    return { auctionId, response, stage };
   }
 
   // Public projection: derives an anonymous `currentPrice` from the winning bid

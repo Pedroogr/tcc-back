@@ -8,18 +8,24 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuctionStatus } from '../../generated/prisma/enums';
 import type {
   BidPriceUpdatedPayload,
   LotSoldPayload,
   LotWinnerAnnouncedPayload,
+  LotStageChangedPayload,
   OfficeBidPayload,
   SaleWonPayload,
 } from './commerce-events';
 
-type CommerceActor = {
-  type: 'USER' | 'AUCTION_HOUSE';
-  id: string;
-};
+type CommerceActor =
+  | { type: 'USER' | 'AUCTION_HOUSE'; id: string }
+  | { type: 'OPERATOR'; id: string; auctionId: string };
+
+const CLOSED_AUCTION_STATUSES: AuctionStatus[] = [
+  AuctionStatus.FINISHED,
+  AuctionStatus.CANCELED,
+];
 
 /**
  * Authenticated realtime gateway for auction commerce (RF06-RF10).
@@ -71,6 +77,11 @@ export class CommerceGateway {
         return;
       }
 
+      if (actor.type === 'OPERATOR' && actor.auctionId !== auctionId) {
+        this.emitError(client, 'Operador nao autorizado para este remate.');
+        return;
+      }
+
       await client.join(this.priceRoom(auctionId));
 
       if (actor.type === 'USER') {
@@ -106,6 +117,12 @@ export class CommerceGateway {
     this.server.to(this.officeRoom(auctionId)).emit('bid:office-recorded', bid);
   }
 
+  emitLotStageChanged(auctionId: string, payload: LotStageChangedPayload) {
+    this.server
+      .to(this.priceRoom(auctionId))
+      .emit('lot:stage-changed', payload);
+  }
+
   emitLotSold(auctionId: string, payload: LotWinnerAnnouncedPayload) {
     const soldPayload: LotSoldPayload = {
       lotId: payload.lotId,
@@ -132,8 +149,48 @@ export class CommerceGateway {
 
     const payload = await this.jwtService.verifyAsync<{
       sub: string;
-      actorType?: 'USER' | 'AUCTION_HOUSE';
+      actorType?: 'USER' | 'AUCTION_HOUSE' | 'OPERATOR';
+      operatorAccessId?: string;
+      auctionId?: string;
     }>(token);
+
+    if (payload.actorType === 'OPERATOR') {
+      if (
+        payload.sub !== payload.operatorAccessId ||
+        !payload.operatorAccessId ||
+        !payload.auctionId
+      ) {
+        throw new Error('Sessao de operador invalida.');
+      }
+
+      const access = await this.prisma.operatorAccess.findUnique({
+        where: { id: payload.operatorAccessId },
+        select: {
+          id: true,
+          auctionId: true,
+          expiresAt: true,
+          usedAt: true,
+          revokedAt: true,
+          auction: { select: { status: true } },
+        },
+      });
+
+      if (
+        !access?.usedAt ||
+        access.revokedAt ||
+        access.expiresAt <= new Date() ||
+        access.auctionId !== payload.auctionId ||
+        CLOSED_AUCTION_STATUSES.includes(access.auction.status)
+      ) {
+        throw new Error('Sessao de operador invalida.');
+      }
+
+      return {
+        type: 'OPERATOR',
+        id: access.id,
+        auctionId: access.auctionId,
+      };
+    }
 
     if (payload.actorType === 'AUCTION_HOUSE') {
       const auctionHouse = await this.prisma.auctionHouse.findUnique({
