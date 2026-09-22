@@ -19,6 +19,7 @@ import { CreateAuctionDto } from './dto/create-auction.dto';
 import { ReviewBuyerRegistrationDto } from './dto/review-buyer-registration.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
 import type { AuctionThumbnailUpload } from './auctions.controller';
+import { assertBuyerHasIe } from '../users/buyer-profile';
 
 const auctionThumbnailMaxSize = 5 * 1024 * 1024;
 const auctionThumbnailMimeTypes = new Set([
@@ -181,6 +182,8 @@ export class AuctionsService {
       );
     }
 
+    assertBuyerHasIe(actor.user.buyerProfile);
+
     const auction = await this.prisma.auction.findUnique({
       where: { id },
       select: { id: true, auctionHouseId: true },
@@ -264,7 +267,11 @@ export class AuctionsService {
 
     const registration = await this.prisma.buyerRegistration.findUnique({
       where: { id: registrationId },
-      select: { id: true, auctionHouseId: true },
+      select: {
+        id: true,
+        auctionHouseId: true,
+        buyer: { select: { buyerProfile: true } },
+      },
     });
 
     if (
@@ -272,6 +279,10 @@ export class AuctionsService {
       registration.auctionHouseId !== actor.auctionHouse.id
     ) {
       throw new NotFoundException('Solicitacao de comprador nao encontrada');
+    }
+
+    if (data.status === BuyerRegistrationStatus.APPROVED) {
+      assertBuyerHasIe(registration.buyer.buyerProfile);
     }
 
     return this.prisma.buyerRegistration.update({

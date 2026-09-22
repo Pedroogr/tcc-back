@@ -18,6 +18,7 @@ import { normalizeBrazilianPhone, normalizeCnpj } from '../common/br-fields';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBuyerRegistrationDto } from '../auctions/dto/create-buyer-registration.dto';
 import { ReviewBuyerRegistrationDto } from '../auctions/dto/review-buyer-registration.dto';
+import { assertBuyerHasIe } from '../users/buyer-profile';
 import { RegisterAuctionHouseInviteDto } from './dto/register-auction-house-invite.dto';
 
 @Injectable()
@@ -153,6 +154,8 @@ export class AuctionHousesService {
       );
     }
 
+    assertBuyerHasIe(actor.user.buyerProfile);
+
     await this.findOne(auctionHouseId);
 
     const existingRegistration = await this.prisma.buyerRegistration.findUnique(
@@ -241,7 +244,11 @@ export class AuctionHousesService {
 
     const registration = await this.prisma.buyerRegistration.findUnique({
       where: { id: registrationId },
-      select: { id: true, auctionHouseId: true },
+      select: {
+        id: true,
+        auctionHouseId: true,
+        buyer: { select: { buyerProfile: true } },
+      },
     });
 
     if (
@@ -249,6 +256,10 @@ export class AuctionHousesService {
       registration.auctionHouseId !== actor.auctionHouse.id
     ) {
       throw new NotFoundException('Solicitacao de comprador nao encontrada');
+    }
+
+    if (data.status === BuyerRegistrationStatus.APPROVED) {
+      assertBuyerHasIe(registration.buyer.buyerProfile);
     }
 
     return this.prisma.buyerRegistration.update({

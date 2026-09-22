@@ -51,10 +51,19 @@ export async function createAuctionHouse(
   });
 }
 
-export async function createBuyer(prisma: PrismaService) {
-  const user = await createUser(prisma);
+export async function createBuyer(
+  prisma: PrismaService,
+  overrides: Partial<Prisma.BuyerProfileUncheckedCreateInput> = {},
+  userOverrides: Partial<Prisma.UserUncheckedCreateInput> = {},
+) {
+  const user = await createUser(prisma, userOverrides);
   return prisma.buyerProfile.create({
-    data: { userId: user.id },
+    data: {
+      userId: user.id,
+      ie: '224365879',
+      ieUf: 'RS',
+      ...overrides,
+    },
     include: { user: true },
   });
 }

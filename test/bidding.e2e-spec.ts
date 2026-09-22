@@ -4,9 +4,9 @@ import {
   E2E_PASSWORD,
   createAuction,
   createAuctionHouse,
+  createBuyer,
   createBuyerRegistration,
   createLot,
-  createUser,
 } from './support/factories';
 import { resetDatabase } from './support/database';
 import { E2eContext, createE2eApp } from './support/e2e-app';
@@ -48,12 +48,12 @@ describe('bidding (e2e)', () => {
       status: LotStatus.IN_AUCTION,
     });
 
-    const firstBuyer = await createUser(context.prisma, {
-      name: 'Comprador Um',
-    });
-    const secondBuyer = await createUser(context.prisma, {
-      name: 'Comprador Dois',
-    });
+    const firstBuyer = (
+      await createBuyer(context.prisma, {}, { name: 'Comprador Um' })
+    ).user;
+    const secondBuyer = (
+      await createBuyer(context.prisma, {}, { name: 'Comprador Dois' })
+    ).user;
     await createBuyerRegistration(
       context.prisma,
       firstBuyer.id,
@@ -110,7 +110,7 @@ describe('bidding (e2e)', () => {
     const lot = await createLot(context.prisma, auction.id, {
       status: LotStatus.IN_AUCTION,
     });
-    const buyer = await createUser(context.prisma);
+    const buyer = (await createBuyer(context.prisma)).user;
     await createBuyerRegistration(context.prisma, buyer.id, auctionHouse.id);
     const token = await login(context, buyer.email);
 
@@ -131,7 +131,7 @@ describe('bidding (e2e)', () => {
     const lot = await createLot(context.prisma, auction.id, {
       status: LotStatus.AVAILABLE,
     });
-    const buyer = await createUser(context.prisma);
+    const buyer = (await createBuyer(context.prisma)).user;
     await createBuyerRegistration(context.prisma, buyer.id, auctionHouse.id);
     const token = await login(context, buyer.email);
 
@@ -149,7 +149,7 @@ describe('bidding (e2e)', () => {
     const lot = await createLot(context.prisma, auction.id, {
       status: LotStatus.IN_AUCTION,
     });
-    const buyer = await createUser(context.prisma);
+    const buyer = (await createBuyer(context.prisma)).user;
     const token = await login(context, buyer.email);
 
     const response = await request(context.httpServer)
@@ -167,12 +167,12 @@ describe('bidding (e2e)', () => {
       status: LotStatus.IN_AUCTION,
     });
 
-    const firstBuyer = await createUser(context.prisma, {
-      name: 'Comprador A',
-    });
-    const secondBuyer = await createUser(context.prisma, {
-      name: 'Comprador B',
-    });
+    const firstBuyer = (
+      await createBuyer(context.prisma, {}, { name: 'Comprador A' })
+    ).user;
+    const secondBuyer = (
+      await createBuyer(context.prisma, {}, { name: 'Comprador B' })
+    ).user;
     await createBuyerRegistration(
       context.prisma,
       firstBuyer.id,

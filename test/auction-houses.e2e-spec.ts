@@ -7,6 +7,7 @@ import {
 import {
   E2E_PASSWORD,
   createAuctionHouse,
+  createBuyer,
   createUser,
 } from './support/factories';
 import { resetDatabase } from './support/database';
@@ -186,7 +187,8 @@ describe('auction houses E2E', () => {
 
   it('supports buyer registration, idempotency, approval, and blocking', async () => {
     const house = await createAuctionHouse(context.prisma);
-    const user = await createUser(context.prisma);
+    const buyer = await createBuyer(context.prisma);
+    const user = buyer.user;
     const userToken = await login(context, user.email);
     const first = await request(context.httpServer)
       .post(`/auction-houses/${house.id}/buyer-registrations`)
@@ -212,6 +214,10 @@ describe('auction houses E2E', () => {
       .set('Authorization', `Bearer ${houseToken}`);
     expect(listed.status).toBe(200);
     expect(listed.body[0].buyer.id).toBe(user.id);
+    expect(listed.body[0].buyer.buyerProfile).toMatchObject({
+      ie: '224365879',
+      ieUf: 'RS',
+    });
     const approved = await request(context.httpServer)
       .patch(`/auction-houses/me/buyer-registrations/${bodyOf(first).id}`)
       .set('Authorization', `Bearer ${houseToken}`)
@@ -289,5 +295,45 @@ describe('auction houses E2E', () => {
           .send({ status: BuyerRegistrationStatus.REJECTED })
       ).status,
     ).toBe(403);
+  });
+
+  it('rejects office registration and approval when buyer IE is missing', async () => {
+    const house = await createAuctionHouse(context.prisma);
+    const legacyBuyer = await createBuyer(context.prisma, {
+      ie: null,
+      ieUf: null,
+    });
+    const legacyToken = await login(context, legacyBuyer.user.email);
+    const houseToken = await login(context, house.email);
+
+    const requestWithoutIe = await request(context.httpServer)
+      .post(`/auction-houses/${house.id}/buyer-registrations`)
+      .set('Authorization', `Bearer ${legacyToken}`)
+      .send({});
+    expect(requestWithoutIe.status).toBe(400);
+
+    const validBuyer = await createBuyer(context.prisma);
+    const registration = await context.prisma.buyerRegistration.create({
+      data: {
+        buyerId: validBuyer.userId,
+        auctionHouseId: house.id,
+      },
+    });
+    await context.prisma.buyerProfile.update({
+      where: { id: validBuyer.id },
+      data: { ie: null, ieUf: null },
+    });
+
+    const approval = await request(context.httpServer)
+      .patch(`/auction-houses/me/buyer-registrations/${registration.id}`)
+      .set('Authorization', `Bearer ${houseToken}`)
+      .send({ status: BuyerRegistrationStatus.APPROVED });
+    expect(approval.status).toBe(400);
+    expect(
+      await context.prisma.buyerRegistration.findUnique({
+        where: { id: registration.id },
+        select: { approvedAt: true },
+      }),
+    ).toEqual({ approvedAt: null });
   });
 });
