@@ -6,11 +6,19 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuctionStatus } from '../../generated/prisma/enums';
+import {
+  AuctionStatus,
+  BidSource,
+  BuyerRegistrationStatus,
+} from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
+import { BidsService } from '../lots/bids.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOperatorAccessDto } from './dto/create-operator-access.dto';
+import { CreateOperatorBidDto } from './dto/create-operator-bid.dto';
+import { SearchOperatorBuyersDto } from './dto/search-operator-buyers.dto';
 import { generateOperatorCode, hashOperatorCode } from './operator-code';
+import type { OperatorSessionActor } from './operator-auth.guard';
 import { OperatorLoginRateLimiter } from './operator-login-rate-limiter';
 
 const ACCESS_LIFETIME_MS = 24 * 60 * 60 * 1000;
@@ -25,6 +33,7 @@ export class OperatorService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly loginRateLimiter: OperatorLoginRateLimiter,
+    private readonly bidsService: BidsService,
   ) {}
 
   async createAccess(data: CreateOperatorAccessDto, actor: AuthenticatedActor) {
@@ -177,6 +186,64 @@ export class OperatorService {
       }
       throw error;
     }
+  }
+
+  async searchBuyers(
+    actor: OperatorSessionActor,
+    data: SearchOperatorBuyersDto,
+  ) {
+    const query = data.query?.trim() ?? '';
+    const documentQuery = query.replace(/\D/g, '');
+    const auction = await this.prisma.auction.findUniqueOrThrow({
+      where: { id: actor.operatorAccess.auctionId },
+      select: { auctionHouseId: true },
+    });
+    const registrations = await this.prisma.buyerRegistration.findMany({
+      where: {
+        auctionHouseId: auction.auctionHouseId,
+        status: BuyerRegistrationStatus.APPROVED,
+        buyer: {
+          buyerProfile: {
+            is: {
+              ie: { not: '' },
+              ieUf: { not: '' },
+            },
+          },
+          ...(query
+            ? {
+                OR: [
+                  { name: { contains: query, mode: 'insensitive' } },
+                  ...(documentQuery
+                    ? [{ document: { contains: documentQuery } }]
+                    : []),
+                ],
+              }
+            : {}),
+        },
+      },
+      select: {
+        buyer: { select: { id: true, name: true, document: true } },
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 20,
+    });
+
+    return registrations.map(({ buyer }) => ({
+      id: buyer.id,
+      name: buyer.name,
+      documentLast4: buyer.document?.slice(-4) ?? null,
+    }));
+  }
+
+  createBid(actor: OperatorSessionActor, data: CreateOperatorBidDto) {
+    return this.bidsService.place({
+      source: BidSource.ON_SITE,
+      auctionId: actor.operatorAccess.auctionId,
+      lotId: data.expectedLotId,
+      bidderId: data.buyerId,
+      operatorAccessId: actor.operatorAccess.id,
+      amount: data.amount,
+    });
   }
 
   private officeId(actor: AuthenticatedActor) {

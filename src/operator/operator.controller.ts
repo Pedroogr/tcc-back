@@ -13,7 +13,9 @@ import type { Request } from 'express';
 import { ActorJwtAuthGuard } from '../auth/actor-jwt-auth.guard';
 import type { AuthenticatedActorRequest } from '../auth/actor-jwt-auth.guard';
 import { CreateOperatorAccessDto } from './dto/create-operator-access.dto';
+import { CreateOperatorBidDto } from './dto/create-operator-bid.dto';
 import { OperatorLoginDto } from './dto/operator-login.dto';
+import { SearchOperatorBuyersDto } from './dto/search-operator-buyers.dto';
 import { OperatorAuthGuard } from './operator-auth.guard';
 import type { OperatorRequest } from './operator-auth.guard';
 import { OperatorService } from './operator.service';
@@ -59,5 +61,23 @@ export class OperatorController {
   @Get('session')
   session(@Req() request: OperatorRequest) {
     return request.operatorActor;
+  }
+
+  @UseGuards(OperatorAuthGuard)
+  @Get('buyers')
+  searchBuyers(
+    @Req() request: OperatorRequest,
+    @Query() query: SearchOperatorBuyersDto,
+  ) {
+    return this.operatorService.searchBuyers(request.operatorActor, query);
+  }
+
+  @UseGuards(OperatorAuthGuard)
+  @Post('bids')
+  createBid(
+    @Req() request: OperatorRequest,
+    @Body() body: CreateOperatorBidDto,
+  ) {
+    return this.operatorService.createBid(request.operatorActor, body);
   }
 }

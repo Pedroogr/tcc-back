@@ -1,11 +1,13 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
 import {
+  AuctionStatus,
   BidSource,
   BidStatus,
   BuyerRegistrationStatus,
@@ -15,6 +17,10 @@ import { CommerceGateway } from '../commerce/commerce.gateway';
 import { PrismaService } from '../prisma/prisma.service';
 
 const MAX_BID_TRANSACTION_ATTEMPTS = 3;
+const CLOSED_AUCTION_STATUSES: AuctionStatus[] = [
+  AuctionStatus.FINISHED,
+  AuctionStatus.CANCELED,
+];
 
 export type PlaceBidCommand =
   | {
@@ -96,6 +102,44 @@ export class BidsService {
     tx: Prisma.TransactionClient,
     command: PlaceBidCommand,
   ) {
+    if (command.source === BidSource.ON_SITE) {
+      const now = new Date();
+      const access = await tx.operatorAccess.findUnique({
+        where: { id: command.operatorAccessId },
+        select: {
+          auctionId: true,
+          usedAt: true,
+          revokedAt: true,
+          expiresAt: true,
+          auction: { select: { status: true } },
+        },
+      });
+
+      if (
+        !access?.usedAt ||
+        access.revokedAt ||
+        access.expiresAt <= now ||
+        access.auctionId !== command.auctionId ||
+        CLOSED_AUCTION_STATUSES.includes(access.auction.status)
+      ) {
+        throw new ForbiddenException('Acesso de operador invalido');
+      }
+
+      const activeLot = await tx.lot.findFirst({
+        where: {
+          auctionId: command.auctionId,
+          status: LotStatus.IN_AUCTION,
+        },
+        select: { id: true },
+      });
+
+      if (activeLot?.id !== command.lotId) {
+        throw new ConflictException(
+          'O lote em pista mudou. Atualize e tente novamente.',
+        );
+      }
+    }
+
     const lot = await tx.lot.findUnique({
       where: { id: command.lotId },
       select: {
