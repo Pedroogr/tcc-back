@@ -17,6 +17,7 @@ import { UpsertSellerProfileDto } from './dto/upsert-seller-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { UserAccessService } from './user-access.service';
+import { UpsertBuyerProfileDto } from './dto/upsert-buyer-profile.dto';
 
 @Controller('users')
 export class UsersController {
@@ -47,8 +48,11 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Post('me/buyer-profile')
-  upsertBuyerProfile(@Req() request: AuthenticatedRequest) {
-    return this.usersService.upsertBuyerProfile(request.user.id);
+  upsertBuyerProfile(
+    @Req() request: AuthenticatedRequest,
+    @Body() body: UpsertBuyerProfileDto,
+  ) {
+    return this.usersService.upsertBuyerProfile(request.user.id, body);
   }
 
   @UseGuards(SystemAdminGuard)

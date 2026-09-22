@@ -96,17 +96,44 @@ describe('users and access control (e2e)', () => {
 
     const firstBuyer = await request(context.httpServer)
       .post('/users/me/buyer-profile')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ie: '224.365.879', ieUf: 'rs' });
     const secondBuyer = await request(context.httpServer)
       .post('/users/me/buyer-profile')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ie: '224365879', ieUf: 'RS' });
     expect(firstBuyer.status).toBe(201);
     expect(secondBuyer.status).toBe(201);
-    expect(bodyOf(firstBuyer).buyerProfile).toMatchObject({ userId: user.id });
-    expect(bodyOf(secondBuyer).buyerProfile).toMatchObject({ userId: user.id });
+    expect(bodyOf(firstBuyer).buyerProfile).toMatchObject({
+      userId: user.id,
+      ie: '224365879',
+      ieUf: 'RS',
+    });
+    expect(bodyOf(secondBuyer).buyerProfile).toMatchObject({
+      userId: user.id,
+      ie: '224365879',
+      ieUf: 'RS',
+    });
     expect(
       await context.prisma.buyerProfile.count({ where: { userId: user.id } }),
     ).toBe(1);
+  });
+
+  it('rejects an invalid buyer profile self-service payload', async () => {
+    const user = await createUser(context.prisma);
+    const token = await login(context, user.email);
+
+    const missing = await request(context.httpServer)
+      .post('/users/me/buyer-profile')
+      .set('Authorization', `Bearer ${token}`)
+      .send({});
+    const nonnumeric = await request(context.httpServer)
+      .post('/users/me/buyer-profile')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ie: 'abc', ieUf: 'SP' });
+
+    expect(missing.status).toBe(400);
+    expect(nonnumeric.status).toBe(400);
   });
 
   it('rehashes a password through self-update and can log in with the new password', async () => {

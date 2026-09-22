@@ -103,6 +103,8 @@ export const BuyerProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   verificationStatus: 'verificationStatus',
+  ie: 'ie',
+  ieUf: 'ieUf',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -28,6 +28,8 @@ export type BuyerProfileMinAggregateOutputType = {
   id: string | null
   userId: string | null
   verificationStatus: $Enums.VerificationStatus | null
+  ie: string | null
+  ieUf: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,6 +38,8 @@ export type BuyerProfileMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   verificationStatus: $Enums.VerificationStatus | null
+  ie: string | null
+  ieUf: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +48,8 @@ export type BuyerProfileCountAggregateOutputType = {
   id: number
   userId: number
   verificationStatus: number
+  ie: number
+  ieUf: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -54,6 +60,8 @@ export type BuyerProfileMinAggregateInputType = {
   id?: true
   userId?: true
   verificationStatus?: true
+  ie?: true
+  ieUf?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -62,6 +70,8 @@ export type BuyerProfileMaxAggregateInputType = {
   id?: true
   userId?: true
   verificationStatus?: true
+  ie?: true
+  ieUf?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -70,6 +80,8 @@ export type BuyerProfileCountAggregateInputType = {
   id?: true
   userId?: true
   verificationStatus?: true
+  ie?: true
+  ieUf?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -151,6 +163,8 @@ export type BuyerProfileGroupByOutputType = {
   id: string
   userId: string
   verificationStatus: $Enums.VerificationStatus
+  ie: string | null
+  ieUf: string | null
   createdAt: Date
   updatedAt: Date
   _count: BuyerProfileCountAggregateOutputType | null
@@ -180,6 +194,8 @@ export type BuyerProfileWhereInput = {
   id?: Prisma.StringFilter<"BuyerProfile"> | string
   userId?: Prisma.StringFilter<"BuyerProfile"> | string
   verificationStatus?: Prisma.EnumVerificationStatusFilter<"BuyerProfile"> | $Enums.VerificationStatus
+  ie?: Prisma.StringNullableFilter<"BuyerProfile"> | string | null
+  ieUf?: Prisma.StringNullableFilter<"BuyerProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -189,6 +205,8 @@ export type BuyerProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
+  ie?: Prisma.SortOrderInput | Prisma.SortOrder
+  ieUf?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -201,6 +219,8 @@ export type BuyerProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.BuyerProfileWhereInput[]
   NOT?: Prisma.BuyerProfileWhereInput | Prisma.BuyerProfileWhereInput[]
   verificationStatus?: Prisma.EnumVerificationStatusFilter<"BuyerProfile"> | $Enums.VerificationStatus
+  ie?: Prisma.StringNullableFilter<"BuyerProfile"> | string | null
+  ieUf?: Prisma.StringNullableFilter<"BuyerProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BuyerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -210,6 +230,8 @@ export type BuyerProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
+  ie?: Prisma.SortOrderInput | Prisma.SortOrder
+  ieUf?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BuyerProfileCountOrderByAggregateInput
@@ -224,6 +246,8 @@ export type BuyerProfileScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"BuyerProfile"> | string
   userId?: Prisma.StringWithAggregatesFilter<"BuyerProfile"> | string
   verificationStatus?: Prisma.EnumVerificationStatusWithAggregatesFilter<"BuyerProfile"> | $Enums.VerificationStatus
+  ie?: Prisma.StringNullableWithAggregatesFilter<"BuyerProfile"> | string | null
+  ieUf?: Prisma.StringNullableWithAggregatesFilter<"BuyerProfile"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BuyerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"BuyerProfile"> | Date | string
 }
@@ -231,6 +255,8 @@ export type BuyerProfileScalarWhereWithAggregatesInput = {
 export type BuyerProfileCreateInput = {
   id?: string
   verificationStatus?: $Enums.VerificationStatus
+  ie?: string | null
+  ieUf?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBuyerProfileInput
@@ -240,6 +266,8 @@ export type BuyerProfileUncheckedCreateInput = {
   id?: string
   userId: string
   verificationStatus?: $Enums.VerificationStatus
+  ie?: string | null
+  ieUf?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -247,6 +275,8 @@ export type BuyerProfileUncheckedCreateInput = {
 export type BuyerProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  ie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ieUf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBuyerProfileNestedInput
@@ -256,6 +286,8 @@ export type BuyerProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  ie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ieUf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -264,6 +296,8 @@ export type BuyerProfileCreateManyInput = {
   id?: string
   userId: string
   verificationStatus?: $Enums.VerificationStatus
+  ie?: string | null
+  ieUf?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -271,6 +305,8 @@ export type BuyerProfileCreateManyInput = {
 export type BuyerProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  ie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ieUf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -279,6 +315,8 @@ export type BuyerProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  ie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ieUf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -292,6 +330,8 @@ export type BuyerProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
+  ie?: Prisma.SortOrder
+  ieUf?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -300,6 +340,8 @@ export type BuyerProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
+  ie?: Prisma.SortOrder
+  ieUf?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -308,6 +350,8 @@ export type BuyerProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   verificationStatus?: Prisma.SortOrder
+  ie?: Prisma.SortOrder
+  ieUf?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -351,6 +395,8 @@ export type EnumVerificationStatusFieldUpdateOperationsInput = {
 export type BuyerProfileCreateWithoutUserInput = {
   id?: string
   verificationStatus?: $Enums.VerificationStatus
+  ie?: string | null
+  ieUf?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -358,6 +404,8 @@ export type BuyerProfileCreateWithoutUserInput = {
 export type BuyerProfileUncheckedCreateWithoutUserInput = {
   id?: string
   verificationStatus?: $Enums.VerificationStatus
+  ie?: string | null
+  ieUf?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -381,6 +429,8 @@ export type BuyerProfileUpdateToOneWithWhereWithoutUserInput = {
 export type BuyerProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  ie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ieUf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -388,6 +438,8 @@ export type BuyerProfileUpdateWithoutUserInput = {
 export type BuyerProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  ie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ieUf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -398,6 +450,8 @@ export type BuyerProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
+  ie?: boolean
+  ieUf?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -407,6 +461,8 @@ export type BuyerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
+  ie?: boolean
+  ieUf?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -416,6 +472,8 @@ export type BuyerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
+  ie?: boolean
+  ieUf?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -425,11 +483,13 @@ export type BuyerProfileSelectScalar = {
   id?: boolean
   userId?: boolean
   verificationStatus?: boolean
+  ie?: boolean
+  ieUf?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BuyerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "verificationStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["buyerProfile"]>
+export type BuyerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "verificationStatus" | "ie" | "ieUf" | "createdAt" | "updatedAt", ExtArgs["result"]["buyerProfile"]>
 export type BuyerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -449,6 +509,8 @@ export type $BuyerProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     userId: string
     verificationStatus: $Enums.VerificationStatus
+    ie: string | null
+    ieUf: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["buyerProfile"]>
@@ -878,6 +940,8 @@ export interface BuyerProfileFieldRefs {
   readonly id: Prisma.FieldRef<"BuyerProfile", 'String'>
   readonly userId: Prisma.FieldRef<"BuyerProfile", 'String'>
   readonly verificationStatus: Prisma.FieldRef<"BuyerProfile", 'VerificationStatus'>
+  readonly ie: Prisma.FieldRef<"BuyerProfile", 'String'>
+  readonly ieUf: Prisma.FieldRef<"BuyerProfile", 'String'>
   readonly createdAt: Prisma.FieldRef<"BuyerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"BuyerProfile", 'DateTime'>
 }

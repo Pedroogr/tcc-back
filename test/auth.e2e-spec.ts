@@ -107,6 +107,10 @@ describe('authentication (e2e)', () => {
         phone: '(11) 98888-1234',
         document: formatCpf(document),
         accountType: 'BUYER',
+        buyerProfile: {
+          ie: '110.042.490.114',
+          ieUf: 'sp',
+        },
       });
 
     expect(response.status).toBe(201);
@@ -115,10 +119,33 @@ describe('authentication (e2e)', () => {
       name: 'Buyer E2E',
       phone: '11988881234',
       document: '12345678909',
-      buyerProfile: { verificationStatus: 'PENDING' },
+      buyerProfile: {
+        ie: '110042490114',
+        ieUf: 'SP',
+        verificationStatus: 'PENDING',
+      },
       sellerProfile: null,
     });
     expect(JSON.stringify(body)).not.toContain('passwordHash');
+  });
+
+  it.each([
+    ['a missing buyer profile', undefined],
+    ['a blank state registration', { ie: '  ', ieUf: 'SP' }],
+    ['a nonnumeric state registration', { ie: 'abc', ieUf: 'SP' }],
+    ['an invalid state abbreviation', { ie: '110042490114', ieUf: 'XX' }],
+  ])('rejects buyer registration with %s', async (_caseName, buyerProfile) => {
+    const response = await request(context.httpServer)
+      .post('/auth/register')
+      .send({
+        name: 'Invalid Buyer E2E',
+        email: nextRegistrationEmail(),
+        password: 'valid-password',
+        accountType: 'BUYER',
+        ...(buyerProfile ? { buyerProfile } : {}),
+      });
+
+    expect(response.status).toBe(400);
   });
 
   it('registers a seller with its nested farm profile and normalized CNPJ', async () => {

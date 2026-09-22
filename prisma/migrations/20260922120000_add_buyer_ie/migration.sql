@@ -1,0 +1,3 @@
+ALTER TABLE "BuyerProfile"
+ADD COLUMN "ie" TEXT,
+ADD COLUMN "ieUf" TEXT;

@@ -1,5 +1,35 @@
 import { BadRequestException } from '@nestjs/common';
 
+const BRAZILIAN_UFS = new Set([
+  'AC',
+  'AL',
+  'AP',
+  'AM',
+  'BA',
+  'CE',
+  'DF',
+  'ES',
+  'GO',
+  'MA',
+  'MT',
+  'MS',
+  'MG',
+  'PA',
+  'PB',
+  'PR',
+  'PE',
+  'PI',
+  'RJ',
+  'RN',
+  'RS',
+  'RO',
+  'RR',
+  'SC',
+  'SP',
+  'SE',
+  'TO',
+]);
+
 export function onlyDigits(value?: string | null) {
   return value?.replace(/\D/g, '') ?? '';
 }
@@ -94,6 +124,26 @@ export function normalizeBrazilianPhone(value?: string) {
   }
 
   return phone;
+}
+
+export function normalizeStateRegistration(value: string) {
+  const ie = onlyDigits(value);
+
+  if (!ie) {
+    throw new BadRequestException('Inscricao estadual obrigatoria.');
+  }
+
+  return ie;
+}
+
+export function normalizeBrazilianUf(value: string) {
+  const uf = value.trim().toUpperCase();
+
+  if (!BRAZILIAN_UFS.has(uf)) {
+    throw new BadRequestException('UF da inscricao estadual invalida.');
+  }
+
+  return uf;
 }
 
 export function generateValidCpf() {

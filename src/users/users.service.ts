@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -7,12 +8,15 @@ import { hash } from 'bcryptjs';
 import { Prisma } from '../../generated/prisma/client';
 import {
   normalizeBrazilianPhone,
+  normalizeBrazilianUf,
   normalizeCpfOrCnpj,
+  normalizeStateRegistration,
 } from '../common/br-fields';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto, UserAccountType } from './dto/create-user.dto';
 import { UpsertSellerProfileDto } from './dto/upsert-seller-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpsertBuyerProfileDto } from './dto/upsert-buyer-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -80,15 +84,18 @@ export class UsersService {
     return this.findOne(userId);
   }
 
-  async upsertBuyerProfile(userId: string) {
+  async upsertBuyerProfile(userId: string, data: UpsertBuyerProfileDto) {
     await this.findOne(userId);
+
+    const buyerProfile = this.toBuyerProfileData(data);
 
     await this.prisma.buyerProfile.upsert({
       where: { userId },
       create: {
         user: { connect: { id: userId } },
+        ...buyerProfile,
       },
-      update: {},
+      update: buyerProfile,
     });
 
     return this.findOne(userId);
@@ -126,7 +133,15 @@ export class UsersService {
     };
 
     if (data.accountType === UserAccountType.BUYER) {
-      createData.buyerProfile = { create: {} };
+      if (!data.buyerProfile) {
+        throw new BadRequestException(
+          'Inscricao estadual e UF sao obrigatorias para compradores',
+        );
+      }
+
+      createData.buyerProfile = {
+        create: this.toBuyerProfileData(data.buyerProfile),
+      };
     }
 
     if (data.accountType === UserAccountType.SELLER) {
@@ -165,6 +180,13 @@ export class UsersService {
       city: data.city,
       state: data.state,
       country: data.country,
+    };
+  }
+
+  private toBuyerProfileData(data: UpsertBuyerProfileDto) {
+    return {
+      ie: normalizeStateRegistration(data.ie),
+      ieUf: normalizeBrazilianUf(data.ieUf),
     };
   }
 

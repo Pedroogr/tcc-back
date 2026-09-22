@@ -135,6 +135,8 @@ model BuyerProfile {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   verificationStatus VerificationStatus @default(PENDING)
+  ie                 String?
+  ieUf               String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

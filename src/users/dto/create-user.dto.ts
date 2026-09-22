@@ -8,6 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { UpsertSellerProfileDto } from './upsert-seller-profile.dto';
+import { UpsertBuyerProfileDto } from './upsert-buyer-profile.dto';
 
 export enum UserAccountType {
   BUYER = 'BUYER',
@@ -41,4 +42,9 @@ export class CreateUserDto {
   @ValidateNested()
   @Type(() => UpsertSellerProfileDto)
   sellerProfile?: UpsertSellerProfileDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpsertBuyerProfileDto)
+  buyerProfile?: UpsertBuyerProfileDto;
 }
