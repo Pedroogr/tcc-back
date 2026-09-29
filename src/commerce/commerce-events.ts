@@ -15,6 +15,16 @@ export type GesturePersonBox = {
   height: number;
 };
 
+export type GestureFirstHandDetectedPayload = {
+  eventId: string;
+  auctionId: string;
+  capturedAt: Date;
+  expiresAt: Date;
+  personBox: GesturePersonBox;
+  snapshotMimeType: 'image/jpeg';
+  snapshot: Buffer;
+};
+
 export type OfficeBidPayload = {
   bidId: string;
   lotId: string;

@@ -79,6 +79,9 @@ describe('CommerceGateway', () => {
     expect(buyerSocket.join).not.toHaveBeenCalledWith(
       'auction:auction-1:office',
     );
+    expect(buyerSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:operators',
+    );
   });
 
   it('joins only the owner office to the detailed room', async () => {
@@ -97,6 +100,9 @@ describe('CommerceGateway', () => {
 
     expect(officeSocket.join).toHaveBeenCalledWith('auction:auction-1:prices');
     expect(officeSocket.join).toHaveBeenCalledWith('auction:auction-1:office');
+    expect(officeSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:operators',
+    );
   });
 
   it('keeps a non-owner office out of the detailed room', async () => {
@@ -120,6 +126,76 @@ describe('CommerceGateway', () => {
     expect(officeSocket.join).not.toHaveBeenCalledWith(
       'auction:auction-1:buyers',
     );
+    expect(officeSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:operators',
+    );
+  });
+
+  it('joins a valid operator only to prices and its assigned operator room', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sub: 'operator-1',
+      actorType: 'OPERATOR',
+      operatorAccessId: 'operator-1',
+      auctionId: 'auction-1',
+    });
+    prisma.operatorAccess.findUnique.mockResolvedValue({
+      id: 'operator-1',
+      auctionId: 'auction-1',
+      expiresAt: new Date(Date.now() + 60_000),
+      usedAt: new Date(),
+      revokedAt: null,
+      auction: { status: 'LIVE' },
+    });
+    prisma.auction.findUnique.mockResolvedValue({
+      id: 'auction-1',
+      auctionHouseId: 'house-1',
+    });
+    const operatorSocket = createSocket('operator-socket');
+
+    await gateway.handleAuctionJoin({ auctionId: 'auction-1' }, operatorSocket);
+
+    expect(operatorSocket.join).toHaveBeenCalledWith(
+      'auction:auction-1:prices',
+    );
+    expect(operatorSocket.join).toHaveBeenCalledWith(
+      'auction:auction-1:operators',
+    );
+    expect(operatorSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:office',
+    );
+    expect(operatorSocket.join).not.toHaveBeenCalledWith(
+      'auction:auction-1:buyers',
+    );
+  });
+
+  it('keeps an operator out of another auction room', async () => {
+    jwtService.verifyAsync.mockResolvedValue({
+      sub: 'operator-1',
+      actorType: 'OPERATOR',
+      operatorAccessId: 'operator-1',
+      auctionId: 'auction-1',
+    });
+    prisma.operatorAccess.findUnique.mockResolvedValue({
+      id: 'operator-1',
+      auctionId: 'auction-1',
+      expiresAt: new Date(Date.now() + 60_000),
+      usedAt: new Date(),
+      revokedAt: null,
+      auction: { status: 'LIVE' },
+    });
+    prisma.auction.findUnique.mockResolvedValue({
+      id: 'auction-2',
+      auctionHouseId: 'house-1',
+    });
+    const operatorSocket = createSocket('operator-socket');
+
+    await gateway.handleAuctionJoin({ auctionId: 'auction-2' }, operatorSocket);
+
+    expect(operatorSocket.emit).toHaveBeenCalledWith(
+      'commerce:error',
+      expect.objectContaining({ message: expect.stringContaining('remate') }),
+    );
+    expect(operatorSocket.join).not.toHaveBeenCalled();
   });
 
   it('derives the notification room from the authenticated token', async () => {
@@ -241,5 +317,29 @@ describe('CommerceGateway', () => {
     );
     expect(server.to).not.toHaveBeenCalledWith('auction:auction-1:prices');
     expect(server.to).not.toHaveBeenCalledWith('auction:auction-1:office');
+  });
+
+  it('publishes a binary first-hand snapshot only to the operator room', () => {
+    const snapshot = Buffer.from([0xff, 0xd8, 0xff, 0xd9]);
+    const payload = {
+      eventId: 'b7cc5e58-c196-4c8f-94b0-b669743d8a45',
+      auctionId: 'auction-1',
+      capturedAt: new Date('2026-09-29T15:00:00.000Z'),
+      expiresAt: new Date('2026-09-29T15:00:05.000Z'),
+      personBox: { x: 0.1, y: 0.2, width: 0.3, height: 0.4 },
+      snapshotMimeType: 'image/jpeg' as const,
+      snapshot,
+    };
+
+    gateway.emitGestureFirstHandDetected('auction-1', payload);
+
+    expect(server.to).toHaveBeenCalledTimes(1);
+    expect(server.to).toHaveBeenCalledWith('auction:auction-1:operators');
+    expect(
+      roomEmitter('auction:auction-1:operators').emit,
+    ).toHaveBeenCalledWith('gesture:first-hand-detected', payload);
+    expect(roomEmitter('auction:auction-1:prices').emit).not.toHaveBeenCalled();
+    expect(roomEmitter('auction:auction-1:office').emit).not.toHaveBeenCalled();
+    expect(roomEmitter('auction:auction-1:buyers').emit).not.toHaveBeenCalled();
   });
 });

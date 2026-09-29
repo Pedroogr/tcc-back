@@ -11,6 +11,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuctionStatus } from '../../generated/prisma/enums';
 import type {
   BidPriceUpdatedPayload,
+  GestureFirstHandDetectedPayload,
   LotSoldPayload,
   LotWinnerAnnouncedPayload,
   LotStageChangedPayload,
@@ -37,6 +38,8 @@ const CLOSED_AUCTION_STATUSES: AuctionStatus[] = [
  *   is joined only by user accounts watching the auction.
  * - `auction:<id>:office` receives detailed bids and is joined only by the
  *   auction's owner office.
+ * - `auction:<id>:operators` receives ephemeral gesture snapshots and is
+ *   joined only by operators assigned to the auction.
  * - `user:<id>` receives the private win notification for a single buyer.
  */
 @WebSocketGateway({
@@ -86,6 +89,8 @@ export class CommerceGateway {
 
       if (actor.type === 'USER') {
         await client.join(this.buyerRoom(auctionId));
+      } else if (actor.type === 'OPERATOR') {
+        await client.join(this.operatorRoom(auctionId));
       } else if (actor.id === auction.auctionHouseId) {
         await client.join(this.officeRoom(auctionId));
       }
@@ -138,6 +143,15 @@ export class CommerceGateway {
 
   emitSaleWon(userId: string, payload: SaleWonPayload) {
     this.server.to(this.userRoom(userId)).emit('sale:won', payload);
+  }
+
+  emitGestureFirstHandDetected(
+    auctionId: string,
+    payload: GestureFirstHandDetectedPayload,
+  ) {
+    this.server
+      .to(this.operatorRoom(auctionId))
+      .emit('gesture:first-hand-detected', payload);
   }
 
   private async authenticateSocket(client: Socket): Promise<CommerceActor> {
@@ -257,6 +271,10 @@ export class CommerceGateway {
 
   private buyerRoom(auctionId: string) {
     return `auction:${auctionId}:buyers`;
+  }
+
+  private operatorRoom(auctionId: string) {
+    return `auction:${auctionId}:operators`;
   }
 
   private userRoom(userId: string) {
