@@ -52,8 +52,9 @@ usuário final.
   identificá-lo com um rótulo, por exemplo, “Pista principal”.
 - Cada operador ou aparelho recebe um código diferente. O mesmo leilão pode ter
   vários operadores simultâneos.
-- O código é exibido somente na criação, vale por até 24 horas ou até o término
-  do leilão e pode ser revogado pelo escritório a qualquer momento.
+- O código é exibido na criação ou em uma reemissão explícita, vale por até 24
+  horas ou até o término do leilão e pode ser revogado pelo escritório a
+  qualquer momento. Reemitir substitui o código pendente e invalida o anterior.
 - O código só pode ser usado uma vez para abrir uma sessão. A sessão permanece
   associada ao mesmo acesso e leilão até expirar ou ser revogada.
 - O operador não possui conta comum e não acessa a transmissão. Sua tela mostra
@@ -167,6 +168,7 @@ O módulo terá controller, service, DTOs, autenticação e guard próprios. Rot
 ```text
 POST   /operator/accesses
 GET    /operator/accesses?auctionId=...
+POST   /operator/accesses/:id/code
 DELETE /operator/accesses/:id
 POST   /operator/login
 GET    /operator/session
@@ -174,9 +176,10 @@ GET    /operator/buyers?query=...
 POST   /operator/bids
 ```
 
-As três primeiras operações exigem sessão do escritório dono do leilão. A
-listagem nunca devolve o código nem seu hash. A exclusão lógica revoga o acesso
-e preserva sua auditoria.
+As quatro primeiras operações exigem sessão do escritório dono do leilão. A
+listagem nunca devolve o código nem seu hash. A reemissão só é permitida para
+acesso pendente e troca atomicamente o hash; a exclusão lógica revoga o acesso e
+preserva sua auditoria.
 
 `POST /operator/login` recebe apenas o código e retorna o token da sessão.
 `GET /operator/session` retorna o leilão, o acesso e o lote autoritativo em
@@ -243,8 +246,11 @@ Não haverá alerta ou formulário para completar comprador legado.
 Na sala operacional do escritório haverá uma seção para:
 
 - criar acesso com rótulo;
-- mostrar o código somente após a criação, com ação de copiar;
+- mostrar o código após a criação ou reemissão, com ações de copiar e abrir a
+  tela do pisteiro;
 - listar rótulo, criação, expiração, uso e situação;
+- permitir clicar em um acesso pendente para reemitir seu código, invalidando o
+  anterior;
 - revogar individualmente um acesso.
 
 Cada criação gera um novo acesso; não há código compartilhado entre operadores.
@@ -276,8 +282,8 @@ revogado remove a sessão e volta à tela de entrada.
 - Código inválido, usado, expirado ou revogado não abre sessão e não revela
   qual condição falhou.
 - Tentativas de login são limitadas para impedir força bruta.
-- O código em texto puro aparece uma vez e nunca é persistido nem retornado em
-  listagens.
+- O código em texto puro aparece uma vez por criação ou reemissão e nunca é
+  persistido nem retornado em listagens.
 - Um operador não consegue trocar `auctionId`, entrar na sala de outro leilão
   ou consultar compradores de outro escritório.
 - Dados de contato e documento completo não são enviados à aplicação do
@@ -325,7 +331,8 @@ separada. Depois disso, novos compradores entram somente pelo contrato com IE.
 ### Frontend
 
 - IE e UF são obrigatórios no cadastro de comprador e aparecem para aprovação.
-- Escritório cria, copia, lista e revoga acessos sem voltar a revelar o código.
+- Escritório cria, copia, lista, reemite códigos pendentes e revoga acessos; a
+  reemissão mostra um código novo em vez de revelar o anterior.
 - Operador entra com código e recebe somente o leilão autorizado.
 - Alterar o lote no escritório atualiza site e operador e limpa o formulário.
 - Homônimos são diferenciados pelos quatro últimos dígitos do documento.

@@ -107,6 +107,92 @@ describe('operator access E2E', () => {
     expect((await createAccess(context, token, canceled.id)).status).toBe(400);
   });
 
+  it('lets the owning office reissue only pending access codes', async () => {
+    const house = await createAuctionHouse(context.prisma);
+    const foreignHouse = await createAuctionHouse(context.prisma);
+    const auction = await createAuction(context.prisma, house.id, {
+      status: AuctionStatus.LIVE,
+    });
+    const officeToken = await login(context, house.email);
+    const foreignToken = await login(context, foreignHouse.email);
+    const created = await createAccess(context, officeToken, auction.id);
+    const accessId = String(bodyOf(created).id);
+    const originalCode = String(bodyOf(created).code);
+
+    const forbidden = await request(context.httpServer)
+      .post(`/operator/accesses/${accessId}/code`)
+      .set('Authorization', `Bearer ${foreignToken}`);
+    expect(forbidden.status).toBe(403);
+
+    const reissued = await request(context.httpServer)
+      .post(`/operator/accesses/${accessId}/code`)
+      .set('Authorization', `Bearer ${officeToken}`);
+    expect(reissued.status).toBe(201);
+    expect(bodyOf(reissued).id).toBe(accessId);
+    expect(bodyOf(reissued).code).toMatch(
+      /^[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}$/,
+    );
+    expect(bodyOf(reissued).code).not.toBe(originalCode);
+    expect(JSON.stringify(bodyOf(reissued))).not.toContain('codeHash');
+
+    expect(
+      (
+        await request(context.httpServer)
+          .post('/operator/login')
+          .send({ code: originalCode })
+      ).status,
+    ).toBe(401);
+    expect(
+      (
+        await request(context.httpServer)
+          .post('/operator/login')
+          .send({ code: bodyOf(reissued).code })
+      ).status,
+    ).toBe(201);
+    expect(
+      (
+        await request(context.httpServer)
+          .post(`/operator/accesses/${accessId}/code`)
+          .set('Authorization', `Bearer ${officeToken}`)
+      ).status,
+    ).toBe(400);
+
+    const revoked = await createAccess(
+      context,
+      officeToken,
+      auction.id,
+      'Revoked',
+    );
+    await request(context.httpServer)
+      .delete(`/operator/accesses/${String(bodyOf(revoked).id)}`)
+      .set('Authorization', `Bearer ${officeToken}`);
+    expect(
+      (
+        await request(context.httpServer)
+          .post(`/operator/accesses/${String(bodyOf(revoked).id)}/code`)
+          .set('Authorization', `Bearer ${officeToken}`)
+      ).status,
+    ).toBe(400);
+
+    const expired = await createAccess(
+      context,
+      officeToken,
+      auction.id,
+      'Expired',
+    );
+    await context.prisma.operatorAccess.update({
+      where: { id: String(bodyOf(expired).id) },
+      data: { expiresAt: new Date(Date.now() - 1000) },
+    });
+    expect(
+      (
+        await request(context.httpServer)
+          .post(`/operator/accesses/${String(bodyOf(expired).id)}/code`)
+          .set('Authorization', `Bearer ${officeToken}`)
+      ).status,
+    ).toBe(400);
+  });
+
   it('atomically activates a code only once and creates an operator session', async () => {
     const house = await createAuctionHouse(context.prisma);
     const auction = await createAuction(context.prisma, house.id, {
@@ -136,6 +222,41 @@ describe('operator access E2E', () => {
         label: 'Pista principal',
       },
     });
+  });
+
+  it('atomically resolves a login racing with code reissue', async () => {
+    const house = await createAuctionHouse(context.prisma);
+    const auction = await createAuction(context.prisma, house.id, {
+      status: AuctionStatus.LIVE,
+    });
+    const officeToken = await login(context, house.email);
+    const created = await createAccess(context, officeToken, auction.id);
+    const accessId = String(bodyOf(created).id);
+    const originalCode = String(bodyOf(created).code);
+
+    const [operatorLogin, reissued] = await Promise.all([
+      request(context.httpServer)
+        .post('/operator/login')
+        .send({ code: originalCode }),
+      request(context.httpServer)
+        .post(`/operator/accesses/${accessId}/code`)
+        .set('Authorization', `Bearer ${officeToken}`),
+    ]);
+
+    expect([
+      [201, 400],
+      [401, 201],
+    ]).toContainEqual([operatorLogin.status, reissued.status]);
+
+    if (reissued.status === 201) {
+      const replacementLogin = await request(context.httpServer)
+        .post('/operator/login')
+        .send({ code: bodyOf(reissued).code });
+      expect(replacementLogin.status).toBe(201);
+      expect(bodyOf(replacementLogin)).toMatchObject({ actorType: 'OPERATOR' });
+    } else {
+      expect(bodyOf(operatorLogin)).toMatchObject({ actorType: 'OPERATOR' });
+    }
   });
 
   it('revokes an issued token immediately', async () => {

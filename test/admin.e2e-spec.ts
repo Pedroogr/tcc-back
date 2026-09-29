@@ -53,12 +53,12 @@ describe('admin office invites (e2e)', () => {
     const response = await request(context.httpServer)
       .post('/admin/office-invites')
       .set('Authorization', `Bearer ${token}`)
-      .send({ email: 'OFFICE@Example.TEST' });
+      .send({ email: 'OFFICE@Example.COM' });
 
     expect(response.status).toBe(201);
     const body = bodyOf(response);
     expect(body).toMatchObject({
-      email: 'office@example.test',
+      email: 'office@example.com',
       status: 'PENDING',
     });
     expect(body.registrationUrl).toBe(
@@ -150,6 +150,7 @@ describe('admin office invites (e2e)', () => {
 
   it.each([
     [{ email: 'not-an-email' }],
+    [{ email: 'office@example.colm' }],
     [{ expiresInDays: 0 }],
     [{ expiresInDays: 1.5 }],
     [{ unexpected: true }],

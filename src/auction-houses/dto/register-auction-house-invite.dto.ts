@@ -1,4 +1,12 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
+import { IsPublicEmailDomain } from '../../common/email-validation';
 
 export class RegisterAuctionHouseInviteDto {
   @IsString()
@@ -9,6 +17,7 @@ export class RegisterAuctionHouseInviteDto {
   document?: string;
 
   @IsEmail()
+  @IsPublicEmailDomain()
   email!: string;
 
   @IsOptional()
@@ -18,13 +27,14 @@ export class RegisterAuctionHouseInviteDto {
   @MinLength(6)
   password!: string;
 
-  @IsOptional()
   @IsString()
-  city?: string;
+  @IsNotEmpty()
+  @Matches(/\S/, { message: 'Municipio obrigatorio' })
+  city!: string;
 
-  @IsOptional()
   @IsString()
-  state?: string;
+  @IsNotEmpty()
+  state!: string;
 
   @IsOptional()
   @IsString()

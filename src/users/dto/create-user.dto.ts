@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 import { UpsertSellerProfileDto } from './upsert-seller-profile.dto';
 import { UpsertBuyerProfileDto } from './upsert-buyer-profile.dto';
+import { IsPublicEmailDomain } from '../../common/email-validation';
 
 export enum UserAccountType {
   BUYER = 'BUYER',
@@ -20,6 +21,7 @@ export class CreateUserDto {
   name!: string;
 
   @IsEmail()
+  @IsPublicEmailDomain()
   email!: string;
 
   @IsString()

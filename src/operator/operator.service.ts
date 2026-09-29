@@ -91,6 +91,70 @@ export class OperatorService {
     });
   }
 
+  async reissueAccessCode(id: string, actor: AuthenticatedActor) {
+    const officeId = this.officeId(actor);
+    const now = new Date();
+    const access = await this.prisma.operatorAccess.findUnique({
+      where: { id },
+      select: {
+        ...this.accessSummarySelect(),
+        codeHash: true,
+        auction: {
+          select: { auctionHouseId: true, status: true },
+        },
+      },
+    });
+
+    if (!access) {
+      throw new NotFoundException('Acesso de operador nao encontrado');
+    }
+    if (access.auction.auctionHouseId !== officeId) {
+      throw new ForbiddenException(
+        'Escritorio nao pode gerenciar acessos de outro remate',
+      );
+    }
+    if (
+      access.usedAt ||
+      access.revokedAt ||
+      access.expiresAt <= now ||
+      CLOSED_AUCTION_STATUSES.includes(access.auction.status)
+    ) {
+      throw new BadRequestException(
+        'Apenas acessos aguardando ativacao podem receber novo codigo',
+      );
+    }
+
+    const code = generateOperatorCode();
+    const updated = await this.prisma.operatorAccess.updateMany({
+      where: {
+        id,
+        codeHash: access.codeHash,
+        usedAt: null,
+        revokedAt: null,
+        expiresAt: { gt: now },
+        auction: { status: { notIn: CLOSED_AUCTION_STATUSES } },
+      },
+      data: { codeHash: hashOperatorCode(code) },
+    });
+
+    if (updated.count !== 1) {
+      throw new BadRequestException(
+        'Apenas acessos aguardando ativacao podem receber novo codigo',
+      );
+    }
+
+    return {
+      id: access.id,
+      auctionId: access.auctionId,
+      label: access.label,
+      expiresAt: access.expiresAt,
+      usedAt: access.usedAt,
+      revokedAt: access.revokedAt,
+      createdAt: access.createdAt,
+      code,
+    };
+  }
+
   async revokeAccess(id: string, actor: AuthenticatedActor) {
     const officeId = this.officeId(actor);
     const access = await this.prisma.operatorAccess.findUnique({
@@ -132,6 +196,7 @@ export class OperatorService {
             expiresAt: true,
             usedAt: true,
             revokedAt: true,
+            codeHash: true,
             auction: { select: { status: true } },
           },
         });
@@ -147,7 +212,12 @@ export class OperatorService {
         }
 
         const claimed = await tx.operatorAccess.updateMany({
-          where: { id: found.id, usedAt: null, revokedAt: null },
+          where: {
+            id: found.id,
+            codeHash: found.codeHash,
+            usedAt: null,
+            revokedAt: null,
+          },
           data: { usedAt: now },
         });
 

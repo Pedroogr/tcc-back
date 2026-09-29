@@ -13,7 +13,7 @@ let registrationSequence = 0;
 
 function nextRegistrationEmail() {
   registrationSequence += 1;
-  return `registration-${registrationSequence}@example.test`;
+  return `registration-${registrationSequence}@example.com`;
 }
 
 function generateValidCpf() {
@@ -214,6 +214,14 @@ describe('authentication (e2e)', () => {
       {
         name: 'Invalid E2E',
         email: 'not-an-email',
+        password: 'valid-password',
+      },
+    ],
+    [
+      'an e-mail with an unknown public suffix',
+      {
+        name: 'Invalid E2E',
+        email: 'marcelo@gmai.colm',
         password: 'valid-password',
       },
     ],

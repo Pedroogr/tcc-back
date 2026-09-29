@@ -14,7 +14,11 @@ import {
   OfficeInviteStatus,
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
-import { normalizeBrazilianPhone, normalizeCnpj } from '../common/br-fields';
+import {
+  normalizeBrazilianPhone,
+  normalizeBrazilianUf,
+  normalizeCnpj,
+} from '../common/br-fields';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBuyerRegistrationDto } from '../auctions/dto/create-buyer-registration.dto';
 import { ReviewBuyerRegistrationDto } from '../auctions/dto/review-buyer-registration.dto';
@@ -113,8 +117,8 @@ export class AuctionHousesService {
             passwordHash: await hash(data.password, 10),
             document: normalizeCnpj(data.document),
             phone: normalizeBrazilianPhone(data.phone),
-            city: data.city?.trim() || undefined,
-            state: data.state?.trim() || undefined,
+            city: data.city.trim(),
+            state: normalizeBrazilianUf(data.state),
             country: data.country?.trim() || 'BR',
             status: AuctionHouseStatus.ACTIVE,
             mustChangePassword: false,

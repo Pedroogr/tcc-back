@@ -43,6 +43,15 @@ export class OperatorController {
   }
 
   @UseGuards(ActorJwtAuthGuard)
+  @Post('accesses/:id/code')
+  reissueAccessCode(
+    @Req() request: AuthenticatedActorRequest,
+    @Param('id') id: string,
+  ) {
+    return this.operatorService.reissueAccessCode(id, request.actor);
+  }
+
+  @UseGuards(ActorJwtAuthGuard)
   @Delete('accesses/:id')
   revokeAccess(
     @Req() request: AuthenticatedActorRequest,

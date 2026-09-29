@@ -15,7 +15,7 @@ import { E2eContext, createE2eApp } from './support/e2e-app';
 
 const inviteData = {
   name: 'Registered Office',
-  email: 'office-register@example.test',
+  email: 'office-register@example.com',
   password: E2E_PASSWORD,
   document: '11.444.777/0001-61',
   phone: '(11) 99999-1111',
@@ -41,7 +41,10 @@ async function login(context: E2eContext, email: string) {
   return String(bodyOf(response).accessToken);
 }
 
-async function createInvite(context: E2eContext, email = inviteData.email) {
+async function createInvite(
+  context: E2eContext,
+  email: string | null = inviteData.email,
+) {
   return context.prisma.officeInvite.create({
     data: {
       token: `invite-${Date.now()}-${Math.random()}`,
@@ -153,6 +156,59 @@ describe('auction houses E2E', () => {
     ).toBe(400);
   });
 
+  it('requires municipality and a valid UF when registering an office', async () => {
+    const invite = await createInvite(context);
+    const endpoint = `/auction-houses/invites/${invite.token}/register`;
+
+    expect(
+      (
+        await request(context.httpServer)
+          .post(endpoint)
+          .send({ ...inviteData, city: undefined })
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await request(context.httpServer)
+          .post(endpoint)
+          .send({ ...inviteData, city: '   ' })
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await request(context.httpServer)
+          .post(endpoint)
+          .send({ ...inviteData, state: undefined })
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await request(context.httpServer)
+          .post(endpoint)
+          .send({ ...inviteData, state: 'XX' })
+      ).status,
+    ).toBe(400);
+
+    const registered = await request(context.httpServer)
+      .post(endpoint)
+      .send({ ...inviteData, city: '  Sao Paulo  ', state: 'sp' });
+
+    expect(registered.status).toBe(201);
+    expect(bodyOf(registered).auctionHouse).toMatchObject({
+      city: 'Sao Paulo',
+      state: 'SP',
+    });
+  });
+
+  it('rejects office registration with an unknown public suffix', async () => {
+    const invite = await createInvite(context, null);
+    const response = await request(context.httpServer)
+      .post(`/auction-houses/invites/${invite.token}/register`)
+      .send({ ...inviteData, email: 'office@example.colm' });
+
+    expect(response.status).toBe(400);
+  });
+
   it('rejects missing, expired, and mismatched invites', async () => {
     expect(
       (
@@ -180,7 +236,7 @@ describe('auction houses E2E', () => {
       (
         await request(context.httpServer)
           .post(`/auction-houses/invites/${fresh.token}/register`)
-          .send({ ...inviteData, email: 'other@example.test' })
+          .send({ ...inviteData, email: 'other@example.com' })
       ).status,
     ).toBe(400);
   });
