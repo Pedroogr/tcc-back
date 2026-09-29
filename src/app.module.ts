@@ -14,6 +14,7 @@ import { AdminModule } from './admin/admin.module';
 import { CommerceModule } from './commerce/commerce.module';
 import { SalesModule } from './sales/sales.module';
 import { OperatorModule } from './operator/operator.module';
+import { GestureModule } from './gesture/gesture.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { OperatorModule } from './operator/operator.module';
     CommerceModule,
     SalesModule,
     OperatorModule,
+    GestureModule,
   ],
 })
 export class AppModule {}
