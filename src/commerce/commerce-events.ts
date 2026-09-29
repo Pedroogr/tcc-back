@@ -8,6 +8,13 @@
 
 import type { BidSource } from '../../generated/prisma/enums';
 
+export type GesturePersonBox = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 export type OfficeBidPayload = {
   bidId: string;
   lotId: string;
