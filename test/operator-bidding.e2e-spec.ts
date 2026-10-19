@@ -173,7 +173,7 @@ describe('operator bidding E2E', () => {
       code: lot.code,
       status: 'IN_AUCTION',
       currentPrice: '1000',
-      nextMinimumBid: '1100',
+      nextMinimumBid: '1000',
     });
 
     const placed = await request(context.httpServer)
@@ -366,14 +366,19 @@ describe('operator bidding E2E', () => {
         }),
     ]);
 
-    expect(responses.every(({ status }) => status === 201)).toBe(true);
+    expect(responses.map(({ status }) => status).sort()).toEqual([201, 400]);
     expect(
       await context.prisma.bid.count({
         where: { lotId: lot.id, status: 'WINNING' },
       }),
     ).toBe(1);
     expect(await context.prisma.bid.count({ where: { lotId: lot.id } })).toBe(
-      2,
+      1,
     );
+
+    const session = await request(context.httpServer)
+      .get('/operator/session')
+      .set('Authorization', `Bearer ${firstOperator.token}`);
+    expect(bodyOf(session).currentLot.nextMinimumBid).toBe('1005');
   });
 });

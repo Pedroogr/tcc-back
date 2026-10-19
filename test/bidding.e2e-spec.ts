@@ -68,6 +68,9 @@ describe('bidding (e2e)', () => {
     const firstToken = await login(context, firstBuyer.email);
     const secondToken = await login(context, secondBuyer.email);
 
+    const openingLot = await request(context.httpServer).get(`/lots/${lot.id}`);
+    expect(openingLot.body.hasWinningBid).toBe(false);
+
     const firstResponse = await request(context.httpServer)
       .post(`/lots/${lot.id}/bids`)
       .set('Authorization', `Bearer ${firstToken}`)
@@ -109,6 +112,47 @@ describe('bidding (e2e)', () => {
     expect(publicLot.body).not.toHaveProperty('bids');
     expect(JSON.stringify(publicLot.body)).not.toContain(firstBuyer.email);
     expect(JSON.stringify(publicLot.body)).not.toContain(secondBuyer.email);
+  });
+
+  it('rejects a bid equal to the current winner without storing a duplicate', async () => {
+    const auctionHouse = await createAuctionHouse(context.prisma);
+    const auction = await createAuction(context.prisma, auctionHouse.id);
+    const lot = await createLot(context.prisma, auction.id, {
+      status: LotStatus.IN_AUCTION,
+    });
+    const firstBuyer = (await createBuyer(context.prisma)).user;
+    const secondBuyer = (await createBuyer(context.prisma)).user;
+    await createBuyerRegistration(
+      context.prisma,
+      firstBuyer.id,
+      auctionHouse.id,
+    );
+    await createBuyerRegistration(
+      context.prisma,
+      secondBuyer.id,
+      auctionHouse.id,
+    );
+    const firstToken = await login(context, firstBuyer.email);
+    const secondToken = await login(context, secondBuyer.email);
+
+    const firstResponse = await request(context.httpServer)
+      .post(`/lots/${lot.id}/bids`)
+      .set('Authorization', `Bearer ${firstToken}`)
+      .send({ amount: 1000 });
+    const duplicateResponse = await request(context.httpServer)
+      .post(`/lots/${lot.id}/bids`)
+      .set('Authorization', `Bearer ${secondToken}`)
+      .send({ amount: 1000 });
+    const lotWithWinner = await request(context.httpServer).get(
+      `/lots/${lot.id}`,
+    );
+
+    expect(firstResponse.status).toBe(201);
+    expect(duplicateResponse.status).toBe(400);
+    expect(lotWithWinner.body.hasWinningBid).toBe(true);
+    expect(await context.prisma.bid.count({ where: { lotId: lot.id } })).toBe(
+      1,
+    );
   });
 
   it('rejects a bid outside the R$ 5 step without storing it', async () => {
