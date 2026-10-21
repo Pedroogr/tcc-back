@@ -151,7 +151,8 @@ describe('WebSocket gateways E2E', () => {
       lot: expect.objectContaining({
         id: lot.id,
         code: '2',
-        nextMinimumBid: '1100',
+        nextMinimumBid: '1000',
+        hasWinningBid: false,
       }),
     });
   });
