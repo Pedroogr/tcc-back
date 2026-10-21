@@ -268,6 +268,33 @@ pelo menos 250 ms, valor que sozinho consome toda a meta de latência. Serão
 comparadas janelas de 80, 100 e 120 ms, medindo simultaneamente velocidade,
 falsos positivos e falsos negativos.
 
+### 3.10. Monitor local para compreender a inferência remota
+
+Ao preparar o teste completo pelo navegador, surgiu a necessidade de observar
+no desktop o que o worker realmente recebia do notebook. O serviço existente
+processava o JPEG em memória e registrava apenas tempos no terminal. Abrir a
+estação em um segundo navegador não resolveria o problema, pois esse navegador
+usaria a câmera do próprio desktop; retransmitir o vídeo exigiria outro fluxo de
+rede e ampliaria desnecessariamente o escopo.
+
+Foram consideradas uma página de monitoramento servida pelo FastAPI e uma
+janela OpenCV local. A página seria mais flexível, mas exigiria broadcast,
+autenticação e proteção de um novo endpoint contendo imagens. Foi escolhida a
+janela local por ser uma ferramenta de diagnóstico limitada ao computador que
+já realiza a inferência.
+
+O monitor foi implementado como opção explícita, desligada por padrão. Quando
+`GESTURE_DEBUG_PREVIEW=true`, ele mostra uma cópia do quadro recebido com caixas,
+confiança, pontos e esqueleto. O painel acrescenta somente informações que o
+worker conhece: resolução, tamanho do JPEG, poses, contador de frames, FPS de
+processamento, modelo, GPU e tempos internos. RTT, tracking, primeira mão e
+entrega do alerta permanecem no notebook e não são simulados no desktop. O
+monitor não grava nem retransmite imagens. A tecla `Q` fecha somente a janela
+até o reinício do servidor. O recurso não deve ser usado em medições de
+desempenho, porque copiar, desenhar e apresentar frames pode alterar os tempos.
+Essa separação preserva o worker mínimo na operação normal e oferece evidência
+visual durante a validação funcional.
+
 ## 4. Matriz das principais decisões
 
 | Problema | Alternativas relevantes | Decisão | Evidência e compensação |

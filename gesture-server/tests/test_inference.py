@@ -72,11 +72,17 @@ class FakeModel:
         return self.results
 
 
-def settings_for(model_path: Path, sha256: str | None = None) -> GestureSettings:
+def settings_for(
+    model_path: Path,
+    sha256: str | None = None,
+    *,
+    debug_preview: bool = False,
+) -> GestureSettings:
     return GestureSettings(
         model_path=model_path,
         model_sha256=sha256 or hashlib.sha256(model_path.read_bytes()).hexdigest(),
         token="test-secret",
+        debug_preview=debug_preview,
     )
 
 
@@ -146,6 +152,44 @@ def test_maps_ultralytics_result_to_pose_contract(tmp_path: Path) -> None:
         }
     ]
     assert cuda.synchronizations == 2
+
+
+def test_enabled_debug_preview_receives_decoded_frame_and_mapped_poses(tmp_path: Path) -> None:
+    from app.inference import create_cuda_engine
+
+    class RecordingPreview:
+        def __init__(self) -> None:
+            self.frames: list[Any] = []
+
+        def show(self, frame: Any) -> bool:
+            self.frames.append(frame)
+            return True
+
+        def close(self) -> None:
+            pass
+
+    model_path = tmp_path / "model.pt"
+    model_path.write_bytes(b"model")
+    image = FakeImage()
+    preview = RecordingPreview()
+    engine = create_cuda_engine(
+        settings_for(model_path, debug_preview=True),
+        decoder=lambda _: image,
+        model_loader=lambda _: FakeModel([one_person_result()]),
+        cuda=FakeCuda(),
+        preview_factory=lambda: preview,
+    )
+
+    result = engine.infer(b"jpeg")
+
+    assert len(preview.frames) == 1
+    frame = preview.frames[0]
+    assert frame.image is image
+    assert frame.poses == result.poses
+    assert frame.timings == result.timings
+    assert frame.jpeg_bytes == len(b"jpeg")
+    assert frame.model_name == "yolo11s-pose"
+    assert frame.device_name == "Fake CUDA 0"
 
 
 @pytest.mark.parametrize("image", [None, FakeImage(height=0), FakeImage(width=0)])
@@ -301,6 +345,31 @@ def test_production_app_loads_engine_once_during_lifespan(tmp_path: Path) -> Non
     assert first.status_code == 200
     assert second.status_code == 200
     assert calls == 1
+
+
+def test_production_app_closes_engine_during_shutdown(tmp_path: Path) -> None:
+    from app.main import create_production_app
+
+    model_path = tmp_path / "model.pt"
+    model_path.write_bytes(b"model")
+
+    class ReadyEngine:
+        ready = True
+        metadata: dict[str, Any] = {}
+
+        def __init__(self) -> None:
+            self.closed = False
+
+        def close(self) -> None:
+            self.closed = True
+
+    engine = ReadyEngine()
+    app = create_production_app(settings_for(model_path), engine_factory=lambda _: engine)
+
+    with TestClient(app) as client:
+        assert client.get("/health").status_code == 200
+
+    assert engine.closed is True
 
 
 def test_gpu_smoke_summary_does_not_expose_secret_or_model_path(tmp_path: Path) -> None:

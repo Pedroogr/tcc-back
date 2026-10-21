@@ -71,4 +71,30 @@ def test_loads_valid_settings_with_safe_defaults(tmp_path: Path) -> None:
     assert settings.protocol_version == 1
     assert settings.capture_max_width == 640
     assert settings.jpeg_quality == 80
+    assert settings.debug_preview is False
     assert settings.token not in repr(settings)
+
+
+def test_enables_debug_preview_explicitly(tmp_path: Path) -> None:
+    from app.config import GestureSettings
+
+    model_path = tmp_path / "model.pt"
+    model_path.write_bytes(b"model")
+    environment = valid_environment(model_path)
+    environment["GESTURE_DEBUG_PREVIEW"] = "true"
+
+    settings = GestureSettings.from_env(environment)
+
+    assert settings.debug_preview is True
+
+
+def test_rejects_invalid_debug_preview_value(tmp_path: Path) -> None:
+    from app.config import GestureSettings, SettingsError
+
+    model_path = tmp_path / "model.pt"
+    model_path.write_bytes(b"model")
+    environment = valid_environment(model_path)
+    environment["GESTURE_DEBUG_PREVIEW"] = "sometimes"
+
+    with pytest.raises(SettingsError, match="GESTURE_DEBUG_PREVIEW"):
+        GestureSettings.from_env(environment)

@@ -192,6 +192,8 @@
 - [x] Executar ao menos três rodadas controladas e registrar tamanho da amostra e resultados.
 - [x] Registrar hardware e versões dos ambientes servidor e cliente.
 - [x] Registrar iluminação, distância, enquadramento e pessoas presentes no ensaio.
+- [x] Adicionar monitor OpenCV local, opt-in e sem persistência, com caixas, confiança, pontos, esqueleto e telemetria exclusiva do servidor.
+- [x] Manter o monitor desligado por padrão e documentar que ele não deve ser usado nos benchmarks.
 - [ ] Confirmar que desconectar o serviço interrompe a estação sem criar lance ou fallback automático.
 - [ ] Comparar o mesmo vídeo em `local` e `remote`, registrando precisão observada e desempenho sem inferir conclusão além da amostra.
 - [x] Executar todas as suítes dos dois projetos e registrar comandos/resultados no documento.
