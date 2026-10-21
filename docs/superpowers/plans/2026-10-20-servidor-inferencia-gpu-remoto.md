@@ -133,18 +133,18 @@
 - Create: `src/gesture/remote-pose-estimator.test.ts`
 - Modify: `src/gesture/pose-estimator.ts`
 
-- [ ] Extrair uma interface `PoseEstimatorPort` com `start`, `detect` e `dispose`; fazer o estimador local implementá-la sem mudar seu comportamento.
-- [ ] Escrever testes do frame binário: quatro bytes big-endian, JPEG restante e wrap de uint32.
-- [ ] Escrever testes de validação das mensagens `ready`, `pose` e `error`, rejeitando versão e campos inválidos.
-- [ ] Executar `npm run test:unit -- remote-pose-protocol` e confirmar falha.
-- [ ] Implementar codec sem dependência de React.
-- [ ] Escrever fake de WebSocket e testes de handshake, token na primeira mensagem, timeout, detecção e mapeamento para `PoseDetectionFrame`.
-- [ ] Testar uma requisição em voo, substituição pelo frame pendente mais novo, resposta antiga, desconexão e `dispose` idempotente.
-- [ ] Executar `npm run test:unit -- remote-pose-estimator` e confirmar falha.
-- [ ] Implementar compressão de `ImageBitmap` em JPEG via canvas injetável/testável e fechar bitmaps em todos os caminhos.
-- [ ] Implementar geração de conexão; mensagens de conexão antiga não podem resolver promises atuais.
-- [ ] Executar `npm run test:unit -- remote-pose-protocol remote-pose-estimator` e `npm run build`.
-- [ ] Commit: `feat: add remote pose estimator`
+- [x] Extrair uma interface `PoseEstimatorPort` com `start`, `detect` e `dispose`; fazer o estimador local implementá-la sem mudar seu comportamento.
+- [x] Escrever testes do frame binário: quatro bytes big-endian, JPEG restante e wrap de uint32.
+- [x] Escrever testes de validação das mensagens `ready`, `pose` e `error`, rejeitando versão e campos inválidos.
+- [x] Executar `npm run test:unit -- remote-pose-protocol` e confirmar falha.
+- [x] Implementar codec sem dependência de React.
+- [x] Escrever fake de WebSocket e testes de handshake, token na primeira mensagem, timeout, detecção e mapeamento para `PoseDetectionFrame`.
+- [x] Testar uma requisição em voo, substituição pelo frame pendente mais novo, resposta antiga, desconexão e `dispose` idempotente.
+- [x] Executar `npm run test:unit -- remote-pose-estimator` e confirmar falha.
+- [x] Implementar compressão de `ImageBitmap` em JPEG via canvas injetável/testável e fechar bitmaps em todos os caminhos.
+- [x] Implementar geração de conexão; mensagens de conexão antiga não podem resolver promises atuais.
+- [x] Executar `npm run test:unit -- remote-pose-protocol remote-pose-estimator` e `npm run build`.
+- [x] Commit: `feat: add remote pose estimator`
 
 ### Task 6: Integrar a escolha explícita na estação
 
