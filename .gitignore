@@ -3,6 +3,12 @@
 /node_modules
 /build
 /gesture-poc/.venv
+/gesture-server/.venv
+/gesture-server/.pytest_cache
+/gesture-server/.coverage
+/gesture-server/.env
+__pycache__/
+*.py[cod]
 /public/uploads/*
 !/public/uploads/.gitkeep
 !/public/uploads/lots/

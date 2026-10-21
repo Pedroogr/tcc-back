@@ -1,0 +1,19 @@
+[project]
+name = "tcc-gesture-server"
+version = "0.1.0"
+description = "Private GPU pose inference service for the cattle auction gesture station"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+  "fastapi>=0.118,<1",
+  "uvicorn[standard]>=0.37,<1",
+]
+
+[dependency-groups]
+dev = [
+  "httpx2>=2,<3",
+  "pytest>=8.4,<9",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"

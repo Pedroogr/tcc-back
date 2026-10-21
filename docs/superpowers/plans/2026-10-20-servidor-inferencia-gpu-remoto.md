@@ -46,15 +46,15 @@
 - Create: `gesture-server/tests/test_health.py`
 - Modify: `.gitignore`
 
-- [ ] Escrever testes para token ausente, modelo ausente, hash divergente e configuração válida.
-- [ ] Escrever teste de `GET /health`: `503` quando o engine não está pronto e `200` com metadados públicos quando está pronto.
-- [ ] Executar `uv run pytest tests/test_config.py tests/test_health.py -q` e confirmar falha pelo pacote ainda inexistente.
-- [ ] Implementar `GestureSettings` lendo apenas variáveis `GESTURE_*`, incluindo caminho, hash, dispositivo, token, origens, limite de 512 KiB, timeout de 5 s e protocolo 1.
-- [ ] Criar `create_app(engine, settings)` e resposta de health sem caminho local, token ou stack trace.
-- [ ] Adicionar `.venv`, caches Python, relatórios e arquivos `.env` do subprojeto ao `.gitignore`.
-- [ ] Executar os testes novamente e confirmar sucesso.
-- [ ] Executar `uv lock` para produzir `gesture-server/uv.lock` reprodutível.
-- [ ] Commit: `feat: scaffold GPU inference service`
+- [x] Escrever testes para token ausente, modelo ausente, hash divergente e configuração válida.
+- [x] Escrever teste de `GET /health`: `503` quando o engine não está pronto e `200` com metadados públicos quando está pronto.
+- [x] Executar `uv run pytest tests/test_config.py tests/test_health.py -q` e confirmar falha pelo pacote ainda inexistente.
+- [x] Implementar `GestureSettings` lendo apenas variáveis `GESTURE_*`, incluindo caminho, hash, dispositivo, token, origens, limite de 512 KiB, timeout de 5 s e protocolo 1.
+- [x] Criar `create_app(engine, settings)` e resposta de health sem caminho local, token ou stack trace.
+- [x] Adicionar `.venv`, caches Python, relatórios e arquivos `.env` do subprojeto ao `.gitignore`.
+- [x] Executar os testes novamente e confirmar sucesso.
+- [x] Executar `uv lock` para produzir `gesture-server/uv.lock` reprodutível.
+- [x] Commit: `feat: scaffold GPU inference service`
 
 ### Task 2: Definir e testar o protocolo puro
 
