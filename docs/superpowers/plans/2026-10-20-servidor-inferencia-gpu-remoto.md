@@ -63,14 +63,14 @@
 - Create: `gesture-server/app/protocol.py`
 - Create: `gesture-server/tests/test_protocol.py`
 
-- [ ] Escrever testes para `hello` válido, versão incompatível, payload que não é JSON e campos extras/ausentes.
-- [ ] Escrever testes para frame binário com menos de 5 bytes, `frameId` uint32 big-endian, JPEG vazio e limite excedido.
-- [ ] Escrever teste de serialização de `ready`, `pose` e erro estável, verificando que `frameId`, poses e tempos são preservados.
-- [ ] Executar `uv run pytest tests/test_protocol.py -q` e confirmar falha.
-- [ ] Implementar tipos imutáveis para metadata, keypoint, box, pose, tempos e resultado.
-- [ ] Implementar parsing separado de autenticação e frame; nenhuma função pura deve conhecer FastAPI.
-- [ ] Executar `uv run pytest tests/test_protocol.py -q` e depois `uv run pytest -q`.
-- [ ] Commit: `feat: define pose websocket protocol`
+- [x] Escrever testes para `hello` válido, versão incompatível, payload que não é JSON e campos extras/ausentes.
+- [x] Escrever testes para frame binário com menos de 5 bytes, `frameId` uint32 big-endian, JPEG vazio e limite excedido.
+- [x] Escrever teste de serialização de `ready`, `pose` e erro estável, verificando que `frameId`, poses e tempos são preservados.
+- [x] Executar `uv run pytest tests/test_protocol.py -q` e confirmar falha.
+- [x] Implementar tipos imutáveis para metadata, keypoint, box, pose, tempos e resultado.
+- [x] Implementar parsing separado de autenticação e frame; nenhuma função pura deve conhecer FastAPI.
+- [x] Executar `uv run pytest tests/test_protocol.py -q` e depois `uv run pytest -q`.
+- [x] Commit: `feat: define pose websocket protocol`
 
 ## Subprojeto B — Inferência CUDA isolada
 

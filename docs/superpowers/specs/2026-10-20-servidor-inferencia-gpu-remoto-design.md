@@ -238,7 +238,6 @@ Uma inferência bem-sucedida retorna:
   "type": "pose",
   "protocolVersion": 1,
   "frameId": 42,
-  "sampledAtMs": 12345.67,
   "modelVersion": "yolo11s-pose:1060bda4",
   "timings": {
     "decodeMs": 2.1,
@@ -251,9 +250,9 @@ Uma inferência bem-sucedida retorna:
 }
 ```
 
-`sampledAtMs` é preservado pelo cliente localmente e associado ao `frameId`;
-não é usado para comparar relógios entre máquinas. O cliente calcula o RTT com
-seu próprio relógio monotônico.
+`sampledAtMs` não atravessa a rede: ele é preservado pelo cliente e associado
+localmente ao `frameId`. Assim, não há comparação entre relógios de máquinas
+diferentes. O cliente calcula o RTT com seu próprio relógio monotônico.
 
 Erros recuperáveis retornam `{ "type": "error", "frameId", "code",
 "message" }`. Erros de autenticação, protocolo ou abuso encerram a conexão.
