@@ -1,7 +1,7 @@
 # Notas de processo e decisões do TCC
 
 **Período reconstruído:** abril a outubro de 2026
-**Última atualização:** 20 de outubro de 2026
+**Última atualização:** 21 de outubro de 2026
 **Natureza do documento:** diário retrospectivo de engenharia e fonte para a monografia
 
 ## Como usar este documento
@@ -54,6 +54,7 @@ evoluiu para a proposta de um serviço privado de inferência em GPU.
 | Setembro de 2026 | RF06–RF10, concorrência, venda, vencedor, IE, operador e relay de gestos | As regras de negócio passaram a ser centralizadas e protegidas por testes. |
 | Início de outubro de 2026 | Estação de gestos no navegador e otimização com YOLO11n | A integração ficou simples de distribuir, porém o notebook real expôs um gargalo extremo. |
 | 14–20 de outubro de 2026 | Pesquisa de GPU em nuvem, benchmark da RTX 3070 Ti e desenho do servidor remoto | A GPU doméstica mostrou desempenho suficiente; a prioridade passou a ser rede, protocolo e latência ponta a ponta. |
+| 21 de outubro de 2026 | Integração Windows–Ubuntu e primeiro smoke pela LAN | Saúde, autenticação e WebSocket/JPEG funcionaram entre o notebook Ubuntu e a RTX. Uma amostra concluiu em `48,962 ms` ponta a ponta, mas um frame sintético comprova o caminho técnico, não p95 nem precisão. |
 
 ## 3. Evolução por fase
 
@@ -325,6 +326,16 @@ falsos positivos e falsos negativos.
   para p95 da captura até a apresentação.
 - Uma fila convencional aumentaria atraso quando a entrada fosse mais rápida
   que a GPU ou a rede. A política escolhida mantém somente o frame mais recente.
+- A primeira requisição real após iniciar o CUDA levou cerca de `2,55 s`,
+  enquanto o smoke local aquecido levou `37,575 ms` ponta a ponta. O cliente
+  passou a executar três frames de aquecimento não contabilizados para separar
+  inicialização de desempenho em regime estável.
+- O lock do worker é intencionalmente restrito ao Windows. No Ubuntu, o cliente
+  portátil precisou ser executado com `uv run --script`; ferramentas auxiliares
+  usaram `--no-project` para não tentar resolver o ambiente CUDA do servidor.
+- A imagem inicialmente escolhida estava em uma pasta de uploads ignorada pelo
+  Git e, portanto, não existia no notebook. Isso mostrou que a entrada de um
+  benchmark precisa ser gerada ou distribuída explicitamente.
 
 ### Rede e operação
 
@@ -336,6 +347,12 @@ falsos positivos e falsos negativos.
 - Um IPv4 público torna a conexão direta possível, mas também aumenta a
   responsabilidade de não expor o FastAPI. Somente a porta UDP do túnel poderá
   ser encaminhada.
+- O Windows classificava a rede local como pública. Após confirmação explícita,
+  o perfil foi alterado para privado e a exceção de firewall ficou limitada à
+  porta TCP `8765`, ao perfil privado e à sub-rede local.
+- A instalação temporária de SSH no notebook foi considerada desnecessária para
+  o ensaio e desativada. Os comandos e resultados continuaram sendo transferidos
+  manualmente, sem transformar o notebook em servidor permanente.
 
 ## 6. Alternativas rejeitadas ou adiadas
 
@@ -387,6 +404,11 @@ chave da VPN e o token da aplicação têm ciclos de vida independentes.
   estimador ser local ou remoto.
 - Separar inferência e domínio impede que o worker de GPU se torne uma segunda
   API de negócio.
+- O notebook Ubuntu consegue autenticar, enviar JPEG por WebSocket e receber a
+  pose processada pela RTX do desktop através da LAN. Em três rodadas com vídeo,
+  os `900/900` frames foram concluídos sem perdas e o p95 do cliente permaneceu
+  entre `29,987` e `37,804 ms`. Isso ainda não mede tracker, apresentação ou
+  precisão da pose.
 
 ### Hipóteses ainda não validadas
 
@@ -400,13 +422,79 @@ chave da VPN e o token da aplicação têm ciclos de vida independentes.
 
 ### Próximas medições
 
-1. Validar o protocolo e o modelo na LAN.
-2. Medir captura, compressão, bytes, RTT, servidor, tracker e apresentação.
-3. Repetir por WireGuard fora da rede doméstica.
-4. Testar perda, jitter, queda do serviço e reconexão.
-5. Comparar YOLO11n local e YOLO11s remoto com o mesmo conjunto de vídeos.
-6. Avaliar falsos positivos e falsos negativos nas três janelas temporais.
-7. Registrar ambiente, versões, amostra e método de cada benchmark.
+O ensaio controlado usará uma única gravação real de 20 segundos a `15 FPS`,
+dividida em quatro fases de cinco segundos: braços abaixados, uma mão levantada,
+mão abaixada e a outra mão levantada. Reutilizar o mesmo arquivo nas três
+rodadas e na comparação local/remota reduz variação da entrada; iluminação,
+distância, enquadramento e pessoas presentes ainda precisam ser registrados.
+
+Em 21 de outubro, a sequência foi gravada no notebook Ubuntu e salva
+temporariamente em `/tmp/tcc-gesture-lan.mp4`. Isso concluiu a preparação da
+entrada reproduzível. A inspeção confirmou abertura correta, resolução
+`640×480`, `15 FPS`, `300` frames e `20,0 s` de duração. A gravação e seus
+metadados ainda não constituem evidência de desempenho ou precisão; as três
+rodadas permaneciam pendentes naquele momento.
+
+Na primeira rodada LAN, os `300` frames foram enviados e concluídos sem
+descarte, substituição ou rejeição. O p95 foi de `29,282 ms` para RTT,
+`15,747 ms` para inferência, `18,685 ms` para o servidor e `31,997 ms` desde a
+leitura do frame até a resposta WebSocket. O throughput observado foi de
+`37,778 FPS`, mas esse valor resulta da leitura do arquivo sem ritmo de
+reprodução e não deve ser confundido com os `15 FPS` da gravação ou com FPS de
+apresentação. Tracker e pintura no navegador não fizeram parte desta rodada.
+
+Na segunda rodada, os `300` frames também foram concluídos sem perdas. O p95
+foi de `34,329 ms` para RTT, `14,262 ms` para inferência, `17,807 ms` para o
+servidor e `37,804 ms` até a resposta. A diferença em relação à primeira
+rodada concentrou-se mais no transporte e na compressão do que na inferência,
+mas a terceira repetição ainda era necessária antes de resumir a estabilidade.
+
+Na terceira rodada, novamente não houve perdas entre os `300` frames. O p95
+foi de `26,475 ms` para RTT, `15,088 ms` para inferência, `17,966 ms` para o
+servidor e `29,987 ms` até a resposta. Considerando as três rodadas, foram
+concluídos `900/900` frames, o throughput médio foi de `37,941 FPS` e a média
+dos p95 por rodada foi de `30,029 ms` para RTT, `15,032 ms` para inferência,
+`18,153 ms` para servidor e `33,263 ms` até a resposta. Essa média resume os
+três agregados e não equivale a recalcular o p95 sobre as 900 amostras.
+
+O servidor medido executava Windows 11 Pro build `26200`, Ryzen 9 5900X,
+`31,9 GiB` de RAM, RTX 3070 Ti de `8 GiB` e driver NVIDIA `617.42`. O ambiente
+Python usava Python `3.10.11`, PyTorch `2.13.0+cu130`, Ultralytics `8.4.177` e
+OpenCV `5.0.0`. Essas versões foram registradas junto ao roteiro para permitir
+comparações futuras sem tratar o resultado como independente do ambiente.
+
+O cliente era um Dell Inspiron 15 3520 com Ubuntu `25.10`, kernel
+`6.17.0-41-generic`, Intel Core i5-1235U, `14 GiB` de RAM, Python `3.10.22` e
+uv `0.13.4`. A primeira coleta das versões das bibliotecas falhou ao consultar
+o atributo de versão do módulo OpenCV; os dados já emitidos foram preservados e
+a consulta pelos metadados dos pacotes confirmou opencv-python `5.0.0.93` e
+websockets `16.1.1`, sem reinstalar o projeto do servidor no Linux.
+
+A gravação foi feita com iluminação natural e a webcam integrada do notebook,
+que estava apoiado no colo, a aproximadamente `30 cm` da pessoa. O
+enquadramento mostrava o tronco de uma única pessoa.
+
+Ao planejar a instrumentação do navegador, foi considerada inicialmente a
+exibição de todas as métricas em um painel. A proposta foi reduzida porque a
+finalidade da estação é auxiliar a operação, não apresentar telemetria ao
+pisteiro. A interface normal permaneceu inalterada; somente a rota com
+`?benchmark=1` mostra o estado, a quantidade de amostras e ações de zerar e
+exportar. Os detalhes ficam no JSON agregado, sem imagens, poses ou token.
+
+A instrumentação inicia o relógio antes da criação do frame, separa resposta,
+tracker e apresentação e encerra a medição após uma oportunidade de pintura do
+navegador. RTT foi mantido como métrica diagnóstica de ida do frame e volta da
+resposta, incluindo o trabalho remoto, mas não foi confundido com latência
+percebida. O desenvolvimento test-first elevou a suíte do frontend de 104 para
+116 testes; lint e build também passaram. A coleta real no notebook ainda era
+necessária para preencher os percentis de tracker, apresentação e ponta a
+ponta.
+
+1. Medir tracker e apresentação na estação web para completar a latência percebida.
+2. Testar queda do serviço, interrupção segura e reconexão.
+3. Comparar YOLO11n local e YOLO11s remoto com o mesmo vídeo.
+4. Avaliar falsos positivos e falsos negativos nas três janelas temporais.
+5. Repetir por WireGuard fora da rede doméstica e medir perda e jitter.
 
 ## 9. Lições que podem fundamentar a monografia
 
