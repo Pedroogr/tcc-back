@@ -33,3 +33,14 @@ Todas as variáveis pertencem ao prefixo `GESTURE_`:
 - `GESTURE_JPEG_QUALITY`: padrão `80`.
 
 Não versione arquivos `.env`, tokens, chaves WireGuard ou endereços públicos.
+
+## Benchmark LAN
+
+O cliente de benchmark aceita vídeo, imagem ou diretório de imagens e não persiste frames nem respostas:
+
+```powershell
+$env:GESTURE_BENCHMARK_TOKEN = Read-Host "Token efêmero"
+uv run python scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pose --origin http://localhost:5173 --input C:\caminho\ensaio.mp4 --max-frames 300
+```
+
+O procedimento completo, incluindo firewall privado, três rodadas controladas e a comparação local/remota, está em [docs/lan-validation.md](docs/lan-validation.md).

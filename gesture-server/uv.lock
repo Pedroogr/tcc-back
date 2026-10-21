@@ -574,6 +574,7 @@ dependencies = [
     { name = "torchvision" },
     { name = "ultralytics" },
     { name = "uvicorn", extra = ["standard"] },
+    { name = "websockets" },
 ]
 
 [package.dev-dependencies]
@@ -592,6 +593,7 @@ requires-dist = [
     { name = "torchvision", specifier = "==0.28.0+cu130", index = "https://download.pytorch.org/whl/cu130" },
     { name = "ultralytics", specifier = "==8.4.177" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.37,<1" },
+    { name = "websockets", specifier = ">=16,<17" },
 ]
 
 [package.metadata.requires-dev]

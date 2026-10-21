@@ -182,14 +182,14 @@
 - Create: `gesture-server/docs/lan-validation.md`
 - Modify: `gesture-server/README.md`
 
-- [ ] Escrever testes das agregações p50, p95, FPS, descarte e bytes antes do script.
-- [ ] Implementar cliente de benchmark com vídeo/frames fornecidos, sem persistir respostas ou imagens por padrão.
-- [ ] Documentar preparação do desktop, variáveis, firewall de perfil privado, execução com um worker e verificação pelo notebook.
+- [x] Escrever testes das agregações p50, p95, FPS, descarte e bytes antes do script.
+- [x] Implementar cliente de benchmark com vídeo/frames fornecidos, sem persistir respostas ou imagens por padrão.
+- [x] Documentar preparação do desktop, variáveis, firewall de perfil privado, execução com um worker e verificação pelo notebook.
 - [ ] Medir captura, compressão, RTT, decode, preprocess, inferência, postprocess, tracker e apresentação.
 - [ ] Executar ao menos três rodadas controladas, registrar hardware, versões, tamanho da amostra e resultados.
 - [ ] Confirmar que desconectar o serviço interrompe a estação sem criar lance ou fallback automático.
 - [ ] Comparar o mesmo vídeo em `local` e `remote`, registrando precisão observada e desempenho sem inferir conclusão além da amostra.
-- [ ] Executar todas as suítes dos dois projetos e registrar comandos/resultados no documento.
+- [x] Executar todas as suítes dos dois projetos e registrar comandos/resultados no documento.
 - [ ] Commit: `test: validate remote inference over LAN`
 
 ### Task 8: Preparar o runbook da etapa WireGuard

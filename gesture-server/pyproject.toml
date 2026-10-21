@@ -12,6 +12,7 @@ dependencies = [
   "torchvision==0.28.0+cu130",
   "ultralytics==8.4.177",
   "uvicorn[standard]>=0.37,<1",
+  "websockets>=16,<17",
 ]
 
 [dependency-groups]
