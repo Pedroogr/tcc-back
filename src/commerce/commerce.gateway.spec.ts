@@ -254,6 +254,7 @@ describe('CommerceGateway', () => {
         status: 'IN_AUCTION',
         currentPrice: '1000',
         nextMinimumBid: '1100',
+        hasWinningBid: false,
       },
     };
 
