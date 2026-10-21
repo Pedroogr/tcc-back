@@ -8,7 +8,7 @@ Este roteiro produz evidência reproduzível sem salvar frames, poses ou o token
 - Perfil de rede do Windows do desktop definido como `Private`.
 - Desktop com RTX 3070 Ti, driver NVIDIA funcional e modelo cujo SHA-256 corresponde à configuração.
 - Mesmo arquivo de vídeo de teste disponível para todas as rodadas. Não versionar gravações com pessoas sem consentimento.
-- Python 3.10 e `uv` nos dois computadores.
+- Python 3.10 e `uv` no desktop; apenas `uv` é necessário para o cliente isolado no notebook.
 - Porta `8765/TCP` fechada nos perfis `Public` e `Domain`.
 
 Registre antes do ensaio:
@@ -43,13 +43,12 @@ Descubra o IPv4 privado do desktop com `Get-NetIPAddress -AddressFamily IPv4`. N
 
 ## 2. Validar a partir do notebook
 
-No notebook, clone ou atualize os repositórios e entre em `tcc-back\gesture-server`:
+No notebook, clone ou atualize os repositórios e entre em `tcc-back\gesture-server`. O modo `--script` instala somente OpenCV e WebSocket em um ambiente isolado; ele não instala PyTorch/CUDA nem as dependências do servidor:
 
 ```powershell
-uv sync
 Invoke-RestMethod http://IP_DO_DESKTOP:8765/health
 $env:GESTURE_BENCHMARK_TOKEN = Read-Host "Token efêmero"
-uv run python scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pose --origin http://localhost:5173 --input C:\caminho\ensaio.mp4 --max-frames 300
+uv run --script scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pose --origin http://localhost:5173 --input C:\caminho\ensaio.mp4 --max-frames 300
 ```
 
 O cliente lê vídeo, imagem ou diretório de imagens fornecido, mantém apenas amostras numéricas em memória e imprime um resumo agregado. Antes de medir, ele repete o primeiro frame três vezes para aquecer CUDA; altere isso somente de forma explícita com `--warmup-frames`. `--output caminho.json` é opcional e grava somente esse resumo. O token nunca deve ser passado como argumento.

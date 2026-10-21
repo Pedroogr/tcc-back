@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+# /// script
+# requires-python = ">=3.10,<3.11"
+# dependencies = [
+#   "opencv-python==5.0.0.93",
+#   "websockets>=16,<17",
+# ]
+# ///
+
 import argparse
 import asyncio
 import json

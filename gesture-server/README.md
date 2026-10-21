@@ -40,7 +40,7 @@ O cliente de benchmark aceita vídeo, imagem ou diretório de imagens e não per
 
 ```powershell
 $env:GESTURE_BENCHMARK_TOKEN = Read-Host "Token efêmero"
-uv run python scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pose --origin http://localhost:5173 --input C:\caminho\ensaio.mp4 --max-frames 300
+uv run --script scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pose --origin http://localhost:5173 --input C:\caminho\ensaio.mp4 --max-frames 300
 ```
 
 O procedimento completo, incluindo firewall privado, três rodadas controladas e a comparação local/remota, está em [docs/lan-validation.md](docs/lan-validation.md).
