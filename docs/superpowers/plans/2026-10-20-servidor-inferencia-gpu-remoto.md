@@ -84,18 +84,18 @@
 - Modify: `gesture-server/app/main.py`
 - Modify: `gesture-server/pyproject.toml`
 
-- [ ] Criar um resultado Ultralytics mínimo e determinístico em teste, sem importar modelo real.
-- [ ] Testar confiança, box em pixels, `normalizedBox`, 17 keypoints COCO e tempos não negativos.
-- [ ] Testar JPEG inválido, imagem com dimensão zero, resultado sem pessoas e falha segura de inferência.
-- [ ] Testar verificação do SHA-256 antes da carga e indisponibilidade de CUDA.
-- [ ] Executar `uv run pytest tests/test_inference.py -q` e confirmar falha.
-- [ ] Definir a interface `PoseEngine`, `ModelMetadata` e uma fábrica de produção.
-- [ ] Implementar `CudaYoloPoseEngine`: carregar uma vez, usar `device=0`, `imgsz=640`, FP16, lock único e relógio monotônico.
-- [ ] Sincronizar CUDA ao medir inferência, sem forçar a suíte determinística a ter PyTorch/CUDA.
-- [ ] Conectar a carga ao lifespan do FastAPI; falha de pré-condição deixa `/health` em `503`.
-- [ ] Executar `uv run pytest tests/test_inference.py -q` e `uv run pytest -q`.
-- [ ] Executar smoke manual no desktop com `uv run python -m app.smoke_gpu`, confirmando GPU, modelo e uma inferência.
-- [ ] Commit: `feat: add CUDA YOLO pose engine`
+- [x] Criar um resultado Ultralytics mínimo e determinístico em teste, sem importar modelo real.
+- [x] Testar confiança, box em pixels, `normalizedBox`, 17 keypoints COCO e tempos não negativos.
+- [x] Testar JPEG inválido, imagem com dimensão zero, resultado sem pessoas e falha segura de inferência.
+- [x] Testar verificação do SHA-256 antes da carga e indisponibilidade de CUDA.
+- [x] Executar `uv run pytest tests/test_inference.py -q` e confirmar falha.
+- [x] Definir a interface `PoseEngine`, `ModelMetadata` e uma fábrica de produção.
+- [x] Implementar `CudaYoloPoseEngine`: carregar uma vez, usar `device=0`, `imgsz=640`, FP16, lock único e relógio monotônico.
+- [x] Sincronizar CUDA ao medir inferência, sem forçar a suíte determinística a ter PyTorch/CUDA.
+- [x] Conectar a carga ao lifespan do FastAPI; falha de pré-condição deixa `/health` em `503`.
+- [x] Executar `uv run pytest tests/test_inference.py -q` e `uv run pytest -q`.
+- [x] Executar smoke manual no desktop com `uv run python -m app.smoke_gpu`, confirmando GPU, modelo e uma inferência.
+- [x] Commit: `feat: add CUDA YOLO pose engine`
 
 ## Subprojeto C — Sessão WebSocket e controle de carga
 

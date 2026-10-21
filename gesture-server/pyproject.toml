@@ -5,6 +5,12 @@ description = "Private GPU pose inference service for the cattle auction gesture
 requires-python = ">=3.10,<3.11"
 dependencies = [
   "fastapi>=0.118,<1",
+  "numpy==2.2.6",
+  "opencv-python==5.0.0.93",
+  "pillow==12.3.0",
+  "torch==2.13.0+cu130",
+  "torchvision==0.28.0+cu130",
+  "ultralytics==8.4.177",
   "uvicorn[standard]>=0.37,<1",
 ]
 
@@ -17,3 +23,15 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--strict-markers --strict-config"
+
+[tool.uv]
+environments = ["sys_platform == 'win32'"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
