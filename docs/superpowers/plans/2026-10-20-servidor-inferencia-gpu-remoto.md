@@ -159,17 +159,17 @@
 - Modify: `src/gesture/pose-types.ts`
 - Modify: `.env.example`
 
-- [ ] Definir modo e URL não secretos em `.env.example`; receber o token em um campo `password` da estação e mantê-lo somente no `sessionStorage`, nunca no bundle ou no Git.
-- [ ] Testar leitura, atualização e limpeza da configuração de sessão sem retornar o token em mensagens, estado de telemetria ou logs.
-- [ ] Testar a factory para `local` e `remote` e erro em configuração incompleta.
-- [ ] Testar labels `remote-cuda`, `webgpu` e `wasm`.
-- [ ] Testar falha remota antes do início com opção manual de modo local.
-- [ ] Testar queda durante rodada: parar captura, limpar pendências, manter tracker sem novo evento e mostrar erro; não alternar automaticamente.
-- [ ] Executar os testes direcionados e confirmar falha antes da implementação.
-- [ ] Injetar a factory na estação e preservar o tracker, snapshot e relay existentes.
-- [ ] Exibir modo, conectividade, RTT, inferência e FPS efetivo sem mostrar token ou URL sensível.
-- [ ] Executar `npm run test:unit`, `npm run lint` e `npm run build`.
-- [ ] Commit: `feat: select local or remote gesture inference`
+- [x] Definir modo e URL não secretos em `.env.example`; receber o token em um campo `password` da estação e mantê-lo somente no `sessionStorage`, nunca no bundle ou no Git.
+- [x] Testar leitura, atualização e limpeza da configuração de sessão sem retornar o token em mensagens, estado de telemetria ou logs.
+- [x] Testar a factory para `local` e `remote` e erro em configuração incompleta.
+- [x] Testar labels `remote-cuda`, `webgpu` e `wasm`.
+- [x] Testar falha remota antes do início com opção manual de modo local.
+- [x] Testar queda durante rodada: parar captura, limpar pendências, manter tracker sem novo evento e mostrar erro; não alternar automaticamente.
+- [x] Executar os testes direcionados e confirmar falha antes da implementação.
+- [x] Injetar a factory na estação e preservar o tracker, snapshot e relay existentes.
+- [x] Exibir modo, conectividade, RTT, inferência e FPS efetivo sem mostrar token ou URL sensível.
+- [x] Executar `npm run test:unit`, `npm run lint` e `npm run build`.
+- [x] Commit: `feat: select local or remote gesture inference`
 
 ## Subprojeto E — Integração e evidência experimental
 
