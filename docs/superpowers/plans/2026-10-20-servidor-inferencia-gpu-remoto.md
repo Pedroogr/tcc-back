@@ -185,8 +185,13 @@
 - [x] Escrever testes das agregações p50, p95, FPS, descarte e bytes antes do script.
 - [x] Implementar cliente de benchmark com vídeo/frames fornecidos, sem persistir respostas ou imagens por padrão.
 - [x] Documentar preparação do desktop, variáveis, firewall de perfil privado, execução com um worker e verificação pelo notebook.
-- [ ] Medir captura, compressão, RTT, decode, preprocess, inferência, postprocess, tracker e apresentação.
-- [ ] Executar ao menos três rodadas controladas, registrar hardware, versões, tamanho da amostra e resultados.
+- [x] Gravar no notebook Ubuntu a sequência controlada reutilizável de 20 segundos para as medições.
+- [x] Medir captura, compressão, bytes, RTT, decode, preprocess, inferência e postprocess.
+- [x] Instrumentar o modo web `?benchmark=1` com coleta em memória, apresentação após pintura, zeragem e exportação agregada.
+- [ ] Medir tracker e apresentação na estação web.
+- [x] Executar ao menos três rodadas controladas e registrar tamanho da amostra e resultados.
+- [x] Registrar hardware e versões dos ambientes servidor e cliente.
+- [x] Registrar iluminação, distância, enquadramento e pessoas presentes no ensaio.
 - [ ] Confirmar que desconectar o serviço interrompe a estação sem criar lance ou fallback automático.
 - [ ] Comparar o mesmo vídeo em `local` e `remote`, registrando precisão observada e desempenho sem inferir conclusão além da amostra.
 - [x] Executar todas as suítes dos dois projetos e registrar comandos/resultados no documento.
