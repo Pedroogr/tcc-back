@@ -107,19 +107,19 @@
 - Create: `gesture-server/tests/test_websocket.py`
 - Modify: `gesture-server/app/main.py`
 
-- [ ] Criar fake engine bloqueável para controlar início e término de inferências nos testes.
-- [ ] Testar origem permitida, timeout do `hello`, token incorreto, versão incorreta e resposta `ready`.
-- [ ] Testar frame válido e resposta `pose` com o mesmo `frameId`.
-- [ ] Testar JPEG inválido e grande demais como erro recuperável sem fechar o servidor.
-- [ ] Testar que uma segunda estação autenticada recebe indisponibilidade enquanto a primeira está ativa.
-- [ ] Testar desconexão durante inferência e liberação do slot para uma nova estação.
-- [ ] Executar `uv run pytest tests/test_websocket.py -q` e confirmar falha.
-- [ ] Implementar comparação de token em tempo constante, allowlist de `Origin` e códigos de fechamento estáveis.
-- [ ] Implementar gerenciador de estação única e lock de inferência; não criar fila interna de frames.
-- [ ] Garantir que logs tragam somente evento, duração, bytes e códigos técnicos.
-- [ ] Executar `uv run pytest -q`.
-- [ ] Iniciar com `uv run uvicorn app.main:app --host 0.0.0.0 --port 8765 --workers 1` e validar `/health` na LAN.
-- [ ] Commit: `feat: serve authenticated pose websocket`
+- [x] Criar fake engine bloqueável para controlar início e término de inferências nos testes.
+- [x] Testar origem permitida, timeout do `hello`, token incorreto, versão incorreta e resposta `ready`.
+- [x] Testar frame válido e resposta `pose` com o mesmo `frameId`.
+- [x] Testar JPEG inválido e grande demais como erro recuperável sem fechar o servidor.
+- [x] Testar que uma segunda estação autenticada recebe indisponibilidade enquanto a primeira está ativa.
+- [x] Testar desconexão durante inferência e liberação do slot para uma nova estação.
+- [x] Executar `uv run pytest tests/test_websocket.py -q` e confirmar falha.
+- [x] Implementar comparação de token em tempo constante, allowlist de `Origin` e códigos de fechamento estáveis.
+- [x] Implementar gerenciador de estação única e lock de inferência; não criar fila interna de frames.
+- [x] Garantir que logs tragam somente evento, duração, bytes e códigos técnicos.
+- [x] Executar `uv run pytest -q`.
+- [x] Iniciar com `uv run uvicorn app.main:create_configured_app --factory --host 0.0.0.0 --port 8765 --workers 1` e validar `/health` na LAN.
+- [x] Commit: `feat: serve authenticated pose websocket`
 
 ## Subprojeto D — Adaptador remoto no frontend
 

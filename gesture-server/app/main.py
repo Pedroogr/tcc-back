@@ -1,29 +1,24 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from typing import Any, Callable, Mapping, Protocol
+from typing import Any, Callable, Mapping
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.responses import JSONResponse
 
 from .config import GestureSettings
-from .inference import EngineStartupError, PoseEngine, create_cuda_engine
-
-
-class HealthEngine(Protocol):
-    @property
-    def ready(self) -> bool: ...
-
-    @property
-    def metadata(self) -> Mapping[str, Any]: ...
+from .inference import EngineStartupError, InferenceError, PoseEngine, create_cuda_engine
+from .protocol import PoseResult
+from .session import StationManager, serve_pose_websocket
 
 
 def create_app(
-    engine: HealthEngine,
+    engine: PoseEngine,
     settings: GestureSettings,
     *,
     lifespan: Any = None,
 ) -> FastAPI:
+    stations = StationManager()
     app = FastAPI(
         title="TCC Gesture Server",
         docs_url=None,
@@ -41,6 +36,10 @@ def create_app(
             return JSONResponse(status_code=503, content=base_response)
         return {**base_response, **engine.metadata}
 
+    @app.websocket("/v1/pose")
+    async def pose_websocket(websocket: WebSocket) -> None:
+        await serve_pose_websocket(websocket, engine, settings, stations)
+
     return app
 
 
@@ -55,6 +54,11 @@ class EngineSlot:
     @property
     def metadata(self) -> Mapping[str, Any]:
         return {} if self.engine is None else self.engine.metadata
+
+    def infer(self, jpeg: bytes) -> PoseResult:
+        if self.engine is None:
+            raise InferenceError("service_not_ready", "O serviço não está pronto.")
+        return self.engine.infer(jpeg)
 
 
 def create_production_app(
@@ -73,3 +77,9 @@ def create_production_app(
         yield
 
     return create_app(slot, settings, lifespan=lifespan)
+
+
+def create_configured_app() -> FastAPI:
+    """Build the production application from validated `GESTURE_*` settings."""
+
+    return create_production_app(GestureSettings.from_env())

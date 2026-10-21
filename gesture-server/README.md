@@ -10,6 +10,13 @@ uv sync
 uv run pytest -q
 ```
 
+Para iniciar o processo de produção com exatamente um worker:
+
+```powershell
+$env:GESTURE_TOKEN = "<segredo-da-sessao>"
+uv run uvicorn app.main:create_configured_app --factory --host 0.0.0.0 --port 8765 --workers 1
+```
+
 ## Configuração
 
 Todas as variáveis pertencem ao prefixo `GESTURE_`:
