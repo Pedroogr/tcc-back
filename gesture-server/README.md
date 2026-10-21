@@ -17,6 +17,21 @@ $env:GESTURE_TOKEN = "<segredo-da-sessao>"
 uv run uvicorn app.main:create_configured_app --factory --host 0.0.0.0 --port 8765 --workers 1
 ```
 
+Para acompanhar no desktop os quadros recebidos durante um teste funcional,
+ative o monitor local antes de iniciar o servidor:
+
+```powershell
+$env:GESTURE_DEBUG_PREVIEW = "true"
+```
+
+A janela mostra o JPEG recebido com caixas, confiança, pontos e esqueleto de
+pose. O painel exibe resolução, tamanho do JPEG, quantidade de poses, frames
+processados, FPS do servidor, modelo, GPU e os tempos de decode, preprocess,
+inferência, postprocess e total. Nenhuma imagem é salva. Pressione `Q` para
+fechá-la até o próximo reinício do servidor. Deixe essa opção desativada durante
+benchmarks, pois desenhar e apresentar os quadros pode alterar os tempos
+observados.
+
 ## Configuração
 
 Todas as variáveis pertencem ao prefixo `GESTURE_`:
@@ -30,7 +45,8 @@ Todas as variáveis pertencem ao prefixo `GESTURE_`:
 - `GESTURE_HELLO_TIMEOUT_SECONDS`: padrão `5`;
 - `GESTURE_PROTOCOL_VERSION`: padrão `1`;
 - `GESTURE_CAPTURE_MAX_WIDTH`: padrão `640`;
-- `GESTURE_JPEG_QUALITY`: padrão `80`.
+- `GESTURE_JPEG_QUALITY`: padrão `80`;
+- `GESTURE_DEBUG_PREVIEW`: padrão `false`; aceita somente `true` ou `false`.
 
 Não versione arquivos `.env`, tokens, chaves WireGuard ou endereços públicos.
 

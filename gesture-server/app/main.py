@@ -60,6 +60,13 @@ class EngineSlot:
             raise InferenceError("service_not_ready", "O serviço não está pronto.")
         return self.engine.infer(jpeg)
 
+    def close(self) -> None:
+        engine = self.engine
+        self.engine = None
+        close = getattr(engine, "close", None)
+        if callable(close):
+            close()
+
 
 def create_production_app(
     settings: GestureSettings,
@@ -74,7 +81,10 @@ def create_production_app(
             slot.engine = engine_factory(settings)
         except EngineStartupError:
             slot.engine = None
-        yield
+        try:
+            yield
+        finally:
+            slot.close()
 
     return create_app(slot, settings, lifespan=lifespan)
 

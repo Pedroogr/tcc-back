@@ -142,6 +142,24 @@ VITE_GESTURE_SERVER_URL=ws://IP_DO_DESKTOP:8765/v1/pose
 
 Inicie o frontend e as dependências normais do sistema. Entre na estação, selecione `GPU remota` e digite o token no campo de senha. Confirme visualmente modo, conectividade, inferência, RTT e FPS. O token deve desaparecer quando a aba for fechada.
 
+Durante a validação funcional, é possível observar no desktop exatamente o
+quadro recebido pelo worker, já marcado com as pessoas e os pontos de pose. Na
+mesma sessão do PowerShell usada para iniciar o servidor, defina:
+
+```powershell
+$env:GESTURE_DEBUG_PREVIEW = "true"
+```
+
+A janela só aparece quando a estação começa a enviar frames. Ela desenha caixas,
+confiança, pontos e esqueleto, além de mostrar resolução, bytes do JPEG, poses,
+contador de frames, FPS de processamento, modelo, GPU e a decomposição dos
+tempos do servidor. Ela não mostra RTT, tracker, primeira mão ou entrega do
+alerta, pois essas informações pertencem ao notebook. `Q` encerra apenas o
+monitor até o servidor ser reiniciado; a inferência continua. O monitor não
+salva imagens e deve permanecer desligado nas rodadas de desempenho, porque a
+cópia, o desenho e a apresentação do frame podem interferir no RTT e no
+throughput.
+
 Para medir a jornada completa sem poluir a interface operacional, acrescente `?benchmark=1` à rota da estação:
 
 ```text
@@ -252,7 +270,7 @@ O throughput médio das três rodadas foi `37,941 FPS`. O p95 do cliente ficou m
 
 ### Pré-validação automatizada — 2026-10-21
 
-- `gesture-server`: `uv run python -m pytest -q` → 46 testes passaram; `uv lock --check` → lock consistente.
+- `gesture-server`: `uv run python -m pytest -q` → 54 testes passaram; `uv lock --check` → lock consistente.
 - `tcc-front`: `npm run test:unit` → 116 testes passaram; `npm run lint` → sem avisos; `npm run build` → concluído com o aviso conhecido de chunk acima de 500 kB.
 - Instrumentação web: ativação exclusiva por `?benchmark=1`, coleta em memória, separação entre tracker/apresentação, zeragem, exportação agregada e ciclo de desenvolvimento do React cobertos por 12 novos testes. A execução no navegador real do notebook permanece pendente.
 - Smoke local do cliente contra a RTX, após três frames de aquecimento: uma imagem, `endToEnd=37,575 ms`, `inference=28,228 ms`, sem rejeição. Essa única amostra valida o funcionamento do cliente, não representa resultado LAN nem sustenta conclusão de desempenho.

@@ -42,6 +42,18 @@ def _decimal(environment: Mapping[str, str], name: str, default: float) -> float
         raise SettingsError(f"{name} must be a number") from error
 
 
+def _boolean(environment: Mapping[str, str], name: str, default: bool) -> bool:
+    raw_value = environment.get(name)
+    if raw_value is None:
+        return default
+    normalized = raw_value.strip().lower()
+    if normalized == "true":
+        return True
+    if normalized == "false":
+        return False
+    raise SettingsError(f"{name} must be true or false")
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as model_file:
@@ -62,6 +74,7 @@ class GestureSettings:
     protocol_version: int = 1
     capture_max_width: int = 640
     jpeg_quality: int = 80
+    debug_preview: bool = False
 
     @classmethod
     def from_env(cls, environment: Mapping[str, str] | None = None) -> GestureSettings:
@@ -96,4 +109,5 @@ class GestureSettings:
             protocol_version=_integer(values, "GESTURE_PROTOCOL_VERSION", 1),
             capture_max_width=_integer(values, "GESTURE_CAPTURE_MAX_WIDTH", 640),
             jpeg_quality=_integer(values, "GESTURE_JPEG_QUALITY", 80),
+            debug_preview=_boolean(values, "GESTURE_DEBUG_PREVIEW", False),
         )

@@ -17,6 +17,7 @@ from .protocol import (
     PoseResult,
     PoseTimings,
 )
+from .preview import FramePreview, OpenCvFramePreview, PreviewFrame
 
 
 MODEL_NAME = "yolo11s-pose"
@@ -54,6 +55,7 @@ class CudaRuntime(Protocol):
 Decoder = Callable[[bytes], Any | None]
 ModelLoader = Callable[[Path], Any]
 Clock = Callable[[], float]
+PreviewFactory = Callable[[], FramePreview]
 
 
 def _sha256(path: Path) -> str:
@@ -105,12 +107,14 @@ class CudaYoloPoseEngine:
         decoder: Decoder,
         cuda: CudaRuntime,
         clock: Clock,
+        preview: FramePreview | None = None,
     ) -> None:
         self._settings = settings
         self._model = model
         self._decoder = decoder
         self._cuda = cuda
         self._clock = clock
+        self._preview = preview
         self._lock = threading.Lock()
         self._model_metadata = ModelMetadata(
             name=MODEL_NAME,
@@ -179,11 +183,27 @@ class CudaYoloPoseEngine:
             postprocess_ms=max(0.0, float(speed.get("postprocess", 0.0))),
             total_ms=max(0.0, (finished_at - started_at) * 1000),
         )
-        return PoseResult(
+        result = PoseResult(
             model_version=f"{MODEL_NAME}:{self._settings.model_sha256[:8]}",
             timings=timings,
             poses=poses,
         )
+        if self._preview is not None:
+            self._preview.show(
+                PreviewFrame(
+                    image=image,
+                    poses=poses,
+                    timings=timings,
+                    jpeg_bytes=len(jpeg),
+                    model_name=self._model_metadata.name,
+                    device_name=self._device_metadata.name,
+                )
+            )
+        return result
+
+    def close(self) -> None:
+        if self._preview is not None:
+            self._preview.close()
 
     def _map_predictions(
         self,
@@ -244,6 +264,7 @@ def create_cuda_engine(
     model_loader: ModelLoader = _default_model_loader,
     cuda: CudaRuntime | None = None,
     clock: Clock = time.perf_counter,
+    preview_factory: PreviewFactory = OpenCvFramePreview,
 ) -> CudaYoloPoseEngine:
     if _sha256(settings.model_path) != settings.model_sha256:
         raise EngineStartupError("model hash does not match configured SHA-256")
@@ -254,4 +275,5 @@ def create_cuda_engine(
         model = model_loader(settings.model_path)
     except Exception as error:
         raise EngineStartupError("model could not be loaded") from error
-    return CudaYoloPoseEngine(settings, model, decoder, cuda_runtime, clock)
+    preview = preview_factory() if settings.debug_preview else None
+    return CudaYoloPoseEngine(settings, model, decoder, cuda_runtime, clock, preview)
