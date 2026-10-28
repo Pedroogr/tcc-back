@@ -12,5 +12,24 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  postgres-demo:
+    image: postgres:16
+    container_name: tcc-back-demo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cattle_auction_demo
+    ports:
+      - "127.0.0.1:5435:5432"
+    volumes:
+      - pgdata-demo:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cattle_auction_demo"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
 volumes:
   pgdata:
+  pgdata-demo:
