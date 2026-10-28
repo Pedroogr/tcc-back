@@ -57,6 +57,55 @@ Describe 'Scripts da demonstracao publica' {
         }
     }
 
+    It 'aceita mensagem informativa em stderr quando o comando nativo retorna zero' {
+        . $StartScript
+        $TempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("tcc-native-test-" + [guid]::NewGuid().ToString('N'))
+        New-Item -ItemType Directory -Path $TempRoot | Out-Null
+        $CommandPath = Join-Path $TempRoot 'info.cmd'
+        $LogPath = Join-Path $TempRoot 'info.log'
+        Set-Content -LiteralPath $CommandPath -Value @('@echo off', 'echo informativo 1>&2', 'exit /b 0') -Encoding ASCII
+        try {
+            { Invoke-DemoLoggedCommand -FilePath $CommandPath -ArgumentList @() -WorkingDirectory $TempRoot -LogPath $LogPath } |
+                Should Not Throw
+            (Get-Content $LogPath -Raw) | Should Match 'informativo'
+        } finally { Remove-Item $TempRoot -Recurse -Force }
+    }
+
+    It 'executa cleanup no maximo uma vez' {
+        . $StartScript
+        Mock Stop-DemoStartup { }
+        $State = @{ Cleaned = $false }
+        Invoke-DemoCleanupOnce -State $State -Processes @() -StopDatabase
+        Invoke-DemoCleanupOnce -State $State -Processes @() -StopDatabase
+        Assert-MockCalled Stop-DemoStartup -Times 1
+    }
+
+    It 'registra o processo que realmente possui a porta do worker' {
+        . $StartScript
+        $Listener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Loopback, 0)
+        $Listener.Start()
+        try {
+            $Port = ([System.Net.IPEndPoint] $Listener.LocalEndpoint).Port
+            $Record = Get-DemoListenerProcessRecord -Name 'listener-fixture' -Port $Port `
+                -StdoutPath 'out.log' -StderrPath 'err.log'
+            $Record.Pid | Should Be $PID
+            $Record.StartTimeUtcTicks | Should Be (Get-Process -Id $PID).StartTime.ToUniversalTime().Ticks
+        } finally { $Listener.Stop() }
+    }
+
+    It 'aguarda a propagacao DNS do hostname do tunnel' {
+        . $StartScript
+        $script:DnsAttempts = 0
+        Mock Start-Sleep { }
+        Mock Resolve-DnsName {
+            $script:DnsAttempts += 1
+            if ($script:DnsAttempts -lt 3) { throw 'ainda nao propagou' }
+            [pscustomobject]@{ IPAddress = '192.0.2.1' }
+        }
+        { Wait-DemoDns -HostName 'demo.trycloudflare.com' -TimeoutSeconds 5 } | Should Not Throw
+        Assert-MockCalled Resolve-DnsName -Times 3
+    }
+
     It 'status nao revela token presente no ambiente' {
         $TempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("tcc-status-test-" + [guid]::NewGuid().ToString('N'))
         New-Item -ItemType Directory -Path $TempRoot | Out-Null

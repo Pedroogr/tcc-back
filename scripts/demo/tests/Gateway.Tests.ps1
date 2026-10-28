@@ -61,6 +61,14 @@ Describe 'Gateway Caddy da demonstracao' {
         (Invoke-RestMethod 'http://127.0.0.1:8080/v1/pose').path | Should Be '/v1/pose'
     }
 
+    It 'roteia mesmo quando o tunnel preserva o Host publico' {
+        $Headers = @{ Host = 'exemplo.trycloudflare.com' }
+        (Invoke-WebRequest 'http://127.0.0.1:8080/rota-do-react' -Headers $Headers -UseBasicParsing).Content |
+            Should Match 'demo-index'
+        (Invoke-RestMethod 'http://127.0.0.1:8080/api/marker' -Headers $Headers).path | Should Be '/marker'
+        (Invoke-RestMethod 'http://127.0.0.1:8080/v1/pose' -Headers $Headers).path | Should Be '/v1/pose'
+    }
+
     AfterAll {
         Remove-Item Env:TCC_FRONT_DIST -ErrorAction SilentlyContinue
         foreach ($Process in @($CaddyProcess, $FixtureProcess)) {

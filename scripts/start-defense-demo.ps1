@@ -48,6 +48,23 @@ function Wait-DemoHttp([string] $Url, [int] $TimeoutSeconds = 120) {
     throw "Timeout aguardando $Url"
 }
 
+function Wait-DemoDns {
+    param(
+        [Parameter(Mandatory = $true)][string] $HostName,
+        [int] $TimeoutSeconds = 180
+    )
+    $Deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+    do {
+        try {
+            Resolve-DnsName $HostName -Type A -ErrorAction Stop | Out-Null
+            return
+        } catch {
+            Start-Sleep -Milliseconds 500
+        }
+    } while ([DateTime]::UtcNow -lt $Deadline)
+    throw "Timeout aguardando propagacao DNS de $HostName"
+}
+
 function Start-DemoProcessWithEnvironment {
     param(
         [hashtable] $Environment,
@@ -77,6 +94,59 @@ function Stop-DemoStartup([object[]] $Processes, [switch] $StopDatabase) {
     }
 }
 
+function Invoke-DemoCleanupOnce {
+    param(
+        [Parameter(Mandatory = $true)][hashtable] $State,
+        [object[]] $Processes,
+        [switch] $StopDatabase
+    )
+    if ($State.Cleaned) { return }
+    Stop-DemoStartup -Processes $Processes -StopDatabase:$StopDatabase
+    $State.Cleaned = $true
+}
+
+function Invoke-DemoLoggedCommand {
+    param(
+        [Parameter(Mandatory = $true)][string] $FilePath,
+        [string[]] $ArgumentList = @(),
+        [Parameter(Mandatory = $true)][string] $WorkingDirectory,
+        [Parameter(Mandatory = $true)][string] $LogPath
+    )
+    $PreviousErrorAction = $ErrorActionPreference
+    Push-Location $WorkingDirectory
+    try {
+        # Windows PowerShell 5.1 materializa stderr nativo como ErrorRecord.
+        # Mensagens informativas do uv nao devem virar excecao quando exit code = 0.
+        $ErrorActionPreference = 'Continue'
+        & $FilePath @ArgumentList 2>&1 | Out-File -LiteralPath $LogPath -Encoding UTF8
+        $NativeExitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $PreviousErrorAction
+        Pop-Location
+    }
+    if ($NativeExitCode -ne 0) {
+        throw "Comando nativo falhou com codigo $NativeExitCode. Consulte $LogPath"
+    }
+}
+
+function Get-DemoListenerProcessRecord {
+    param(
+        [Parameter(Mandatory = $true)][string] $Name,
+        [Parameter(Mandatory = $true)][int] $Port,
+        [Parameter(Mandatory = $true)][string] $StdoutPath,
+        [Parameter(Mandatory = $true)][string] $StderrPath
+    )
+    $OwnerIds = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Stop |
+        Select-Object -ExpandProperty OwningProcess -Unique)
+    if ($OwnerIds.Count -ne 1) { throw "A porta $Port nao possui um unico processo ouvinte." }
+    $Process = Get-Process -Id ([int] $OwnerIds[0]) -ErrorAction Stop
+    return [pscustomobject]@{
+        Name = $Name; Pid = $Process.Id
+        StartTimeUtcTicks = $Process.StartTime.ToUniversalTime().Ticks
+        Executable = $Process.Path; StdoutPath = $StdoutPath; StderrPath = $StderrPath
+    }
+}
+
 function Invoke-DefenseDemoStart {
     Invoke-DemoPortPreflight
     & (Join-Path $RepoRoot 'scripts\prepare-defense-demo.ps1') | Out-Null
@@ -88,6 +158,7 @@ function Invoke-DefenseDemoStart {
     $PublicUrl = $null
     $DemoPassword = $null
     $GestureToken = $null
+    $CleanupState = @{ Cleaned = $false }
 
     try {
         Push-Location $RepoRoot
@@ -182,13 +253,16 @@ function Invoke-DefenseDemoStart {
             GESTURE_TOKEN = $GestureToken; GESTURE_ALLOWED_ORIGINS = $Origin
             GESTURE_DEBUG_PREVIEW = $(if ($EnableMonitor) { 'true' } else { 'false' })
         } -ProcessArguments @{
-            Name = 'gesture-worker'; FilePath = (Get-Command uv).Source
+            Name = 'gesture-worker-launcher'; FilePath = (Get-Command uv).Source
             ArgumentList = @('run', 'uvicorn', 'app.main:create_configured_app', '--factory', '--host', '127.0.0.1', '--port', '8765', '--workers', '1')
             WorkingDirectory = $WorkerRoot; StdoutPath = (Join-Path $Run.Directory 'worker.out.log')
             StderrPath = (Join-Path $Run.Directory 'worker.err.log')
         }
         [void] $Processes.Add($WorkerRecord)
         Wait-DemoHttp 'http://127.0.0.1:8765/health' 180 | Out-Null
+        $WorkerListenerRecord = Get-DemoListenerProcessRecord -Name 'gesture-worker' -Port 8765 `
+            -StdoutPath $WorkerRecord.StdoutPath -StderrPath $WorkerRecord.StderrPath
+        [void] $Processes.Add($WorkerListenerRecord)
 
         $Manifest = @{
             RunId = $Run.RunId; State = 'validating'; PublicUrl = $Origin; RepoRoot = $RepoRoot
@@ -197,8 +271,9 @@ function Invoke-DefenseDemoStart {
         Write-DemoManifest -Path $Run.ManifestPath -Manifest $Manifest
 
         Complete-DemoStartup -Smoke {
-            Wait-DemoHttp "$Origin/" 45 | Out-Null
-            Wait-DemoHttp "$Origin/api/auctions/public" 45 | Out-Null
+            Wait-DemoDns -HostName $PublicUrl.Host -TimeoutSeconds 180
+            Wait-DemoHttp "$Origin/" 60 | Out-Null
+            Wait-DemoHttp "$Origin/api/auctions/public" 60 | Out-Null
             Add-Type -AssemblyName System.Drawing
             $FramePath = Join-Path $Run.Directory 'smoke-frame.jpg'
             $Bitmap = New-Object System.Drawing.Bitmap(640, 480)
@@ -209,10 +284,12 @@ function Invoke-DefenseDemoStart {
                 $env:GESTURE_BENCHMARK_TOKEN = $GestureToken
                 Push-Location $WorkerRoot
                 try {
-                    & uv run --script scripts/benchmark_client.py --url $WebSocketUrl --origin $Origin `
-                        --input $FramePath --max-frames 1 --output (Join-Path $Run.Directory 'public-smoke.json') `
-                        *> (Join-Path $Run.Directory 'benchmark.log')
-                    if ($LASTEXITCODE -ne 0) { throw 'Smoke publico do WebSocket de gestos falhou.' }
+                    Invoke-DemoLoggedCommand -FilePath (Get-Command uv).Source -WorkingDirectory $WorkerRoot `
+                        -ArgumentList @(
+                            'run', '--script', 'scripts/benchmark_client.py', '--url', $WebSocketUrl,
+                            '--origin', $Origin, '--input', $FramePath, '--max-frames', '1',
+                            '--output', (Join-Path $Run.Directory 'public-smoke.json')
+                        ) -LogPath (Join-Path $Run.Directory 'benchmark.log')
                 } finally { Pop-Location }
             } finally { $env:GESTURE_BENCHMARK_TOKEN = $OldBenchmarkToken }
         } -Publish {
@@ -232,10 +309,12 @@ function Invoke-DefenseDemoStart {
             Write-Output "Logs: $($Run.Directory)"
             $Published = $true
         } -Cleanup {
-            Stop-DemoStartup -Processes @($Processes) -StopDatabase:$DatabaseStarted
+            Invoke-DemoCleanupOnce -State $CleanupState -Processes @($Processes) -StopDatabase:$DatabaseStarted
         }
     } catch {
-        if (-not $Published) { Stop-DemoStartup -Processes @($Processes) -StopDatabase:$DatabaseStarted }
+        if (-not $Published) {
+            Invoke-DemoCleanupOnce -State $CleanupState -Processes @($Processes) -StopDatabase:$DatabaseStarted
+        }
         throw
     } finally {
         $DemoPassword = $null
