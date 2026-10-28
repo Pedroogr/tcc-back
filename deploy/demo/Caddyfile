@@ -1,0 +1,29 @@
+{
+	admin off
+	auto_https off
+}
+
+http://:8080 {
+	bind 127.0.0.1
+	@api path /api/*
+	handle @api {
+		uri strip_prefix /api
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	@socket path /socket.io/*
+	handle @socket {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	@pose path /v1/pose
+	handle @pose {
+		reverse_proxy 127.0.0.1:8765
+	}
+
+	handle {
+		root * {$TCC_FRONT_DIST}
+		try_files {path} /index.html
+		file_server
+	}
+}
