@@ -1,5 +1,9 @@
+import time
+
 import cv2
 from ultralytics import YOLO
+
+from fps_counter import RollingFps
 
 # Modelo de pose.
 # Se ficar muito pesado, troca para: "yolo11n-pose.pt"
@@ -278,6 +282,7 @@ def remove_duplicate_detections(detections):
 
 print("Iniciando câmera...")
 print("Pressione 'q' para sair.")
+fps_counter = RollingFps(window_size=30)
 
 while True:
     ret, frame = cap.read()
@@ -295,6 +300,7 @@ while True:
     )
 
     result = results[0]
+    inference_ms = result.speed.get("inference", 0.0)
 
     detections = []
 
@@ -383,6 +389,17 @@ while True:
         (20, 80),
         cv2.FONT_HERSHEY_SIMPLEX,
         0.8,
+        (255, 255, 255),
+        2,
+    )
+
+    fps = fps_counter.record(time.perf_counter())
+    cv2.putText(
+        frame,
+        f"FPS: {fps:.1f}   Inferencia: {inference_ms:.1f} ms",
+        (20, 120),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.7,
         (255, 255, 255),
         2,
     )
