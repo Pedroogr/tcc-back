@@ -15,6 +15,7 @@ import {
   LotStatus,
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
+import { minimumBidAmount } from '../lots/bid-pricing';
 import { BidsService } from '../lots/bids.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOperatorAccessDto } from './dto/create-operator-access.dto';
@@ -359,9 +360,11 @@ export class OperatorService {
             title: currentLot.title,
             status: currentLot.status,
             currentPrice: currentPrice?.toString() ?? null,
-            nextMinimumBid: (currentPrice ?? new Prisma.Decimal(0))
-              .plus(increment)
-              .toString(),
+            nextMinimumBid: minimumBidAmount(
+              currentLot.initialPrice,
+              currentLot.bids[0]?.amount ?? null,
+              increment,
+            ).toString(),
           }
         : null,
     };

@@ -15,6 +15,7 @@ import {
 } from '../../generated/prisma/enums';
 import { CommerceGateway } from '../commerce/commerce.gateway';
 import { PrismaService } from '../prisma/prisma.service';
+import { minimumBidAmount } from './bid-pricing';
 
 const MAX_BID_TRANSACTION_ATTEMPTS = 3;
 const CLOSED_AUCTION_STATUSES: AuctionStatus[] = [
@@ -204,9 +205,11 @@ export class BidsService {
     });
     const minBidIncrement =
       lot.auction.settings?.minBidIncrement ?? new Prisma.Decimal(0);
-    const minimumAmount = currentWinningBid
-      ? currentWinningBid.amount.plus(minBidIncrement)
-      : (lot.initialPrice ?? new Prisma.Decimal(0));
+    const minimumAmount = minimumBidAmount(
+      lot.initialPrice,
+      currentWinningBid?.amount ?? null,
+      minBidIncrement,
+    );
     const amount = new Prisma.Decimal(command.amount);
 
     if (amount.lt(minimumAmount)) {

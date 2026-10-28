@@ -16,6 +16,7 @@ import {
 } from '../../generated/prisma/enums';
 import { AuthenticatedActor } from '../auth/actor-jwt-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
+import { minimumBidAmount } from './bid-pricing';
 import { CommerceGateway } from '../commerce/commerce.gateway';
 import type { LotStageChangedPayload } from '../commerce/commerce-events';
 import { BidsService } from './bids.service';
@@ -414,9 +415,12 @@ export class LotsService {
             title: activeLot.title,
             status: activeLot.status,
             currentPrice: currentPrice?.toString() ?? null,
-            nextMinimumBid: (currentPrice ?? new Prisma.Decimal(0))
-              .plus(increment)
-              .toString(),
+            nextMinimumBid: minimumBidAmount(
+              activeLot.initialPrice,
+              activeLot.bids[0]?.amount ?? null,
+              increment,
+            ).toString(),
+            hasWinningBid: activeLot.bids.length > 0,
           }
         : null,
     };
@@ -437,6 +441,7 @@ export class LotsService {
     return {
       ...safeLot,
       currentPrice: bids[0]?.amount ?? safeLot.initialPrice ?? null,
+      hasWinningBid: bids.length > 0,
     };
   }
 
