@@ -340,7 +340,7 @@ como checklist anterior à defesa.
 
 Na verificação final proporcional ao risco, passaram `122` testes unitários do
 frontend em `16` arquivos e o build demo (`6,74 s` no conjunto), `58` testes
-Jest, `4` testes do seed, `24` testes Pester e o build do backend (`11,20 s` no
+Jest, `4` testes do seed, `26` testes Pester e o build do backend (`11,20 s` no
 conjunto), além de `54` testes do worker (`1,52 s`). As durações são evidência
 da execução deste ambiente e não um benchmark de desempenho do produto.
 

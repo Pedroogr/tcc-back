@@ -71,7 +71,8 @@ npm run demo:status
 npm run demo:stop
 ```
 
-`status` informa URL, estado e PIDs próprios sem revelar token ou senha. `stop`
+`status` informa URL, estado, PIDs próprios e sondagens de API, gateway, worker
+e site público sem revelar token ou senha. `stop`
 encerra somente processos cujo PID e horário de início coincidem com o
 manifesto, para o `postgres-demo` e preserva o volume `pgdata-demo`. Depois, a
 URL anterior deve retornar erro e as quatro portas devem ficar livres.

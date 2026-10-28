@@ -86,11 +86,48 @@ Describe 'Scripts da demonstracao publica' {
         $Listener.Start()
         try {
             $Port = ([System.Net.IPEndPoint] $Listener.LocalEndpoint).Port
+            $Current = Get-Process -Id $PID
+            $Launcher = [pscustomobject]@{
+                Pid = $PID; StartTimeUtcTicks = $Current.StartTime.ToUniversalTime().Ticks
+                Executable = $Current.Path
+            }
             $Record = Get-DemoListenerProcessRecord -Name 'listener-fixture' -Port $Port `
-                -StdoutPath 'out.log' -StderrPath 'err.log'
+                -LauncherRecord $Launcher -StdoutPath 'out.log' -StderrPath 'err.log'
             $Record.Pid | Should Be $PID
             $Record.StartTimeUtcTicks | Should Be (Get-Process -Id $PID).StartTime.ToUniversalTime().Ticks
         } finally { $Listener.Stop() }
+    }
+
+    It 'recusa adotar listener que nao descende do launcher desta execucao' {
+        . $StartScript
+        $Listener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Loopback, 0)
+        $Listener.Start()
+        $Other = Start-Process powershell -ArgumentList @('-NoProfile', '-Command', 'Start-Sleep -Seconds 30') `
+            -WindowStyle Hidden -PassThru
+        try {
+            $Port = ([System.Net.IPEndPoint] $Listener.LocalEndpoint).Port
+            $Other.Refresh()
+            $Launcher = [pscustomobject]@{
+                Pid = $Other.Id; StartTimeUtcTicks = $Other.StartTime.ToUniversalTime().Ticks
+                Executable = $Other.Path
+            }
+            { Get-DemoListenerProcessRecord -Name 'unrelated' -Port $Port -LauncherRecord $Launcher `
+                -StdoutPath 'out.log' -StderrPath 'err.log' } | Should Throw
+        } finally {
+            $Listener.Stop()
+            if (-not $Other.HasExited) { $Other.Kill() }
+        }
+    }
+
+    It 'registra o listener antes de uma falha de readiness' {
+        . $StartScript
+        $script:ReadinessProcesses = New-Object System.Collections.ArrayList
+        { Complete-DemoWorkerStartup -LauncherRecord ([pscustomobject]@{ Pid = 1 }) `
+            -Processes ([ref] $script:ReadinessProcesses) -StdoutPath 'out.log' -StderrPath 'err.log' `
+            -ResolveListener { [pscustomobject]@{ Name = 'gesture-worker'; Pid = 99; StartTimeUtcTicks = 1; Executable = 'python.exe'; StdoutPath = ''; StderrPath = '' } } `
+            -WaitForReadiness { throw 'worker permaneceu 503' } } | Should Throw
+        $script:ReadinessProcesses.Count | Should Be 1
+        $script:ReadinessProcesses[0].Name | Should Be 'gesture-worker'
     }
 
     It 'aguarda a propagacao DNS do hostname do tunnel' {
@@ -116,14 +153,14 @@ Describe 'Scripts da demonstracao publica' {
         try {
             $Output = (& $StatusScript -ManifestPath $ManifestPath | Out-String)
             $Output | Should Not Match 'token-que-nao-pode-aparecer'
-            $Output | Should Match 'ready'
+            $Output | Should Match 'degraded'
         } finally {
             Remove-Item Env:GESTURE_TOKEN -ErrorAction SilentlyContinue
             Remove-Item $TempRoot -Recurse -Force
         }
     }
 
-    It 'stop recusa registro stale e para apenas o servico sem remover volume' {
+    It 'stop recusa registro stale e nao para o banco de uma execucao mais nova' {
         $TempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("tcc-stop-test-" + [guid]::NewGuid().ToString('N'))
         New-Item -ItemType Directory -Path $TempRoot | Out-Null
         $ManifestPath = Join-Path $TempRoot 'manifest.json'
@@ -137,15 +174,21 @@ Describe 'Scripts da demonstracao publica' {
             })
         } | ConvertTo-Json -Depth 5
         Set-Content -LiteralPath $ManifestPath -Value $Manifest
+        $Pointer = Join-Path ([System.IO.Path]::GetTempPath()) 'tcc-defense-demo\current.txt'
+        New-Item -ItemType Directory -Path (Split-Path $Pointer -Parent) -Force | Out-Null
+        $NewerManifestPath = Join-Path $TempRoot 'newer-manifest.json'
+        Set-Content -LiteralPath $NewerManifestPath -Value '{"RunId":"newer","State":"ready","Processes":[]}'
+        Set-Content -LiteralPath $Pointer -Value $NewerManifestPath
         $global:DockerArguments = $null
         function global:docker { $global:DockerArguments = @($args); $global:LASTEXITCODE = 0 }
         try {
             & $StopScript -ManifestPath $ManifestPath
             (Get-Process -Id $PID -ErrorAction SilentlyContinue) | Should Not BeNullOrEmpty
-            ($global:DockerArguments -join ' ') | Should Be 'compose stop postgres-demo'
-            ($global:DockerArguments -join ' ') | Should Not Match 'down|volume|pgdata-demo'
+            $global:DockerArguments | Should BeNullOrEmpty
+            (Get-Content $Pointer -Raw).Trim() | Should Be $NewerManifestPath
         } finally {
             Remove-Item Function:\global:docker -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $Pointer -Force -ErrorAction SilentlyContinue
             Remove-Item $TempRoot -Recurse -Force
         }
     }

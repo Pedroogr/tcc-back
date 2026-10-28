@@ -10,6 +10,17 @@ if (-not $ManifestPath) {
     $ManifestPath = (Get-Content $Pointer -Raw).Trim()
 }
 $Manifest = Read-DemoManifest -Path $ManifestPath
+$OwnsCurrentRun = $false
+if (Test-Path $Pointer) {
+    $CurrentManifestPath = (Get-Content $Pointer -Raw).Trim()
+    if ($CurrentManifestPath) {
+        $OwnsCurrentRun = [string]::Equals(
+            [System.IO.Path]::GetFullPath($CurrentManifestPath),
+            [System.IO.Path]::GetFullPath($ManifestPath),
+            [System.StringComparison]::OrdinalIgnoreCase
+        )
+    }
+}
 $Records = @($Manifest.Processes)
 [array]::Reverse($Records)
 foreach ($Record in $Records) {
@@ -20,18 +31,16 @@ foreach ($Record in $Records) {
     }
 }
 
-$DatabaseRoot = if ($Manifest.RepoRoot) { [string] $Manifest.RepoRoot } else { $RepoRoot }
-Push-Location $DatabaseRoot
-try {
-    & docker compose stop postgres-demo
-    if ($LASTEXITCODE -ne 0) { throw 'Falha ao parar o PostgreSQL demo.' }
-} finally { Pop-Location }
-
-if (Test-Path $Pointer) {
-    $Current = (Get-Content $Pointer -Raw).Trim()
-    if ([string]::Equals($Current, $ManifestPath, [System.StringComparison]::OrdinalIgnoreCase)) {
-        Remove-Item -LiteralPath $Pointer -Force
-    }
+if ($OwnsCurrentRun) {
+    $DatabaseRoot = if ($Manifest.RepoRoot) { [string] $Manifest.RepoRoot } else { $RepoRoot }
+    Push-Location $DatabaseRoot
+    try {
+        & docker compose stop postgres-demo
+        if ($LASTEXITCODE -ne 0) { throw 'Falha ao parar o PostgreSQL demo.' }
+    } finally { Pop-Location }
+    Remove-Item -LiteralPath $Pointer -Force
+    Write-Output 'PostgreSQL demo parado; o volume pgdata-demo foi preservado.'
+} else {
+    Write-Output 'PostgreSQL demo preservado: o manifesto informado nao pertence a execucao atual.'
 }
-Write-Output 'PostgreSQL demo parado; o volume pgdata-demo foi preservado.'
 

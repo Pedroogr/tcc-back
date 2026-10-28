@@ -25,11 +25,36 @@ $ProcessStatus = @(
     }
 )
 
+function Test-DemoStatusEndpoint([string] $Url) {
+    try {
+        $Response = Invoke-WebRequest $Url -UseBasicParsing -TimeoutSec 5
+        return $Response.StatusCode -ge 200 -and $Response.StatusCode -lt 400
+    } catch { return $false }
+}
+
+$AllProcessesRunning = $ProcessStatus.Count -gt 0 -and @($ProcessStatus | Where-Object { -not $_.Running }).Count -eq 0
+$Health = [ordered]@{
+    NestApi = $false
+    Gateway = $false
+    Worker = $false
+    PublicSite = $false
+}
+if ($AllProcessesRunning) {
+    $Health.NestApi = Test-DemoStatusEndpoint 'http://127.0.0.1:3000/auctions/public'
+    $Health.Gateway = Test-DemoStatusEndpoint 'http://127.0.0.1:8080/'
+    $Health.Worker = Test-DemoStatusEndpoint 'http://127.0.0.1:8765/health'
+    if ($Manifest.PublicUrl) { $Health.PublicSite = Test-DemoStatusEndpoint ([string] $Manifest.PublicUrl) }
+}
+$CurrentlyReady = $Manifest.State -eq 'ready' -and $AllProcessesRunning -and
+    @($Health.Values | Where-Object { -not $_ }).Count -eq 0
+
 [pscustomobject]@{
     RunId = $Manifest.RunId
-    State = $Manifest.State
+    State = $(if ($CurrentlyReady) { 'ready' } else { 'degraded' })
+    StartupState = $Manifest.State
     PublicUrl = $Manifest.PublicUrl
     Processes = $ProcessStatus
+    Health = [pscustomobject] $Health
     ManifestPath = $ManifestPath
 }
 

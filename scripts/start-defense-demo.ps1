@@ -133,18 +133,75 @@ function Get-DemoListenerProcessRecord {
     param(
         [Parameter(Mandatory = $true)][string] $Name,
         [Parameter(Mandatory = $true)][int] $Port,
+        [Parameter(Mandatory = $true)] $LauncherRecord,
         [Parameter(Mandatory = $true)][string] $StdoutPath,
         [Parameter(Mandatory = $true)][string] $StderrPath
     )
+    try {
+        $Launcher = Get-Process -Id ([int] $LauncherRecord.Pid) -ErrorAction Stop
+    } catch { throw 'O launcher do worker nao esta mais em execucao.' }
+    if ($Launcher.StartTime.ToUniversalTime().Ticks -ne [long] $LauncherRecord.StartTimeUtcTicks) {
+        throw 'O PID do launcher foi reutilizado.'
+    }
+    if ($LauncherRecord.Executable -and $Launcher.Path -and
+        -not [string]::Equals($LauncherRecord.Executable, $Launcher.Path, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw 'O executavel do launcher nao corresponde ao registro desta execucao.'
+    }
     $OwnerIds = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Stop |
         Select-Object -ExpandProperty OwningProcess -Unique)
     if ($OwnerIds.Count -ne 1) { throw "A porta $Port nao possui um unico processo ouvinte." }
+    $AncestorPid = [int] $OwnerIds[0]
+    $Visited = @{}
+    $DescendsFromLauncher = $false
+    while ($AncestorPid -gt 0 -and -not $Visited.ContainsKey($AncestorPid)) {
+        if ($AncestorPid -eq [int] $LauncherRecord.Pid) {
+            $DescendsFromLauncher = $true
+            break
+        }
+        $Visited[$AncestorPid] = $true
+        $Info = Get-CimInstance Win32_Process -Filter "ProcessId=$AncestorPid" -ErrorAction SilentlyContinue
+        if (-not $Info) { break }
+        $AncestorPid = [int] $Info.ParentProcessId
+    }
+    if (-not $DescendsFromLauncher) {
+        throw "O processo que ocupa a porta $Port nao pertence ao launcher desta execucao."
+    }
     $Process = Get-Process -Id ([int] $OwnerIds[0]) -ErrorAction Stop
     return [pscustomobject]@{
         Name = $Name; Pid = $Process.Id
         StartTimeUtcTicks = $Process.StartTime.ToUniversalTime().Ticks
         Executable = $Process.Path; StdoutPath = $StdoutPath; StderrPath = $StderrPath
     }
+}
+
+function Complete-DemoWorkerStartup {
+    param(
+        [Parameter(Mandatory = $true)] $LauncherRecord,
+        [Parameter(Mandatory = $true)][ref] $Processes,
+        [Parameter(Mandatory = $true)][string] $StdoutPath,
+        [Parameter(Mandatory = $true)][string] $StderrPath,
+        [scriptblock] $ResolveListener,
+        [scriptblock] $WaitForReadiness
+    )
+    $Deadline = [DateTime]::UtcNow.AddSeconds(180)
+    do {
+        try {
+            if ($ResolveListener) {
+                $ListenerRecord = & $ResolveListener
+            } else {
+                $ListenerRecord = Get-DemoListenerProcessRecord -Name 'gesture-worker' -Port 8765 `
+                    -LauncherRecord $LauncherRecord -StdoutPath $StdoutPath -StderrPath $StderrPath
+            }
+            [void] $Processes.Value.Add($ListenerRecord)
+            break
+        } catch {
+            if ($_.Exception.Message -match 'nao pertence|reutilizado|nao corresponde|nao esta mais') { throw }
+            Start-Sleep -Milliseconds 250
+        }
+    } while ([DateTime]::UtcNow -lt $Deadline)
+    if (-not $ListenerRecord) { throw 'O worker nao abriu a porta 8765 dentro do prazo.' }
+    if ($WaitForReadiness) { & $WaitForReadiness }
+    else { Wait-DemoHttp 'http://127.0.0.1:8765/health' 180 | Out-Null }
 }
 
 function Invoke-DefenseDemoStart {
@@ -259,10 +316,8 @@ function Invoke-DefenseDemoStart {
             StderrPath = (Join-Path $Run.Directory 'worker.err.log')
         }
         [void] $Processes.Add($WorkerRecord)
-        Wait-DemoHttp 'http://127.0.0.1:8765/health' 180 | Out-Null
-        $WorkerListenerRecord = Get-DemoListenerProcessRecord -Name 'gesture-worker' -Port 8765 `
+        Complete-DemoWorkerStartup -LauncherRecord $WorkerRecord -Processes ([ref] $Processes) `
             -StdoutPath $WorkerRecord.StdoutPath -StderrPath $WorkerRecord.StderrPath
-        [void] $Processes.Add($WorkerListenerRecord)
 
         $Manifest = @{
             RunId = $Run.RunId; State = 'validating'; PublicUrl = $Origin; RepoRoot = $RepoRoot
