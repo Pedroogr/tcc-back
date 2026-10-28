@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
+import { readListenConfig } from './runtime/listen-config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bodyParser: false });
@@ -20,6 +21,11 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  const { port, host } = readListenConfig(process.env);
+  if (host) {
+    await app.listen(port, host);
+    return;
+  }
+  await app.listen(port);
 }
 void bootstrap();
