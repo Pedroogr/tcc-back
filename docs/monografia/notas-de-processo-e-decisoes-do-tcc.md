@@ -1,7 +1,7 @@
 # Notas de processo e decisões do TCC
 
 **Período reconstruído:** abril a outubro de 2026
-**Última atualização:** 21 de outubro de 2026
+**Última atualização:** 28 de outubro de 2026
 **Natureza do documento:** diário retrospectivo de engenharia e fonte para a monografia
 
 ## Como usar este documento
@@ -55,6 +55,7 @@ evoluiu para a proposta de um serviço privado de inferência em GPU.
 | Início de outubro de 2026 | Estação de gestos no navegador e otimização com YOLO11n | A integração ficou simples de distribuir, porém o notebook real expôs um gargalo extremo. |
 | 14–20 de outubro de 2026 | Pesquisa de GPU em nuvem, benchmark da RTX 3070 Ti e desenho do servidor remoto | A GPU doméstica mostrou desempenho suficiente; a prioridade passou a ser rede, protocolo e latência ponta a ponta. |
 | 21 de outubro de 2026 | Integração Windows–Ubuntu e primeiro smoke pela LAN | Saúde, autenticação e WebSocket/JPEG funcionaram entre o notebook Ubuntu e a RTX. Uma amostra concluiu em `48,962 ms` ponta a ponta, mas um frame sintético comprova o caminho técnico, não p95 nem precisão. |
+| 28 de outubro de 2026 | Demonstração pública temporária com Caddy e Quick Tunnel | O sistema passou a ser acessível por navegador sem instalar cliente VPN. Dois ensaios públicos completos validaram site, API e WebSocket de pose; a solução continua sendo ensaio, não deploy. |
 
 ## 3. Evolução por fase
 
@@ -295,6 +296,54 @@ desempenho, porque copiar, desenhar e apresentar frames pode alterar os tempos.
 Essa separação preserva o worker mínimo na operação normal e oferece evidência
 visual durante a validação funcional.
 
+### 3.11. Caminho clientless para a defesa
+
+O WireGuard direto continuou adequado para uma instalação privada, mas impunha
+configuração prévia no dispositivo da banca. Para a defesa foi escolhida uma
+camada temporária: Caddy no loopback reúne frontend, API, Socket.IO e o
+WebSocket de poses; um Quick Tunnel do Cloudflare publica somente esse gateway.
+A banca precisa apenas do navegador. FastAPI, NestJS e PostgreSQL não recebem
+port forwarding e continuam locais.
+
+Essa decisão não foi tratada como deploy. Quick Tunnel não oferece hostname
+estável nem garantia de disponibilidade. URL, token, senha das contas demo e
+segredo JWT são recriados a cada execução. Um PostgreSQL separado, na porta
+`5435`, recebe migrations e seed idempotente com IDs fixos; o banco normal não
+é tocado. O manifesto registra apenas PIDs, horários, executáveis, logs e URL,
+nunca os segredos.
+
+A implementação expôs dificuldades úteis para a metodologia. O Caddyfile
+inicial associava as rotas ao host `127.0.0.1`; os testes locais passavam, mas o
+Cloudflare preservava o `Host` público e recebia resposta vazia. A correção
+separou endereço de escuta e host: `bind 127.0.0.1` mantém a porta local sem
+restringir o hostname. Outro ensaio mostrou que o DNS de um hostname aleatório
+levou cerca de 50 segundos para propagar. A espera fixa foi substituída por
+polling de DNS com limite de três minutos.
+
+Também foi necessário distinguir o lançador `uv.exe` do Python que realmente
+possuía a porta `8765`. O cleanup passou a registrar e validar o PID ouvinte,
+evitando worker órfão sem recorrer a encerramento por nome. Por fim, mensagens
+informativas do `uv` em stderr eram convertidas em exceção pelo Windows
+PowerShell 5.1; o exit code nativo passou a ser a fonte da decisão, mantendo o
+log para diagnóstico.
+
+No primeiro ensaio público concluído, um frame sintético teve RTT de
+`76,775 ms`, inferência de `19,320 ms`, servidor de `21,831 ms` e ponta a ponta
+de `78,544 ms`. Após encerrar, o hostname retornou erro `502`, todas as portas
+ficaram livres e o volume demo foi preservado. Uma segunda execução gerou novo
+hostname e novo token, sem migrations pendentes; o frame teve RTT de
+`56,912 ms`, inferência de `16,028 ms`, servidor de `17,696 ms` e ponta a ponta
+de `58,649 ms`. Como cada rodada teve somente um frame preto, p50 e p95 eram
+iguais e esses valores provam integração, não desempenho estatístico ou
+precisão. O ensaio humano por 4G/5G, com câmera e fluxo operacional, permanece
+como checklist anterior à defesa.
+
+Na verificação final proporcional ao risco, passaram `122` testes unitários do
+frontend em `16` arquivos e o build demo (`6,74 s` no conjunto), `58` testes
+Jest, `4` testes do seed, `24` testes Pester e o build do backend (`11,20 s` no
+conjunto), além de `54` testes do worker (`1,52 s`). As durações são evidência
+da execução deste ambiente e não um benchmark de desempenho do produto.
+
 ## 4. Matriz das principais decisões
 
 | Problema | Alternativas relevantes | Decisão | Evidência e compensação |
@@ -309,7 +358,7 @@ visual durante a validação funcional.
 | Superar limitação do notebook | GPU em nuvem ou GPU doméstica | RTX 3070 Ti doméstica | Sem custo recorrente; disponibilidade e rede passam a ser responsabilidade do projeto. |
 | Serviço de GPU | Incorporar ao NestJS ou Python independente | FastAPI + PyTorch, um worker | Evita ponte Node/Python; adiciona um serviço para operar. |
 | Transporte | HTTP por frame, WebRTC ou WebSocket | WebSocket com JPEG | Protocolo simples e contínuo; exige backpressure explícito. |
-| Rede externa | Exposição pública, VPN gerenciada ou WireGuard | WireGuard direto | Menor dependência e rota direta; exige configuração de roteador e chaves. |
+| Rede externa | Exposição pública, VPN gerenciada, WireGuard ou túnel temporário | WireGuard para instalação; Quick Tunnel para a defesa | A banca usa só navegador; hostname e disponibilidade não são estáveis. |
 | Falha remota | Fallback automático ou escolha explícita | Interromper rodada e permitir troca manual | Evita comportamento invisível; demanda intervenção do operador. |
 
 ## 5. Dificuldades e como influenciaram o projeto
@@ -380,6 +429,12 @@ visual durante a validação funcional.
 - A instalação temporária de SSH no notebook foi considerada desnecessária para
   o ensaio e desativada. Os comandos e resultados continuaram sendo transferidos
   manualmente, sem transformar o notebook em servidor permanente.
+- A instalação MSI do `cloudflared` ficou presa em uma janela gráfica. O ensaio
+  usou o binário portátil oficial validado por versão e SHA-256, e o preparador
+  passou a localizar tanto instalações Winget quanto a cópia local.
+- Quick Tunnels podem anunciar o hostname antes de o DNS local conseguir
+  resolvê-lo. A prontidão passou a depender de resolução e smokes reais, não da
+  simples presença da URL no log.
 
 ## 6. Alternativas rejeitadas ou adiadas
 
@@ -405,6 +460,8 @@ visual durante a validação funcional.
   processo pode duplicar o modelo e disputar a mesma GPU.
 - **Fallback remoto/local automático:** rejeitado durante uma rodada para não
   esconder mudanças de desempenho e semântica.
+- **Quick Tunnel como implantação final:** rejeitado por hostname variável e
+  ausência de SLA; foi aceito somente como caminho clientless para a defesa.
 
 ## 7. Privacidade, segurança e responsabilidade humana
 
@@ -417,9 +474,13 @@ devem conter somente identificadores técnicos, tamanhos, durações e códigos 
 erro. Tokens, imagens, IP público e dados de compradores não devem aparecer em
 logs ou documentos versionados.
 
-Na rede, a defesa é composta: WireGuard, firewall, token na primeira mensagem
-WebSocket, validação de origem e ausência de exposição pública do serviço. A
-chave da VPN e o token da aplicação têm ciclos de vida independentes.
+Na instalação privada, a defesa é composta por WireGuard, firewall, token na
+primeira mensagem WebSocket, validação de origem e ausência de exposição direta
+do serviço. Na demonstração, TLS e hostname público vêm do Cloudflare, o Caddy
+é o único destino do túnel e a origem permitida é o hostname exato da execução.
+Isso amplia temporariamente a superfície pública do site, mas não publica as
+portas internas. O encerramento invalida o hostname; token e senha não são
+persistidos.
 
 ## 8. Hipóteses, evidências e pendências experimentais
 
@@ -446,6 +507,8 @@ chave da VPN e o token da aplicação têm ciclos de vida independentes.
   uso pretendido.
 - O acesso direto ao WireGuard funcionará sem CGNAT, bloqueio de porta ou
   mudança frequente de endereço; DDNS pode ser necessário.
+- O fluxo completo com câmera e navegador externo continuará estável em 4G/5G;
+  os smokes públicos automatizados não medem usabilidade nem precisão.
 
 ### Próximas medições
 

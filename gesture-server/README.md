@@ -60,3 +60,25 @@ uv run --script scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pos
 ```
 
 O procedimento completo, incluindo firewall privado, três rodadas controladas e a comparação local/remota, está em [docs/lan-validation.md](docs/lan-validation.md).
+
+## Demonstração pública temporária
+
+Para a defesa clientless, o projeto raiz oferece um orquestrador que mantém o
+worker em `127.0.0.1:8765` e publica somente o gateway Caddy por um Quick Tunnel:
+
+```powershell
+cd ..
+npm run demo:prepare -- --InstallMissing
+npm run demo:start -- -EnableMonitor
+npm run demo:status
+npm run demo:stop
+```
+
+O iniciador define `GESTURE_ALLOWED_ORIGINS` com o hostname exato da execução e
+passa o token somente pelo ambiente herdado. URL, token e credenciais mudam a
+cada início; token e senha não são persistidos no manifesto. O smoke usa
+`wss://<hostname>/v1/pose` antes de divulgar o acesso.
+
+Consulte [o runbook da demonstração](../docs/demo-quick-tunnel.md) para o teste
+por 4G/5G, diagnóstico, encerramento e limitações. Quick Tunnel é temporário e
+não substitui deploy, WireGuard ou a futura avaliação de TURN.
