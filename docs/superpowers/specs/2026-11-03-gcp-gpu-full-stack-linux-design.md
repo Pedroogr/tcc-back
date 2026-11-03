@@ -2,7 +2,7 @@
 
 **Data:** 2026-11-03
 **Projetos:** `tcc-back` e `tcc-front`
-**Status:** proposto para aprovação
+**Status:** aprovado
 **Natureza:** ambiente temporário de demonstração e medição, não produção
 
 ## Intenção
@@ -51,6 +51,10 @@ e a VM. O desktop local não participa da jornada.
   da aplicação é liberada. O acesso SSH administrativo usa IAP e OS Login.
 - O worker continua com Python 3.10, um processo Uvicorn, uma conexão ativa e
   o modelo versionado em `gesture-poc/yolo11s-pose.pt`.
+- O par PyTorch/Torchvision passa a `2.14.0+cu130`/`0.29.0+cu130`. O par atual
+  `2.13.0+cu130`/`0.28.0+cu130` não oferece wheel estável de PyTorch para
+  CPython 3.10/Linux x86-64 no índice CUDA 13.0, portanto não pode sustentar um
+  lock realmente multiplataforma.
 - O frontend é compilado no modo remoto, usando `/api`, `/socket.io` e
   `/v1/pose` na mesma origem.
 - Os repositórios são clonados como diretórios irmãos, `tcc-back` e
@@ -140,6 +144,7 @@ necessário à VM, não as portas da aplicação.
 - aguarda migrations e seed bem-sucedidos antes de iniciar;
 - aceita CORS e Socket.IO somente para a URL pública exata da execução;
 - não contém credenciais na imagem.
+- persiste `public/uploads` em volume próprio, separado da imagem e do banco.
 
 ### Worker de gestos
 
@@ -234,13 +239,13 @@ estável do projeto Compose, senha do PostgreSQL associada ao volume, URL
 pública atual, caminhos de logs e arquivo de ambiente da execução. Senhas e
 tokens nunca são passados em argumentos de processo, query string ou imagem.
 
-O volume do PostgreSQL e sua credencial são preservados por `stop.sh`. A
-exclusão de dados exige um comando separado, explícito e documentado, que
-remove volume e credencial juntos; nunca ocorre como efeito colateral de
-iniciar ou parar. Se o volume existir sem o estado de credencial, o launcher
-falha com orientação de recuperação em vez de gerar uma senha que o banco não
-aceitará. Migrations e seed devem ser idempotentes para permitir reinício da
-mesma VM.
+Os volumes do PostgreSQL e de uploads, além da credencial do banco, são
+preservados por `stop.sh`. A exclusão de dados exige um comando separado,
+explícito e documentado, que remove volumes e credencial juntos; nunca ocorre
+como efeito colateral de iniciar ou parar. Se o volume do banco existir sem o
+estado de credencial, o launcher falha com orientação de recuperação em vez de
+gerar uma senha que o banco não aceitará. Migrations e seed devem ser
+idempotentes para permitir reinício da mesma VM.
 
 O token do worker e o JWT são regenerados a cada nova execução. O frontend não
 recebe o token no bundle: o apresentador o informa na estação e ele continua
@@ -384,15 +389,18 @@ objetivo prático e deve ser diagnosticado antes da defesa.
 ## Compatibilidade do worker entre Windows e Linux
 
 O manifesto do worker continuará único. `pyproject.toml` e `uv.lock` serão
-ampliados para resolver explicitamente Windows e Linux x86-64, preservando as
-versões atuais de Python, PyTorch/CUDA e demais dependências. Não será criado um
+ampliados para resolver explicitamente Windows e Linux x86-64. Python 3.10,
+CUDA 13.0 e as demais dependências permanecem fixados; PyTorch e Torchvision
+sobem juntos para `2.14.0+cu130` e `0.29.0+cu130`, par publicado oficialmente
+para CPython 3.10 tanto em Windows quanto em Linux x86-64. Não será criado um
 segundo conjunto de versões exclusivo do contêiner, pois isso permitiria que o
 worker local e o worker da VM divergissem silenciosamente.
 
-A alteração só é aceita se `uv sync --frozen` e a suíte determinística passarem
-nos dois ambientes. A imagem Linux usa o mesmo lock e o plano de implementação
-deve validar que as wheels CUDA fixadas existem para Linux antes de escolher a
-imagem base. O fluxo Windows permanece suportado e documentado.
+A alteração só é aceita se `uv sync --frozen`, a suíte determinística e o smoke
+CUDA passarem nos dois ambientes. Como é uma troca de runtime de inferência,
+ela também exige repetir o benchmark do modelo no Windows e na T4 antes da
+defesa. A imagem Linux usa o mesmo lock. O fluxo Windows permanece suportado e
+documentado.
 
 ## Critérios de aceite
 
@@ -405,7 +413,7 @@ imagem base. O fluxo Windows permanece suportado e documentado.
 - Nenhuma porta da aplicação ou banco está aberta publicamente.
 - Origem, JWT, senha do banco e token não estão em imagem, Git, URL ou logs.
 - Falha parcial não divulga o ambiente como pronto e a limpeza não afeta outros
-  contêineres ou o volume persistente.
+  contêineres nem os volumes persistentes de banco e uploads.
 - `stop.sh` invalida a URL; o runbook deixa explícito que a VM deve ser parada
   para encerrar a cobrança.
 - O fluxo Windows existente continua funcionando.
