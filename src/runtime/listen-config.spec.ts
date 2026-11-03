@@ -6,9 +6,10 @@ describe('readListenConfig', () => {
   });
 
   it('reads an explicit loopback host and port', () => {
-    expect(
-      readListenConfig({ PORT: '3100', HOST: '127.0.0.1' }),
-    ).toEqual({ port: 3100, host: '127.0.0.1' });
+    expect(readListenConfig({ PORT: '3100', HOST: '127.0.0.1' })).toEqual({
+      port: 3100,
+      host: '127.0.0.1',
+    });
   });
 
   it.each(['invalid', '0', '65536', '3000.5'])(

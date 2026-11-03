@@ -3,9 +3,7 @@ export type ListenConfig = {
   host?: string;
 };
 
-export function readListenConfig(
-  environment: NodeJS.ProcessEnv,
-): ListenConfig {
+export function readListenConfig(environment: NodeJS.ProcessEnv): ListenConfig {
   const rawPort = environment.PORT?.trim() || '3000';
   const port = Number(rawPort);
   if (!Number.isInteger(port) || port < 1 || port > 65_535) {
