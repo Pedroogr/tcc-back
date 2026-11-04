@@ -8,11 +8,7 @@ GCP_DEMO_PROJECT_NAME="${GCP_DEMO_PROJECT_NAME:-tcc-gpu-demo}"
 
 extract_quick_tunnel_url() {
   local input
-  if (( $# > 0 )); then
-    input="$(printf '%s\n' "$@")"
-  else
-    input="$(cat)"
-  fi
+  input="$(cat)"
 
   local -a urls=()
   mapfile -t urls < <(
@@ -110,10 +106,14 @@ write_run_env() {
 compose() {
   local -a common=(
     --project-name "$GCP_DEMO_PROJECT_NAME"
-    --env-file "$GCP_DEMO_STATE_DIR/persistent.env"
-    --env-file "$GCP_DEMO_STATE_DIR/run.env"
-    -f "$GCP_DEMO_COMPOSE_FILE"
   )
+  if [[ -f "$GCP_DEMO_STATE_DIR/persistent.env" ]]; then
+    common+=(--env-file "$GCP_DEMO_STATE_DIR/persistent.env")
+  fi
+  if [[ -f "$GCP_DEMO_STATE_DIR/run.env" ]]; then
+    common+=(--env-file "$GCP_DEMO_STATE_DIR/run.env")
+  fi
+  common+=(-f "$GCP_DEMO_COMPOSE_FILE")
   if docker compose version >/dev/null 2>&1; then
     docker compose "${common[@]}" "$@"
   else
