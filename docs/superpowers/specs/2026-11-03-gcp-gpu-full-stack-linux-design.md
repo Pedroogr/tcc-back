@@ -419,3 +419,11 @@ documentado.
 - O fluxo Windows existente continua funcionando.
 - O teste pela rede da faculdade registra FPS e latência ponta a ponta para
   comparação com os 6 FPS observados.
+
+## Operação
+
+O procedimento operacional aprovado está consolidado em
+[`docs/runbooks/gcp-gpu-demo.md`](../../runbooks/gcp-gpu-demo.md). O runbook
+separa cota regional de capacidade zonal, mantém somente SSH via IAP como
+entrada na VM, descreve a preparação idempotente do host e deixa explícita a
+diferença entre parar a stack e parar a VM para encerrar a cobrança principal.

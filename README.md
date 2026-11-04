@@ -37,6 +37,25 @@ já pode estar sendo usada por outro banco local. No DBeaver, use host
 `localhost`, porta `5434`, banco `cattle_auction` e as credenciais do `.env`
 local.
 
+## Demonstração em VM com GPU
+
+O fluxo Linux executa frontend, API, PostgreSQL e reconhecimento de gestos na
+mesma VM com NVIDIA T4 e publica uma única URL HTTPS temporária. A criação da
+VM, preparação segura do host, inicialização, validação e encerramento estão no
+[runbook da demonstração no Google Cloud](docs/runbooks/gcp-gpu-demo.md).
+
+Na VM Ubuntu 22.04, depois de clonar `tcc-back` e `tcc-front` como diretórios
+irmãos, comece por:
+
+```bash
+./scripts/gcp-demo/prepare-host.sh
+./scripts/gcp-demo/start.sh
+./scripts/gcp-demo/status.sh
+```
+
+Ao terminar, execute `./scripts/gcp-demo/stop.sh` e também pare a VM no Console
+do Google Cloud; parar somente os contêineres não encerra a cobrança da VM/GPU.
+
 ## Project setup
 
 ```bash
