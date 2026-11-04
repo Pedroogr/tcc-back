@@ -1,0 +1,163 @@
+services:
+  postgres:
+    image: postgres:16.15-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    expose:
+      - "5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    networks:
+      - data
+
+  migrate:
+    image: tcc-demo-api-tools:${IMAGE_TAG:-local}
+    build:
+      context: ../..
+      dockerfile: deploy/gcp/api.Dockerfile
+      target: tools
+    profiles:
+      - tools
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:?DEMO_PASSWORD is required}
+    command:
+      - sh
+      - -c
+      - npx prisma migrate deploy && node scripts/demo/seed-defense-demo.js
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - data
+
+  api:
+    image: tcc-demo-api:${IMAGE_TAG:-local}
+    build:
+      context: ../..
+      dockerfile: deploy/gcp/api.Dockerfile
+      target: runtime
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      FRONTEND_URL: ${FRONTEND_URL:?FRONTEND_URL is required}
+    expose:
+      - "3000"
+    volumes:
+      - uploads:/app/public/uploads
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:3000/auctions/public').then((response) => { if (!response.ok) process.exit(1) }).catch(() => process.exit(1))
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app
+      - data
+
+  worker:
+    image: tcc-demo-worker:${IMAGE_TAG:-local}
+    build:
+      context: ../..
+      dockerfile: deploy/gcp/worker.Dockerfile
+    restart: unless-stopped
+    environment:
+      GESTURE_TOKEN: ${GESTURE_TOKEN:?GESTURE_TOKEN is required}
+      GESTURE_ALLOWED_ORIGINS: ${GESTURE_ALLOWED_ORIGINS:?GESTURE_ALLOWED_ORIGINS is required}
+      GESTURE_DEBUG_PREVIEW: "false"
+    expose:
+      - "8765"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/health', timeout=3).read()
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+    networks:
+      - app
+
+  gateway:
+    image: tcc-demo-gateway:${IMAGE_TAG:-local}
+    build:
+      context: ${TCC_FRONT_CONTEXT:-../../../tcc-front}
+      dockerfile: ${TCC_GATEWAY_DOCKERFILE:-../tcc-back/deploy/gcp/gateway.Dockerfile}
+    restart: unless-stopped
+    expose:
+      - "8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --tries=1
+        - --spider
+        - http://127.0.0.1:8080/
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    networks:
+      - edge
+      - app
+
+  cloudflared:
+    image: cloudflare/cloudflared:2026.10.5
+    restart: unless-stopped
+    command:
+      - tunnel
+      - --no-autoupdate
+      - --url
+      - http://gateway:8080
+    depends_on:
+      gateway:
+        condition: service_healthy
+    networks:
+      - edge
+
+networks:
+  edge: {}
+  app:
+    internal: true
+  data:
+    internal: true
+
+volumes:
+  postgres-data: {}
+  uploads: {}
