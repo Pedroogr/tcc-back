@@ -9,6 +9,7 @@ while IFS= read -r -d '' script; do
 done < <(find "$repo_root/scripts/gcp-demo" -type f -name '*.sh' -print0)
 
 bash "$repo_root/scripts/gcp-demo/tests/runtime.test.sh"
+bash "$repo_root/scripts/gcp-demo/tests/startup.test.sh"
 node --test "$repo_root/scripts/gcp-demo/tests/compose-contract.test.js"
 node --test "$repo_root/scripts/gcp-demo/tests/socket-smoke.test.js"
 (
