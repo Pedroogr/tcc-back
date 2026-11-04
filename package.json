@@ -25,7 +25,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "node scripts/run-e2e.js",
-    "gcp-demo:config": "node --test scripts/gcp-demo/tests/compose-contract.test.js"
+    "gcp-demo:config": "node --test scripts/gcp-demo/tests/compose-contract.test.js",
+    "gcp-demo:test": "bash scripts/gcp-demo/tests/run.sh",
+    "gcp-demo:start": "bash scripts/gcp-demo/start.sh",
+    "gcp-demo:status": "bash scripts/gcp-demo/status.sh",
+    "gcp-demo:stop": "bash scripts/gcp-demo/stop.sh",
+    "gcp-demo:reset": "bash scripts/gcp-demo/reset-data.sh"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
