@@ -8,8 +8,8 @@ dependencies = [
   "numpy==2.2.6",
   "opencv-python==5.0.0.93",
   "pillow==12.3.0",
-  "torch==2.13.0+cu130",
-  "torchvision==0.28.0+cu130",
+  "torch==2.14.0+cu130",
+  "torchvision==0.29.0+cu130",
   "ultralytics==8.4.177",
   "uvicorn[standard]>=0.37,<1",
   "websockets>=16,<17",
@@ -26,7 +26,14 @@ testpaths = ["tests"]
 addopts = "--strict-markers --strict-config"
 
 [tool.uv]
-environments = ["sys_platform == 'win32'"]
+environments = [
+  "sys_platform == 'win32' and platform_machine == 'AMD64' and implementation_name == 'cpython'",
+  "sys_platform == 'linux' and platform_machine == 'x86_64' and implementation_name == 'cpython'",
+]
+required-environments = [
+  "sys_platform == 'win32' and platform_machine == 'AMD64' and implementation_name == 'cpython'",
+  "sys_platform == 'linux' and platform_machine == 'x86_64' and implementation_name == 'cpython'",
+]
 
 [tool.uv.sources]
 torch = { index = "pytorch-cu130" }

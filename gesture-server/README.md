@@ -10,6 +10,25 @@ uv sync
 uv run pytest -q
 ```
 
+O `uv.lock` é único para os ambientes suportados do worker: Windows AMD64 e
+Linux x86_64, ambos com Python 3.10. Ele fixa PyTorch `2.14.0+cu130` e
+torchvision `0.29.0+cu130`; depois de alterar dependências, valide as duas
+plataformas antes de versionar o lock:
+
+```powershell
+uv lock --check
+uv run python -c "import torch, torchvision; print(torch.__version__, torchvision.__version__)"
+```
+
+No Linux, a imagem de produção executa a mesma verificação sem depender do
+Python do host:
+
+```bash
+docker build -f deploy/gcp/worker.Dockerfile -t tcc-gesture-worker:test .
+docker run --rm tcc-gesture-worker:test python -c \
+  "import cv2, torch, torchvision, ultralytics; print(torch.__version__, torchvision.__version__)"
+```
+
 Para iniciar o processo de produção com exatamente um worker:
 
 ```powershell
@@ -60,6 +79,12 @@ uv run --script scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pos
 ```
 
 O procedimento completo, incluindo firewall privado, três rodadas controladas e a comparação local/remota, está em [docs/lan-validation.md](docs/lan-validation.md).
+
+Ao comparar a RTX local com uma T4 na nuvem, execute primeiro
+`scripts/smoke_gpu.py` e depois três rodadas de `scripts/benchmark_client.py`
+com o mesmo vídeo, resolução, qualidade JPEG e quantidade de frames. Registre
+separadamente GPU, driver, versão do PyTorch e os percentis de rede e servidor;
+não compare apenas o FPS informado pela câmera.
 
 ## Demonstração pública temporária
 

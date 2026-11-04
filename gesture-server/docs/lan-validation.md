@@ -51,7 +51,10 @@ $env:GESTURE_BENCHMARK_TOKEN = Read-Host "Token efêmero"
 uv run --script scripts/benchmark_client.py --url ws://IP_DO_DESKTOP:8765/v1/pose --origin http://localhost:5173 --input C:\caminho\ensaio.mp4 --max-frames 300
 ```
 
-No notebook Ubuntu, use o equivalente abaixo. O `--script` é importante porque o lock do servidor foi criado para o worker Windows; o cliente de benchmark declara suas próprias dependências portáveis:
+No notebook Ubuntu, use o equivalente abaixo. O lock do servidor atende tanto
+Windows AMD64 quanto Linux x86_64 com Python 3.10. Mesmo assim, o `--script` é
+importante no cliente porque instala apenas as dependências portáveis do
+benchmark, sem baixar PyTorch/CUDA nem alterar o ambiente do worker:
 
 ```bash
 curl -fsS http://IP_DO_DESKTOP:8765/health
@@ -299,3 +302,27 @@ rm -f /tmp/tcc-gesture-lan.mp4
 ```
 
 Revise os logs do servidor antes de anexá-los à monografia. Eles podem conter ID, quantidade de bytes e duração, mas não devem conter token, JPEG, poses, IP público nem dados comerciais.
+
+## 7. Comparação RTX local e T4 na VM
+
+Antes de comparar desempenho, confirme em cada máquina que o worker realmente
+está usando CUDA e registre as versões carregadas:
+
+```bash
+uv run python scripts/smoke_gpu.py
+uv run python -c \
+  "import torch, torchvision; print(torch.__version__, torchvision.__version__, torch.cuda.get_device_name(0))"
+```
+
+Na VM, execute os mesmos comandos dentro do contêiner com `docker compose exec
+gesture-worker`. Em seguida, repita três vezes o `benchmark_client.py` usando o
+mesmo arquivo, `--max-frames`, largura e qualidade JPEG empregados na RTX.
+Mantenha `GESTURE_DEBUG_PREVIEW=false`. Registre separadamente:
+
+- GPU, driver NVIDIA, PyTorch e torchvision;
+- FPS efetivo e descartes;
+- RTT, inferência e total do servidor em p50/p95;
+- região da VM e rede utilizada pelo cliente.
+
+Uma T4 mais rápida na inferência não garante menor latência ponta a ponta: a
+conclusão deve considerar os percentis de rede e a apresentação no navegador.
