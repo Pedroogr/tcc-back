@@ -161,8 +161,8 @@ describe('authentication (e2e)', () => {
         accountType: 'SELLER',
         sellerProfile: {
           farmName: 'Fazenda E2E',
-          ruralRegistration: 'RURAL-123',
-          stateRegistration: 'STATE-456',
+          ruralRegistration: '244.112.330.118',
+          stateRegistration: '110.042.490.114',
           city: 'Ribeirao Preto',
           state: 'SP',
           country: 'BR',
@@ -178,8 +178,8 @@ describe('authentication (e2e)', () => {
       buyerProfile: null,
       sellerProfile: {
         farmName: 'Fazenda E2E',
-        ruralRegistration: 'RURAL-123',
-        stateRegistration: 'STATE-456',
+        ruralRegistration: '244112330118',
+        stateRegistration: '110042490114',
         city: 'Ribeirao Preto',
         state: 'SP',
         country: 'BR',
@@ -187,6 +187,20 @@ describe('authentication (e2e)', () => {
       },
     });
     expect(JSON.stringify(body)).not.toContain('passwordHash');
+  });
+
+  it('rejects a seller registration with the wrong size for its UF', async () => {
+    const response = await request(context.httpServer)
+      .post('/auth/register')
+      .send({
+        name: 'Seller E2E',
+        email: nextRegistrationEmail(),
+        password: 'seller-password',
+        accountType: 'SELLER',
+        sellerProfile: { stateRegistration: '1100424', state: 'SP' },
+      });
+
+    expect(response.status).toBe(400);
   });
 
   it('registers a user without a profile when account type is omitted', async () => {

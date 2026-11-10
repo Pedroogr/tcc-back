@@ -10,6 +10,7 @@ import {
   normalizeBrazilianPhone,
   normalizeBrazilianUf,
   normalizeCpfOrCnpj,
+  normalizeRegistrationForUf,
   normalizeStateRegistration,
 } from '../common/br-fields';
 import { PrismaService } from '../prisma/prisma.service';
@@ -175,8 +176,7 @@ export class UsersService {
   ): Prisma.SellerProfileCreateWithoutUserInput {
     return {
       farmName: data.farmName,
-      ruralRegistration: data.ruralRegistration,
-      stateRegistration: data.stateRegistration,
+      ...this.toSellerRegistrations(data),
       city: data.city,
       state: data.state,
       country: data.country,
@@ -195,11 +195,25 @@ export class UsersService {
   ): Prisma.SellerProfileUpdateInput {
     return {
       farmName: data.farmName,
-      ruralRegistration: data.ruralRegistration,
-      stateRegistration: data.stateRegistration,
+      ...this.toSellerRegistrations(data),
       city: data.city,
       state: data.state,
       country: data.country,
+    };
+  }
+
+  private toSellerRegistrations(data: UpsertSellerProfileDto) {
+    return {
+      ruralRegistration: normalizeRegistrationForUf(
+        data.ruralRegistration,
+        data.state,
+        'Inscricao rural',
+      ),
+      stateRegistration: normalizeRegistrationForUf(
+        data.stateRegistration,
+        data.state,
+        'Inscricao estadual',
+      ),
     };
   }
 

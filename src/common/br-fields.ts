@@ -30,6 +30,36 @@ const BRAZILIAN_UFS = new Set([
   'TO',
 ]);
 
+const STATE_REGISTRATION_LENGTHS: Record<string, number[]> = {
+  AC: [13],
+  AL: [9],
+  AP: [9],
+  AM: [9],
+  BA: [8, 9],
+  CE: [9],
+  DF: [13],
+  ES: [9],
+  GO: [9],
+  MA: [9],
+  MT: [11],
+  MS: [9],
+  MG: [13],
+  PA: [9],
+  PB: [9],
+  PR: [10],
+  PE: [9, 14],
+  PI: [9],
+  RJ: [8],
+  RN: [9, 10],
+  RS: [10],
+  RO: [14],
+  RR: [9],
+  SC: [9],
+  SP: [12],
+  SE: [9],
+  TO: [9],
+};
+
 export function onlyDigits(value?: string | null) {
   return value?.replace(/\D/g, '') ?? '';
 }
@@ -134,6 +164,32 @@ export function normalizeStateRegistration(value: string) {
   }
 
   return ie;
+}
+
+export function normalizeRegistrationForUf(
+  value: string | undefined,
+  uf: string | undefined,
+  label: string,
+) {
+  if (!value?.trim()) {
+    return undefined;
+  }
+
+  if (!uf?.trim()) {
+    throw new BadRequestException(`Estado obrigatorio para validar: ${label}.`);
+  }
+
+  const normalizedUf = normalizeBrazilianUf(uf);
+  const digits = onlyDigits(value);
+  const allowedLengths = STATE_REGISTRATION_LENGTHS[normalizedUf];
+
+  if (!allowedLengths.includes(digits.length)) {
+    throw new BadRequestException(
+      `${label} de ${normalizedUf} deve conter ${allowedLengths.join(' ou ')} digitos.`,
+    );
+  }
+
+  return digits;
 }
 
 export function normalizeBrazilianUf(value: string) {
