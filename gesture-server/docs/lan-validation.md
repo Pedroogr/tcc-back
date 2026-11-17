@@ -1,5 +1,12 @@
 # Validação da inferência remota na LAN
 
+> **Versão antiga, mantida para testes.** Este roteiro é a primeira versão da
+> conexão entre máquinas: desktop e notebook na mesma rede, com o front rodando
+> no notebook. Para conectar outra máquina hoje, use a demonstração pública com
+> Quick Tunnel (`npm run demo:start -- -EnableMonitor`, ver
+> [o runbook](../../docs/demo-quick-tunnel.md)). Este roteiro continua válido
+> para testes e benchmarks na LAN.
+
 Este roteiro produz evidência reproduzível sem salvar frames, poses ou o token. A etapa LAN valida primeiro o transporte e a GPU; a jornada completa da estação exige também o frontend, a API NestJS e suas dependências normais em execução, mas não exige um deploy público.
 
 ## Pré-condições

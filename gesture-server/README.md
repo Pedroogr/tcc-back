@@ -3,6 +3,15 @@
 Serviço privado de inferência de pose executado no desktop com GPU. O serviço
 não acessa o banco, não registra lances e não persiste imagens.
 
+> **Qual caminho usar.** Para conectar outra máquina, use a
+> [demonstração pública temporária](#demonstração-pública-temporária)
+> (`npm run demo:start -- -EnableMonitor` no `tcc-back`): basta um navegador, em
+> qualquer rede. O modo LAN descrito em [Desenvolvimento](#desenvolvimento) e
+> [Benchmark LAN](#benchmark-lan), com o servidor em `0.0.0.0:8765` e o front
+> rodando no notebook com `VITE_GESTURE_SERVER_URL` apontando para o IP do
+> desktop, é a **primeira versão** da conexão entre máquinas. Ele fica mantido
+> apenas para testes e benchmarks na rede local.
+
 ## Desenvolvimento
 
 ```powershell
