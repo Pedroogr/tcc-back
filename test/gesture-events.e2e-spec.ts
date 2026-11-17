@@ -379,10 +379,10 @@ describe('gesture event relay E2E', () => {
       snapshotMimeType: 'image/jpeg',
     });
     expect(Date.parse(payload.expiresAt)).toBeGreaterThanOrEqual(
-      startedAt + 5_000,
+      startedAt + 10_000,
     );
     expect(Date.parse(payload.expiresAt)).toBeLessThanOrEqual(
-      completedAt + 5_000,
+      completedAt + 10_000,
     );
     expect(Buffer.from(payload.snapshot)).toEqual(snapshot);
     await Promise.all([notOtherOperator, notBuyer, notOffice]);

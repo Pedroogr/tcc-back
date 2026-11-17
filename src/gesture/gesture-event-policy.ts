@@ -9,7 +9,7 @@ import { isISO8601, isUUID } from 'class-validator';
 import { imageSize } from 'image-size';
 import type { GesturePersonBox } from '../commerce/commerce-events';
 
-export const GESTURE_EVENT_DISPLAY_MS = 5_000;
+export const GESTURE_EVENT_DISPLAY_MS = 10_000;
 export const GESTURE_EVENT_CAPTURE_SKEW_MS = 30_000;
 export const GESTURE_EVENT_RATE_WINDOW_MS = 5_000;
 export const GESTURE_EVENT_ID_TTL_MS = 60_000;
